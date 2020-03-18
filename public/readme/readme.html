@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Gofer &#8250; ReadMe</title>
+		<link rel="stylesheet" href="readme.css" type="text/css" />
+	</head>
+	<body>
+		<h1 id="logo">
+		<a href="http://trioangle.com/uber-clone/"></a>
+		<br /> Version 2.2
+		</h1>
+		<h2>Installation: Famous 2-minute install</h2>
+		<ol>
+			<li>Unzip the package in an empty directory and upload everything.</li>
+			<li>Open <span class="file"><a href="../install">install</a></span> in your browser. It will take you through the process to set up a <code>.env</code> file with your database connection details.
+			<ol>
+				<li>If for some reason this doesn&#8217;t work, don&#8217;t worry. It doesn&#8217;t work on all web hosts. Open up <code>.env.example</code> with a text editor like WordPad or similar and fill in your database connection details.</li>
+				<li>Save the file as <code>.env</code> and upload it.</li>
+				<li>Open <span class="file"><a href="../install">install</a></span> in your browser.</li>
+			</ol>
+		</li>
+		<li>Once the configuration file is set up, the installer will set up the tables needed for your site. If there is an error, double check your <code>.env</code> file, and try again.
+		</li>
+	</ol>
+	<h2>System Requirements</h2>
+	<ul>
+		<li><a href="http://php.net/">PHP</a> version <strong> 7.3 </strong> or higher.</li>
+		<li><a href="http://www.mysql.com/">MySQL</a>.</li>
+		<li>The <a href="http://php.net/manual/en/book.openssl.php">OpenSSL</a> PHP module.</li>
+		<li>The <a href="http://php.net/manual/en/book.pdo.php">PDO</a> PHP module.</li>
+		<li>The <a href="http://php.net/manual/en/book.mbstring.php">mbstring</a> PHP module.</li>
+		<li>The <a href="http://php.net/manual/en/book.tokenizer.php">Tokenizer</a> PHP module.</li>
+		<li>The bcmath, mod_rewrite, mod_gzip, mod_filter and mod_expires modules.</li>
+	</ul>
+	<h2>API Settings</h2>
+	You can enter your API credentials in Admin panel in <a href="../admin/api_credentials">API Credentials</a> page.
+	<ul>
+		<li><code>Firebase</code> - for push notification. <a href="https://firebase.google.com/" target="_blank">Instructions</a></li>
+		<li><code>Twilio</code> - for send sms notification. <a href="https://www.twilio.com/" target="_blank">Instructions</a></li>
+		<li><code>Google API Keys (Browser and Server Key)</code> - for Google Map and Places. Please enable, "Google Places API Web Service", "Google Maps Geocoding API" in Google Developer Console. <a href="https://trioangle.com/blog/how-to-create-google-map-api-server-key/" target="blank">Server Key Instructions</a> <a href="https://trioangle.com/blog/how-to-create-google-map-api-javascript-key/" target="blank">Browser Key Instructions</a></li>
+		<li><code> Facebook APP ID</code>
+			<a href="https://developers.facebook.com/" target="_blank">Login with facebook</a> then
+			follow the <a href="https://developers.facebook.com/" target="_blank">Instruction</a>
+		</ul>
+		<h2>Final Notes</h2>
+		<ul>
+			<li>Once you have reached the Google's daily limit quotas, you have to pay some amount for unlock Google services.</li>
+			<li>If you have any suggestions, ideas, or comments, or if you (gasp!) found a bug, send email to sales@trioangle.com or support@trioangle.com.</li>
+		</ul>
+		<h2>License</h2>
+		<p>Gofer has license for this package. See <a href="../End User License Agreement.pdf">End User License Agreement.pdf</a>.</p>
+	</body>
+</html>

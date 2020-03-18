@@ -1,0 +1,103 @@
+version: '3.4'
+services:
+  #MySQL Service
+  db:
+    image: mysql:5.7.29
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    expose:
+      - "3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: pmadmin
+      MYSQL_PASSWORD: ougsdiugfsdjfNOIUygsad
+      MYSQL_ROOT_PASSWORD: ougsdiugfsdjfNOIUygsad
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysqls
+    networks:
+      - app-network
+  
+  #PHPMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    depends_on:
+      - db
+    expose:
+      - "80"
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=ougsdiugfsdjfNOIUygsad
+    networks:
+      - app-network
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rideon.co/php
+    container_name: app
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+      - "4433:443"
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+      DB_HOST: db
+    healthcheck:
+      test: ["CMD", "nc", "-vt", "localhost", "3306"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    working_dir: /var/www/html
+    networks:
+      - app-network
+ #PHP Service
+  app22:
+    build:
+      context: ./GoferWeb/
+      dockerfile: ./GoferWeb/Dockerfile2
+    image: rideon22.co/php
+    container_name: app22
+    depends_on:
+      - db
+    expose:
+      - "80"
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app22
+      SERVICE_TAGS: dev
+      DB_HOST: db
+    working_dir: /var/www/html
+    networks:
+      - app-network
+
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt/live/dev.rideon.co/:/etc/letsencrypt/live/dev.rideon.co/
+      - /etc/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge

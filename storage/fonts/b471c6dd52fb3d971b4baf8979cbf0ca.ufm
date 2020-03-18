@@ -1,0 +1,34 @@
+StartFontMetrics 4.1
+Notice Converted by PHP-font-lib
+Comment https://github.com/PhenX/php-font-lib
+EncodingScheme FontSpecific
+FontName uber-clone
+FontSubfamily clone
+UniqueID FontForge 2.0 : uber-clone : 18-3-2017
+FullName uber-clone
+Version Version 1.0
+PostScriptName uber-clone
+Weight Medium
+ItalicAngle 0
+IsFixedPitch true
+UnderlineThickness 0
+UnderlinePosition 0
+FontHeightOffset 90
+Ascender 1000
+Descender 0
+FontBBox 0 0 1000 1000
+StartCharMetrics 15
+U 97 ; WX 1000 ; N arrow-right ; G 3
+U 98 ; WX 1000 ; N instagram ; G 7
+U 99 ; WX 1000 ; N chevron-right ; G 4
+U 100 ; WX 1000 ; N earth-grid-select-language-button ; G 5
+U 101 ; WX 1000 ; N facebook ; G 6
+U 102 ; WX 1000 ; N help-lifeguard-symbol ; G 8
+U 103 ; WX 1000 ; N linkedin-button-logo ; G 9
+U 104 ; WX 1000 ; N map-marker ; G 10
+U 105 ; WX 1000 ; N remove ; G 11
+U 106 ; WX 1000 ; N send ; G 12
+U 107 ; WX 1000 ; N twitter ; G 13
+U 108 ; WX 1000 ; N user-inside-circle ; G 14
+EndCharMetrics
+EndFontMetrics
