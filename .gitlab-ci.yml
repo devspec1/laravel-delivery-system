@@ -2,17 +2,6 @@ stages:
   - DEVDEPLOY-DEPLOY
   - PRODUCTION-DEPLOY 
   
-predev-deployment:
-  stage: PREDEV-DEPLOY
-  tags:
-       - predevwebserver
-  only:
-    refs:
-       - master
-  script:
-       - sudo docker exec -i gofer bash -c 'cd /var/www/html/; rm .env; git pull; cp deployments/.env.example .env'
-  
-
 dev-deployment:
   stage: DEVDEPLOY-DEPLOY
   tags:
@@ -22,3 +11,13 @@ dev-deployment:
        - development
   script:
        - sudo docker exec -i devlaravel bash -c 'cd /var/www/html/; rm .env; git pull; cp deployments/.env.development .env'
+
+prod-deployment:
+  stage: PRODUCTION-DEPLOY
+  tags:
+       - predevwebserver
+  only:
+    refs:
+       - master
+  script:
+       - sudo docker exec -i gofer bash -c 'cd /var/www/html/; rm .env; git pull; cp deployments/.env.example .env'
