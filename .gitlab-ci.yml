@@ -10,7 +10,7 @@ dev-deployment:
     refs:
        - development
   script:
-       - sudo docker exec -i devlaravel bash -c 'cd /var/www/html/; rm .env; git pull; cp deployments/.env.development .env'
+       - echo 'empty'
 
 prod-deployment:
   stage: PRODUCTION-DEPLOY
