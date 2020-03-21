@@ -47,7 +47,8 @@ Route::group(['middleware' => 'jwt.verify'], function () {
     Route::get('check_status', 'DriverController@checkStatus');
     
     Route::get('get_passengers_for_drivers', 'ReferralsController@get_passengers_for_drivers');
-
+    Route::get('get_drivers_for_drivers', 'ReferralsController@get_drivers_for_drivers');
+    
 	// Common API for Both Driver & Rider
 	Route::get('country_list', 'DriverController@country_list');
 	Route::get('toll_reasons', 'TripController@toll_reasons');
