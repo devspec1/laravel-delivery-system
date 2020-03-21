@@ -502,7 +502,8 @@ class UserController extends Controller
 				$validator->errors()->add('mobile_number',trans('messages.user.mobile_no_exists'));
 			}
 
-			$referral_check = User::whereUserType(ucfirst($request->user_type))->where('referral_code',$request->referral_code)->count();
+            //$referral_check = User::whereUserType(ucfirst($request->user_type))->where('referral_code',$request->referral_code)->count();
+            $referral_check = User::get()->where('referral_code',$request->referral_code)->count();
 	        if($request->referral_code != '' && $referral_check == 0)  {
 	        	$validator->errors()->add('referral_code',__('messages.referrals.enter_valid_referral_code'));
 	        }

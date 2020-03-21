@@ -44,7 +44,9 @@ Route::group(['middleware' => 'jwt.verify'], function () {
 	Route::get('language','TokenAuthController@language');
 	Route::get('update_device', 'TokenAuthController@updateDevice');
 	Route::get('updatelocation', 'DriverController@updateLocation');
-	Route::get('check_status', 'DriverController@checkStatus');
+    Route::get('check_status', 'DriverController@checkStatus');
+    
+    Route::get('get_passengers_for_drivers', 'ReferralsController@get_passengers_for_drivers');
 
 	// Common API for Both Driver & Rider
 	Route::get('country_list', 'DriverController@country_list');
