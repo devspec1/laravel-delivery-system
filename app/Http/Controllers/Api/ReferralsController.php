@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Helper\RequestHelper;
 use App\Http\Start\Helpers;
 use App\Models\User;
+use App\Models\DriverAddress;
 use App\Models\ReferralSetting;
 use App\Models\ReferralUser;
 use JWTAuth;
@@ -208,7 +209,9 @@ class ReferralsController extends Controller
 
 			if($userww->user_type == "Rider") {
 				continue;
-			}
+            }
+            $driver_address = DriverAddress::where('user_id',$referral_user->referral_id)->first();
+            
 			$temp_details['id'] 			= $referral_user->id;
 			$temp_details['name'] 			= $referral_user->referred_user_name;
 			$temp_details['profile_image'] 	= $referral_user->referred_user_profile_picture_src;
@@ -219,7 +222,9 @@ class ReferralsController extends Controller
 			$temp_details['trips'] 			= $referral_user->trips;
 			$temp_details['remaining_trips']= $referral_user->remaining_trips;
 			$temp_details['earnable_amount']= $referral_user->earnable_amount;
-			$temp_details['status'] 		= $referral_user->payment_status;
+            $temp_details['status'] 		= $referral_user->payment_status;
+			$temp_details['driver_address'] 		= $driver_address;
+
 			// $temp_details['check'] 		=    $referral_user->referral_id ;
 			// $temp_details['type'] 		=    $userww->user_type ;
 
