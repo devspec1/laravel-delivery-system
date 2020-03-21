@@ -544,7 +544,18 @@ class UserController extends Controller
 			$user->mobile_number = $request->mobile_number;
 			$user->password = $request->password;
 			$user->user_type = $request->user_type;
-			$user->used_referral_code = $request->referral_code;
+            $user->used_referral_code = $request->referral_code;
+            
+            //if referral_code is provided in signup form
+			if (trim($request->referral_code) != "") {
+				// $users = User::where('id', $user_id)->where('user_type', 'Rider')->first();
+				$users = User::where('referral_code', $request->referral_code)->first();
+				
+				$to = '+'.$users->country_code.$users->mobile_number;
+				$text = "Rideon: New User Registered Using you Referral code. Please view details by login to Dashboard";
+				$this->otp_helper->sendPhoneSMS($to , $text);
+			}
+
 
 			if ($request->fb_id != null && $request->fb_id != "") {
 				$user->fb_id = $request->fb_id;
@@ -677,7 +688,24 @@ class UserController extends Controller
 				$user->password = $request->password;
 				$user->user_type = $request->user_type;
 				$user->company_id = 1;
-				$user->used_referral_code = $request->referral_code;
+                $user->used_referral_code = $request->referral_code;
+                
+                //if referral_code is provided in signup form
+				if (trim($request->referral_code) != "") {
+					// $users = User::where('id', $user_id)->where('user_type', 'Rider')->first();
+					$users = User::where('referral_code', $request->referral_code)->first();
+					
+					$to = '+'.$users->country_code.$users->mobile_number;
+					$text = "Rideon: New User Registered Using you Referral code. Please view details by login to Dashboard";
+                    $this->otp_helper->sendPhoneSMS($to , $text);
+				}
+
+				// exit;
+
+				//here first need check if ref code is present in database.
+				//if referral code is present in database get user and send message to phone.
+				//also send push notification and email also with same content.
+
 
 				$user->status = 'Car_details';
 

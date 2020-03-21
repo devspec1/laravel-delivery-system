@@ -33,6 +33,13 @@ class OtpHelper {
 			]);
         }
 		return $message_responce;
+    }
+    
+    public function sendPhoneSMS($mobile_number,$text){
+		
+        $message_responce=$this->request_helper->send_message($mobile_number,$text);
+       
+		return $message_responce;
 	}
 
 	public function resendOtp(){
