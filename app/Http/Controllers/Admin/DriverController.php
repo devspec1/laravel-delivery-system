@@ -281,6 +281,7 @@ class DriverController extends Controller
                 'email'         => 'required|email',
                 'status'        => 'required',
                 // 'mobile_number' => 'required|regex:/[0-9]{6}/',
+                'referral_code' => 'required',
                 'country_code'  => 'required',
                 'license_front' => 'mimes:jpg,jpeg,png,gif',
                 'license_back'  => 'mimes:jpg,jpeg,png,gif',
@@ -342,6 +343,14 @@ class DriverController extends Controller
                 if($user_email) {
                     $validator->errors()->add('email',trans('messages.user.email_exists'));
                 }
+
+                //--- Konstantin N edits: refferal checking for coincidence
+                $referral_c = User::where('referral_code', $request->referral_code)->where('user_type', $request->user_type)->where('id','!=', $request->id)->count();
+
+                if($referral_c){
+                    $validator->errors()->add('referral_code',trans('messages.referrals.referral_exists'));
+                }
+                
             });
 
             if ($validator->fails()) {
@@ -357,6 +366,7 @@ class DriverController extends Controller
             $user->email        = $request->email;
             $user->status       = $request->status;
             $user->country_code = $country_code;
+            $user->referral_code = $request->referral_code;
             if($request->mobile_number!="") {
                 $user->mobile_number = $request->mobile_number;
             }

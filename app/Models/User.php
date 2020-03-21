@@ -425,7 +425,12 @@ class User extends Authenticatable implements JWTSubject
     // Get Unique Referral Code
     public function generateUniqueReferralCode()
     {
-        $code = strtoupper(str_random(10));
+        //$code = strtoupper(str_random(10));
+        //--Konstantin N changes
+        srand(intval(substr(md5(microtime()),rand(0,26),5)));
+        $code = strtoupper("RODO" . intval( "0" . rand(1,9) . rand(0,9) . rand(0,9) . rand(0,9) . rand(0,9) ));
+        //--
+
         return $code;
     }
 

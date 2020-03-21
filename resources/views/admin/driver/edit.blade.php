@@ -38,7 +38,14 @@
 								{!! Form::text('last_name', $result->last_name, ['class' => 'form-control', 'id' => 'input_last_name', 'placeholder' => 'Last Name']) !!}
 								<span class="text-danger">{{ $errors->first('last_name') }}</span>
 							</div>
-						</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="referral_code" class="col-sm-3 control-label">Referral Code<em class="text-danger">*</em></label>
+                            <div class="col-sm-6">
+                              {!! Form::text('referral_code', $result->referral_code, ['class' => 'form-control', 'id' => 'input_referral_code', 'placeholder' => 'Referral Code']) !!}
+                              <span class="text-danger">{{ $errors->first('referral_code') }}</span>
+                            </div>
+                          </div>
 						<div class="form-group">
 							<label for="input_email" class="col-sm-3 control-label">Email<em class="text-danger">*</em></label>
 							<div class="col-sm-6">
