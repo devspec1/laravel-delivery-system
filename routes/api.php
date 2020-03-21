@@ -33,6 +33,8 @@ Route::get('forgotpassword', 'TokenAuthController@forgotpassword');
 Route::get('language_list', 'TokenAuthController@language_list');
 Route::get('currency_list', 'TokenAuthController@currency_list');
 
+Route::get('faq', 'HomeController@faq');
+
 // With Login Routes
 Route::group(['middleware' => 'jwt.verify'], function () {
 	
@@ -48,7 +50,7 @@ Route::group(['middleware' => 'jwt.verify'], function () {
     
     Route::get('get_passengers_for_drivers', 'ReferralsController@get_passengers_for_drivers');
     Route::get('get_drivers_for_drivers', 'ReferralsController@get_drivers_for_drivers');
-    
+
 	// Common API for Both Driver & Rider
 	Route::get('country_list', 'DriverController@country_list');
 	Route::get('toll_reasons', 'TripController@toll_reasons');
