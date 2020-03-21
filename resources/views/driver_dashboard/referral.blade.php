@@ -14,7 +14,8 @@
 		<div class="parter-info separated--bottom" style="padding: 0px 0px 15px;">
 			<h2 class="flush-h2" style="text-align: center;"> {{trans('messages.referrals.previous_referrals')}} </h2>
 		</div>
-		<div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 25px 0px 15px;"  ng-init="all_referral_details={{ $all_referral_details }};currentPage=all_referral_details.current_page;totalPages=all_referral_details.last_page;">
+		{{-- <div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 25px 0px 15px;"  ng-init="all_referral_details={{ $all_referral_details }};currentPage=all_referral_details.current_page;totalPages=all_referral_details.last_page;"> --}}
+        <div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 25px 0px 15px;"  ng-init="getReferrals()">
 			<div id="no-more-tables">
 				<table class="col-sm-12 table-bordered table-striped table-condensed cf">
 					<thead class="cf">
@@ -28,7 +29,8 @@
 							<th class="width-20"> Status </th>
 						</tr>
 					</thead>
-					<tbody class="all-trips-table" ng-repeat="referral_data in all_referral_details.data">
+					{{-- <tbody class="all-trips-table" ng-repeat="referral_data in all_referral_details.data"> --}}
+                    <tbody class="all-trips-table" ng-repeat="referral_data in all_referral_details">
 						<tr class="trip-expand__origin collapsed" ng-cloak>
 							<td data-title="Pickup">@{{ referral_data.referred_user_name }}</td>
 							<td class="hide-sm" data-title="Driver">@{{ referral_data.trips }}</td>

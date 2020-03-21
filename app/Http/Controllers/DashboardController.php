@@ -333,10 +333,44 @@ class DashboardController extends Controller
 
         $referral_users = ReferralUser::where('user_id', Auth::user()->id);
 
-        $data['all_referral_details'] =  $referral_users->paginate(4)->toJson();
+        $data['all_referral_details'] =  $referral_users->paginate(5)->toJson();
 
         return view('driver_dashboard.referral',$data);
     }
+
+    /*
+    * function referral_api
+    * this function receives current page a params 
+    * and returns current users referral in pagination format
+    * current user is fetched using auth
+    */
+
+    public function referral_api() {
+
+        $data['result'] = User::find(Auth::user()->id);
+
+        $admin_referral_settings = ReferralSetting::where('user_type','Driver')->where('name','apply_referral')->first();
+        $data['apply_referral']  = $admin_referral_settings->value;
+
+        $default_currency = Currency::active()->defaultCurrency()->first();
+        $session_currency = session('currency');
+
+        $currency_code = isset($session_currency) ? $session_currency : $default_currency->code;
+        $currency_symbol = Currency::original_symbol($currency_code);
+
+        $referral_amount = $currency_symbol .'0';
+        if( $data['apply_referral']) {
+            $referral_amount = $admin_referral_settings->driver_referral_amount;
+        }
+        $data['driver_referral_amount'] = $referral_amount;
+
+        $referral_users = ReferralUser::where('user_id', Auth::user()->id);
+
+        $data['all_referral_details'] =  $referral_users->paginate(4)->toJson();
+
+        return $data['all_referral_details'];
+    }
+
 
     /** 
     * Get Invite Details using ajax
