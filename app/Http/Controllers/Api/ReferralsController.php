@@ -89,7 +89,7 @@ class ReferralsController extends Controller
 			'completed_referrals' 	=> $completed_referrals,
 		]);
     }
-    
+
     /**
 	 * To Get the referral Users Details
 	 * @param  Request $request Get values
@@ -122,7 +122,7 @@ class ReferralsController extends Controller
 		// $referral_users = ReferralUser::where('user_id',$user_details->id)->whereUserType("rider");
 
 		$pending_referrals = array();
-		$completed_referrals = array();
+		//$completed_referrals = array();
 		// print_r($referral_users);
 
 		foreach ($referral_users as $referral_user) {
@@ -145,12 +145,12 @@ class ReferralsController extends Controller
 			// $temp_details['check'] 		=    $referral_user->referral_id ;
 			// $temp_details['type'] 		=    $userww->user_type ;
 
-			if($referral_user->payment_status == 'Pending') {
+			//if($referral_user->payment_status == 'Pending') {
 				array_push($pending_referrals,$temp_details);
-			}
-			else {
-				array_push($completed_referrals,$temp_details);
-			}
+			//}
+			//else {
+			//	array_push($completed_referrals,$temp_details);
+			//}
 		}
 
 		return response()->json([
@@ -162,8 +162,9 @@ class ReferralsController extends Controller
 			'referral_amount' 		=> $referral_amount,
 			'pending_amount' 		=> $user->pending_referral_amount,
 			'total_earning'  		=> $user->total_referral_earnings,
-			'pending_referrals' 	=> $pending_referrals,
-			'completed_referrals' 	=> $completed_referrals,
+			// 'pending_referrals' 	=> $pending_referrals,
+            // 'completed_referrals' 	=> $completed_referrals,
+            'referrals' 	=> $pending_referrals
 		]);
 	}
 
