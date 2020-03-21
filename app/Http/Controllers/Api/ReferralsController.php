@@ -240,7 +240,7 @@ class ReferralsController extends Controller
 			'referral_amount' 		=> $referral_amount,
 			'pending_amount' 		=> $user->pending_referral_amount,
 			'total_earning'  		=> $user->total_referral_earnings,
-			'drivers' 	=> $pending_referrals
+			'referrals' 	=> $pending_referrals
 			
 		]);
 	}
