@@ -89,7 +89,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="permit" class="col-sm-3 control-label">Contact Carriage Permit <em class="text-danger">*</em></label>
+							<label for="permit" class="col-sm-3 control-label">{{trans('messages.driver_dashboard.carriage_permit')}} <em class="text-danger">*</em></label>
 							<div class="col-sm-6">
 								{!! Form::file('permit', ['class' => 'form-control', 'id' => 'permit', 'accept' => 'image/*']) !!}
 								<span class="text-danger">{{ $errors->first('permit') }}</span>
