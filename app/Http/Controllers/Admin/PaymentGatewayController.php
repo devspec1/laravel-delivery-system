@@ -127,7 +127,7 @@ class PaymentGatewayController extends Controller
         PaymentGateway::where(['name' => 'public_key', 'site' => 'Braintree'])->update(['value' => $request->bt_public_key]);
         PaymentGateway::where(['name' => 'private_key', 'site' => 'Braintree'])->update(['value' => $request->bt_private_key]);
 
-        $payout_methods = implode($request->payout_methods,',');
+        $payout_methods = implode(',',$request->payout_methods);
 
         PaymentGateway::where(['name' => 'payout_methods', 'site' => 'Common'])->update(['value' => $payout_methods]);
 
