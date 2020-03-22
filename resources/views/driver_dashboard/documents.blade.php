@@ -107,7 +107,7 @@
       <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12" style="padding:6px 0px;"> {{trans('messages.driver_dashboard.carriage_permit')}}  </div>
 
       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 ">
-      <div class="profile_img_mark image-show" data-title="Contract Carriage Permit" style="cursor: pointer;">
+      <div class="profile_img_mark image-show" data-title="{{trans('messages.driver_dashboard.carriage_permit')}}" style="cursor: pointer;">
       @if(@$user->driver_documents->permit)
        <img style="max-width: 75px;
       max-height: 75px;width: 100%;height: 100%;" src="{{ $user->driver_documents->permit }}">
