@@ -138,7 +138,8 @@ class HomeController extends Controller
 
                 if($payment_details != '') {
                     $last4  = strval($payment_details->last4);
-                    $payment_method['value'] = 'xxxx xxxx xxxx '.$last4;
+                    $brand  = strtoupper(strval($payment_details->brand));
+                    $payment_method['value'] = $brand.' xxxx xxxx xxxx '.$last4;
 
                     $stripe_card = array(
                         "key"           => "stripe_card",
@@ -161,7 +162,7 @@ class HomeController extends Controller
             if(!isset($skip_payment)) {
                 $payMethodData = array(
                     "key"       => $payment_method['key'],
-                    "value"     => \Lang::get('messages.api.'.$payment_method['value']),
+                    "value"     => $payment_method['value'],
                     "icon"      => $payment_method['icon'],
                     "is_default"=> ($default_paymode == $payment_method['key']),
                 );
