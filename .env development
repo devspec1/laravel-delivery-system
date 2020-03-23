@@ -1,0 +1,9 @@
+DB_CONNECTOR=MYSQL
+DB_HOST=db
+DB_DATABASE=laravel
+DB_USERNAME=pmuser
+DB_PASSWORD=ougsdiugfsdjfNOIUygsad
+
+APP_ENV=local
+
+SESSION_DRIVER=database
