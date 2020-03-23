@@ -10,7 +10,7 @@ dev-deployment:
     refs:
        - development
   script:
-       - echo 'empty'
+       - echo docker exec -i rideondev bash -c 'cd /var/www/html/; rm .env; git pull; cp .env.development .env'
 
 prod-deployment:
   stage: PRODUCTION-DEPLOY
