@@ -73,7 +73,10 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
 	Route::match(array('GET', 'POST'), 'add_driver', 'DriverController@add')->middleware('admin_can:create_driver');
 	Route::match(array('GET', 'POST'), 'edit_driver/{id}', 'DriverController@update')->middleware('admin_can:update_driver');
 	Route::match(array('GET', 'POST'), 'delete_driver/{id}', 'DriverController@delete')->middleware('admin_can:delete_driver');
-
+	
+	//Import Driver
+	Route::match(array('GET', 'POST'), 'import_drivers', 'DriverController@import_drivers');
+	
 	// Manage Company
 	Route::get('company', 'CompanyController@index')->middleware('admin_can:view_company');
 	Route::match(array('GET', 'POST'), 'add_company', 'CompanyController@add')->middleware('admin_can:create_company');

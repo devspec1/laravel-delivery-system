@@ -247,6 +247,11 @@
 			@if(@$user->can('manage_site_settings'))
 			<li class="{{ (Route::current()->uri() == 'admin/site_setting') ? 'active' : ''  }}"><a href="{{ url('admin/site_setting') }}"><i class="fa fa-cogs"></i><span>Site Setting</span></a></li>
 			@endif
+
+			@if(@$user->can('manage_site_settings'))
+
+			<li class="{{ (Route::current()->uri() == 'admin/import_drivers') ? 'active' : ''  }}"><a href="{{ url('admin/import_drivers') }}"><i class="fa fa-cogs"></i><span>Import Driver</span></a></li>
+            @endif
 		</ul>
 	</section>
 </aside>
