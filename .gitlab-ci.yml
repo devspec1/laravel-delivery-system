@@ -20,4 +20,4 @@ prod-deployment:
     refs:
        - master
   script:
-       - sudo docker exec -i gofer bash -c 'cd /var/www/html/; rm .env; git pull; cp .env.example .env'
+       - sudo docker exec -i gofer bash -c 'cd /var/www/html/; rm .env; git pull; cp .env.production .env'
