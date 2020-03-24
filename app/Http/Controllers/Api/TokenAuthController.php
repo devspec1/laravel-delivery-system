@@ -165,7 +165,8 @@ class TokenAuthController extends Controller
             ]);
         }
 
-        $referral_check = User::whereUserType(ucfirst($request->user_type))->where('referral_code',$request->referral_code)->count();
+        //$referral_check = User::whereUserType(ucfirst($request->user_type))->where('referral_code',$request->referral_code)->count();
+        $referral_check = User::get()->where('referral_code',$request->referral_code)->count();
         if($request->referral_code != '' && $referral_check == 0) {
             return response()->json([
                 'status_code' => '0',
