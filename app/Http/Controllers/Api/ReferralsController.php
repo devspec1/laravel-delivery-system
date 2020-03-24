@@ -142,7 +142,8 @@ class ReferralsController extends Controller
 			$temp_details['trips'] 			= $referral_user->trips;
 			$temp_details['remaining_trips']= $referral_user->remaining_trips;
 			$temp_details['earnable_amount']= $referral_user->earnable_amount;
-			$temp_details['status'] 		= $referral_user->payment_status;
+            $temp_details['status'] 		= $referral_user->payment_status;
+            $temp_details['driver_address'] 		= '';
 			// $temp_details['check'] 		=    $referral_user->referral_id ;
 			// $temp_details['type'] 		=    $userww->user_type ;
 
