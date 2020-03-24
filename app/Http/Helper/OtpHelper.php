@@ -33,7 +33,18 @@ class OtpHelper {
 			]);
         }
 		return $message_responce;
-    }
+	}
+	
+	// Send account password reset link
+	public function sendPassResetMsg($mobile_number,$country_code, $url){
+        $text = 'Rideon: Reset password link '.$url;
+        $to = '+'.$country_code.$mobile_number;
+        $message_responce=$this->request_helper->send_message($to,$text);
+        
+		return $message_responce;
+	}
+
+
     
     public function sendPhoneSMS($mobile_number,$text){
 		
