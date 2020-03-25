@@ -133,7 +133,7 @@ class ReferralsController extends Controller
 				continue;
 			}
 			$temp_details['id'] 			= $referral_user->id;
-			$temp_details['name'] 			= $referral_user->referred_user_name;
+			$temp_details['name'] 			= $referral_user->referred_user_name . $userww->last_name;
 			$temp_details['profile_image'] 	= $referral_user->referred_user_profile_picture_src;
 			$temp_details['start_date'] 	= $referral_user->start_date;
 			$temp_details['end_date'] 		= $referral_user->end_date;
@@ -214,7 +214,7 @@ class ReferralsController extends Controller
             $driver_address = DriverAddress::where('user_id',$referral_user->referral_id)->first();
             
 			$temp_details['id'] 			= $referral_user->id;
-			$temp_details['name'] 			= $referral_user->referred_user_name;
+			$temp_details['name'] 			= $referral_user->referred_user_name . $userww->last_name;
 			$temp_details['profile_image'] 	= $referral_user->referred_user_profile_picture_src;
 			$temp_details['start_date'] 	= $referral_user->start_date;
 			$temp_details['end_date'] 		= $referral_user->end_date;
