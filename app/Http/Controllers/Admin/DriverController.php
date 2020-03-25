@@ -648,6 +648,7 @@ class DriverController extends Controller
     {
         if($request->isMethod("GET")) {
             $data['result']             = User::find($request->id);
+            $data['profile_image'] = ProfilePicture::where('user_id',$request->id)->first();
 
             //If login user is company then company can edit only that company's driver details
             if($data['result'] && (LOGIN_USER_TYPE!='company' || Auth::guard('company')->user()->id == $data['result']->company_id)) {
@@ -818,6 +819,8 @@ class DriverController extends Controller
 
             $user_doc = DriverDocuments::where('user_id',  $user->id)->firstOrNew(['user_id' => $user->id]);
 
+            $user_picture = ProfilePicture::where('user_id',$request->id)->first();
+
             $image_uploader = resolve('App\Contracts\ImageHandlerInterface');
             $target_dir = '/images/users/'.$user->id;
             $target_path = asset($target_dir).'/';
@@ -852,7 +855,23 @@ class DriverController extends Controller
 
                 $user_doc->license_back = $target_path.$upload_result['file_name'];
             }
-             
+            if($request->hasFile('profile_image')) {
+                $profile_image = $request->file('profile_image');
+
+                $extension = $profile_image->getClientOriginalExtension();
+                $file_name = "profile_image".time().".".$extension;
+                $options = compact('target_dir','file_name');
+
+                $upload_result = $image_uploader->upload($profile_image,$options);
+                if(!$upload_result['status']) {
+                    flashMessage('danger', $upload_result['status_message']);
+                    return back();
+                }
+
+                $user_picture->src = $target_path.$upload_result['file_name'];
+            }
+            $user_picture->user_id =$user->id;
+            $user_picture->save();
             $user_doc->user_id      = $user->id;                
             $user_doc->save();
 

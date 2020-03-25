@@ -163,6 +163,20 @@
 									@endif
 								</div>
 							</div>
+                        </div>
+                        <div class="form-group">
+							<label for="input_profile_image" class="col-sm-3 control-label">Driver's profile photo<em class="text-danger">*</em></label>
+							<div class="col-sm-6">
+								{!! Form::file('profile_image', ['class' => 'form-control', 'id' => 'input_profile_image', 'accept' => "image/*"]) !!}
+								<span class="text-danger">{{ $errors->first('license_front') }}</span>
+								<div class="license-img">
+                                    @if(@$profile_image->src)
+									<a href="{{@$profile_image->src }}" target="_blank"><img style="width: 200px;height: 100px" src="{{@$profile_image->src }}"> </a>
+									@else
+									<img style="width: 100px;height: 100px; padding-top: 5px;" src="{{ url('images/user.jpeg')}}">
+									@endif
+								</div>
+							</div>
 						</div>
 						@if(LOGIN_USER_TYPE!='company' || Auth::guard('company')->user()->id != 1)
 						<span class="bank_detail">
