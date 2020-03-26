@@ -44,11 +44,17 @@ class ProfileController extends Controller
 	 */
 	public function upload_profile_image(Request $request)
 	{
-		$rules = array(
-            'image' => 'required|mimes:jpg,jpeg,png,gif',
-        );
+        $user_details = JWTAuth::parseToken()->authenticate();
 
-        $validator = Validator::make($request->all(), $rules);
+		$rules = array(
+			'image' 		=> 'required|mimes:jpg,jpeg,png,gif',
+		);
+
+		$messages = [
+			'image.required' 			=> ':attribute ' . trans('messages.field_is_required') . '',
+		];
+
+		$validator = Validator::make($request->all(), $rules, $messages);
 
 		if ($validator->fails()) {
 			return response()->json([
@@ -57,14 +63,15 @@ class ProfileController extends Controller
             ]);
 		}
 
-        $user_details = JWTAuth::parseToken()->authenticate();
-
         if(!$request->hasFile('image')) {
 			return response()->json([
 				'status_code' 		=> "0",
 				'status_message' 	=> "Invalid File",
 			]);
-		}
+        }
+        
+        $image_uploader = resolve('App\Contracts\ImageHandlerInterface');
+		$target_dir = '/images/users/'.$user_details->id;
         
         $user_profile_image = ProfilePicture::find($user_details->id);
         if(!$user_profile_image)
@@ -73,9 +80,7 @@ class ProfileController extends Controller
             $user_profile_image->user_id = $user_details->id;
         }
 
-        $image_uploader = resolve('App\Contracts\ImageHandlerInterface');
-        $target_dir = '/images/users/'.$user_details->id;
-        $target_path = asset($target_dir).'/';
+        $target_path = asset($target_dir.'/'.$upload_result['file_name']);
 
         $user_profile_image->photo_source = 'Local';
         $profile_image = $request->file('image');
@@ -96,9 +101,9 @@ class ProfileController extends Controller
 			]);
         }
 
-        $user_picture->src = $target_path.$upload_result['file_name'];
-        $user_picture->user_id =$user_details->id;
-        $user_picture->save();
+        $user_profile_image->src = $target_path;
+        $user_profile_image->user_id =$user_details->id;
+        $user_profile_image->save();
 
 		return response()->json([
 			'status_code' 		=> "1",
