@@ -57,34 +57,48 @@ class ProfileController extends Controller
             ]);
 		}
 
-		$user_details = JWTAuth::parseToken()->authenticate();
+        $user_details = JWTAuth::parseToken()->authenticate();
 
-		$image_uploader = resolve('App\Contracts\ImageHandlerInterface');
-        $target_dir = '/images/users/'.$user_details->id;
-
-		if(!$request->hasFile('image')) {
+        if(!$request->hasFile('image')) {
 			return response()->json([
 				'status_code' 		=> "0",
 				'status_message' 	=> "Invalid File",
 			]);
 		}
+        
+        $user_profile_image = ProfilePicture::find($user_details->id);
+        if(!$user_profile_image)
+        {
+            $user_profile_image = new ProfilePicture;
+            $user_profile_image->user_id = $user_details->id;
+        }
 
-		$image = $request->file('image');
+        $image_uploader = resolve('App\Contracts\ImageHandlerInterface');
+        $target_dir = '/images/users/'.$user_details->id;
+        $target_path = asset($target_dir).'/';
 
-		$extension = $image->getClientOriginalExtension();
-		$file_name = "profile_pic_".time().".".$extension;
-		$compress_size = array(
+        $user_profile_image->photo_source = 'Local';
+        $profile_image = $request->file('image');
+
+        $extension = $profile_image->getClientOriginalExtension();
+        $file_name = "profile_image".time().".".$extension;
+        $compress_size = array(
 			["height" => 225, "width" => 225],
 		);
         $options = compact('target_dir','file_name','compress_size');
+        
+        $upload_result = $image_uploader->upload($profile_image,$options);
 
-        $upload_result = $image_uploader->upload($image,$options);
         if(!$upload_result['status']) {
             return response()->json([
 				'status_code' 		=> "0",
 				'status_message' 	=> $upload_result['status_message'],
 			]);
         }
+
+        $user_picture->src = $target_path.$upload_result['file_name'];
+        $user_picture->user_id =$user_details->id;
+        $user_picture->save();
 
 		return response()->json([
 			'status_code' 		=> "1",
