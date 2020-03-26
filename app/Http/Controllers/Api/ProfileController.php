@@ -80,17 +80,13 @@ class ProfileController extends Controller
             $user_profile_image->user_id = $user_details->id;
         }
 
-        $target_path = asset($target_dir.'/'.$upload_result['file_name']);
-
         $user_profile_image->photo_source = 'Local';
         $profile_image = $request->file('image');
 
         $extension = $profile_image->getClientOriginalExtension();
         $file_name = "profile_image".time().".".$extension;
-        $compress_size = array(
-			["height" => 225, "width" => 225],
-		);
-        $options = compact('target_dir','file_name','compress_size');
+
+        $options = compact('target_dir','file_name');
         
         $upload_result = $image_uploader->upload($profile_image,$options);
 
@@ -101,6 +97,8 @@ class ProfileController extends Controller
 			]);
         }
 
+        $target_path = asset($target_dir.'/'.$upload_result['file_name']);
+
         $user_profile_image->src = $target_path;
         $user_profile_image->user_id =$user_details->id;
         $user_profile_image->save();
@@ -108,7 +106,7 @@ class ProfileController extends Controller
 		return response()->json([
 			'status_code' 		=> "1",
 			'status_message' 	=> "Profile Image Upload Successfully",
-			'image_url' 		=> asset($target_dir.'/'.$upload_result['file_name']),
+			'image_url' 		=> $target_path,
 		]);
 	}
 
