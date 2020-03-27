@@ -753,7 +753,7 @@ return [
 
 	'referrals' => [
 		'referral_code' 				=> 'Referral Code',
-		'enter_valid_referral_code'     => 'Entered Referral Code Not Found',
+		'enter_valid_referral_code'     => 'Sorry that invitation code isn’t on our system. If you need assistance getting a code pls contact 1800 xxx',
 		'referral'						=> 'Referral',
 		'referral_header'				=> 'SignUp & Get Paid :amount For Every Referral Sign-up!',
 		'referral_not_available'		=> 'Currently Referrals Not Available.',
