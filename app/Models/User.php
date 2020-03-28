@@ -400,13 +400,8 @@ class User extends Authenticatable implements JWTSubject
      // Set valid Driver referral code
     public function setUsedReferralCodeAttribute($value)
     {
-        $user = User::where('referral_code',$value)->first();
-        if($user != '') {
             $this->attributes['used_referral_code'] = $value;
-        }
-        else {
-            $this->attributes['used_referral_code'] = '';
-        }
+    
     }
 
     // Get Unique Referral Code

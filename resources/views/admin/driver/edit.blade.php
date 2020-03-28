@@ -46,6 +46,13 @@
                               <span class="text-danger">{{ $errors->first('referral_code') }}</span>
                             </div>
                           </div>
+                           <div class="form-group">
+                            <label for="referral_code" class="col-sm-3 control-label">Used Referral Code<em class="text-danger">*</em></label>
+                            <div class="col-sm-6">
+                              {!! Form::text('used_referral_code', $result->used_referral_code, ['class' => 'form-control', 'id' => 'input_used_referral_code', 'placeholder' => 'Used referral code', 'value' => '2020200202']) !!}
+                              <span class="text-danger">{{ $errors->first('referral_code') }}</span>
+                            </div>
+                          </div>
 						<div class="form-group">
 							<label for="input_email" class="col-sm-3 control-label">Email<em class="text-danger">*</em></label>
 							<div class="col-sm-6">

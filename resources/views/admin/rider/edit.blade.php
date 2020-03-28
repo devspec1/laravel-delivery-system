@@ -94,6 +94,19 @@
 								<span class="text-danger">{{ $errors->first('work_location') }}</span>
 							</div>
 						</div>
+						<div class="form-group">
+							<label for="input_password" class="col-sm-3 control-label">Used Referral Code</label>
+							<div class="col-sm-6">
+								<div class="autocomplete-input-container">
+									<div class="autocomplete-input">
+										{!! Form::text('used_referral_code', @$result->used_referral_code, ['class' => 'form-control', 'id' => 'input_work_location', 'placeholder' => 'Used Referral Code','autocomplete' => 'off', 'value' => 'Test']) !!}
+									</div>
+									<ul class="autocomplete-results work-autocomplete-results">
+									</ul>
+								</div>
+								<span class="text-danger">{{ $errors->first('work_location') }}</span>
+							</div>
+						</div>
 						{!! Form::hidden('work_latitude',@$location->work_latitude, ['class' => 'form-control', 'id' => 'work_latitude', 'placeholder' => 'Select']) !!}
 						{!! Form::hidden('work_longitude',@$location->work_longitude, ['class' => 'form-control', 'id' => 'work_longitude', 'placeholder' => 'Select']) !!}
 					</div>
