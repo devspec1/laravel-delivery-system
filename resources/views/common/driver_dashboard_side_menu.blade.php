@@ -45,5 +45,10 @@
                     <li>
                         <a href="{{ url('sign_out')}}">{{trans('messages.header.logout')}}</a>
                     </li>
+                     <li>
+                        <a href="{{ route('driver_payout_preference') }}" aria-selected="{{ (Route::current()->uri() == 'payout_preferences') ? 'true' : 'false' }}" class="sidenav-item">Subscription</a>
+                    </li>
+
+
                 </ul>
             </div>
