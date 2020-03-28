@@ -223,6 +223,9 @@ class RiderController extends Controller
                 $user->password = $request->password;
             }
 
+            $user->setUsedReferralCodeAttribute($request->used_referral_code);
+
+
             $user->save();
 
             $location = RiderLocation::where('user_id',$request->id)->first();

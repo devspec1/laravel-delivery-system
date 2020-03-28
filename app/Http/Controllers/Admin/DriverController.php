@@ -663,6 +663,8 @@ class DriverController extends Controller
             flashMessage('danger', 'Invalid ID');
             return redirect(LOGIN_USER_TYPE.'/driver'); 
         }
+
+
         
         if($request->submit) {
             // Edit Driver Validation Rules
@@ -673,6 +675,7 @@ class DriverController extends Controller
                 'status'        => 'required',
                 // 'mobile_number' => 'required|regex:/[0-9]{6}/',
                 'referral_code' => 'required',
+                'used_referral_code' => 'nullable',
                 'country_code'  => 'required',
                 'license_front' => 'mimes:jpg,jpeg,png,gif',
                 'license_back'  => 'mimes:jpg,jpeg,png,gif',
@@ -758,6 +761,13 @@ class DriverController extends Controller
             $user->status       = $request->status;
             $user->country_code = $country_code;
             $user->referral_code = $request->referral_code;
+            
+
+           
+            $user->setUsedReferralCodeAttribute($request->used_referral_code);
+           
+
+
             if($request->mobile_number!="") {
                 $user->mobile_number = $request->mobile_number;
             }
