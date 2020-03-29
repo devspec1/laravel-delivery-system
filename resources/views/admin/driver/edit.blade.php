@@ -23,11 +23,12 @@
 						<h3 class="box-title">Edit Driver Form</h3>
 					</div>
 
+					{!! Form::open(['url' => LOGIN_USER_TYPE.'/edit_driver/'.$result->id, 'class' => 'form-horizontal','files' => true]) !!}
+
 					@if($referrer)
 
 					{!! Form::hidden('referrer',$referrer, ['id' => 'referrer']) !!}
-					{!! Form::open(['url' => LOGIN_USER_TYPE.'/edit_driver/'.$result->id, 'class' => 'form-horizontal','files' => true]) !!}
-
+					
 					@endif
 					<div class="box-body ed_bld">
 						<span class="text-danger">(*)Fields are Mandatory</span>
