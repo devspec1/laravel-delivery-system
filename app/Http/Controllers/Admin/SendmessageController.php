@@ -150,7 +150,7 @@ class SendmessageController extends Controller
             return $company_details->toJson();
         }
 
-        $user_details=User::select('id','first_name','mobile_number','user_type')->where('status','Active');
+        $user_details=User::select('id','first_name','last_name','mobile_number','user_type','referral_code')->where('status','Active');
 
         if($type != "all") {
             $user_details=$user_details->where('user_type',$type);

@@ -760,7 +760,7 @@ return [
 		'previous_referrals' 			=> 'Your Referrals',
 		'referral_credited' 			=> 'Referral Credited',
         'referral_credited_desc'		=> 'Referral Amount Credited to Your Wallet',
-        'referral_exists'                => 'Referral you are trying to set Exists',
+        'referral_exists'               => 'Referral you are trying to set Exists',
 	],
 
 	'date_time' => [

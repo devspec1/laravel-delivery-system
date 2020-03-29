@@ -27,7 +27,7 @@
 
 					@if($referrer)
 
-					{!! Form::hidden('referrer',$referrer, ['id' => 'referrer']) !!}
+					{!! Form::hidden('referrer', $referrer, ['id' => 'referrer']) !!}
 					
 					@endif
 					<div class="box-body ed_bld">
@@ -47,22 +47,22 @@
 							</div>
                         </div>
                         <div class="form-group">
-                            <label for="referral_code" class="col-sm-3 control-label">Referral Code<em class="text-danger">*</em></label>
+                            <label for="referral_code" class="col-sm-3 control-label">Referral Code</label>
                             <div class="col-sm-6">
                               {!! Form::text('referral_code', $result->referral_code, ['class' => 'form-control', 'id' => 'input_referral_code', 'placeholder' => 'Referral Code']) !!}
                               <span class="text-danger">{{ $errors->first('referral_code') }}</span>
                             </div>
                           </div>
-                           <div class="form-group">
-                            <label for="referral_code" class="col-sm-3 control-label">Used Referral Code<em class="text-danger">*</em></label>
+                           {{-- <div class="form-group">
+                            <label for="used_referral_code" class="col-sm-3 control-label">Used Referral Code<em class="text-danger">*</em></label>
                             <div class="col-sm-6">
                               {!! Form::text('used_referral_code', $result->used_referral_code, ['class' => 'form-control', 'id' => 'input_used_referral_code', 'placeholder' => 'Used referral code']) !!}
-                              <span class="text-danger">{{ $errors->first('referral_code') }}</span>
+                              <span class="text-danger">{{ $errors->first('used_referral_code') }}</span>
                             </div>
-                          </div>
+                          </div> --}}
 
                           <div class="form-group" style="margin-bottom: 1em">
-                          	<label for="input-tags3" class="col-sm-3 control-label">Referrer<em class="text-danger"></em></label>
+                          	<label for="input-tags3" class="col-sm-3 control-label">Used Referral Code</label>
                           	<div class="col-sm-6">
 	                    	<input type="text" id="input-tags3" name="referrer_id" value="" />
 	                    
@@ -270,6 +270,7 @@
     var select = $("#input-tags3").selectize();
     var selectize = select[0].selectize;
     selectize.disable();
+    
     $.ajax({
       type: 'POST',
       url: APP_URL+'/{{LOGIN_USER_TYPE}}/get_send_users',
@@ -281,12 +282,12 @@
         selectize.clear();
         selectize.clearOptions();
         $.each(resultData, function (key, value) {
-          selectize.addOption({value:value.id,text:value.first_name + ' - ' +value.mobile_number});
+          selectize.addOption({value:value.id,text:value.first_name + ' ' +  value.last_name+' - ' + value.user_type + ' - ' + value.mobile_number + ' - ' + value.referral_code});
         });
         selectize.enable();
 
         if(v = $("#referrer").val())
-       	 selectize.setValue(v, false);
+            selectize.setValue(v, false);
 
       }
     });

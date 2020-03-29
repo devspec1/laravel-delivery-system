@@ -148,7 +148,13 @@ class RiderController extends Controller
             if($data['result']) {
                 $data['country_code_option']=Country::select('long_name','phone_code')->get();
                 $data['location']=RiderLocation::where('user_id', $request->id)->first();
-                $data['referrer'] = ReferralUser::getExpiredRef($request->id);
+                $usedRef = User::where('referral_code', $data['result']->used_referral_code)->first();
+                if($usedRef){
+                    $data['referrer'] = $usedRef->id;
+                }
+                else{
+                    $data['referrer'] = null;
+                }
                 return view('admin.rider.edit', $data);
             }
             flashMessage('danger', 'Invalid ID');
@@ -225,55 +231,79 @@ class RiderController extends Controller
                 $user->password = $request->password;
             }
 
-            $user->setUsedReferralCodeAttribute($request->used_referral_code);
+            // $user->setUsedReferralCodeAttribute($request->used_referral_code);
+
+            //find user by refferer_id
+            $usedRef = User::find($request->referrer_id);
+            if($usedRef){
+                //remove old reference if used referral code updated
+                if($usedRef->used_referral_code != $user->used_referral_code){
+                    $old_reffered = User::where('referral_code', $user->used_referral_code)->first();
+                    $reference = ReferralUser::where('user_id', $old_reffered->id)->where('referral_id', $request->id)->first();
+                    if($reference){
+                        $reference->delete();
+                    }
+                }
+
+                //get reffernce between referred user and current user
+                $reference = ReferralUser::where('user_id', $usedRef->id)->where('referral_id', $request->id)->first();
+
+                if(!$reference) {
+                    //if there is no reference between users, create it
+                    $referrel_user = new ReferralUser;
+                    $referrel_user->referral_id = $user->id;
+                    $referrel_user->user_id     = $usedRef->id;
+                    $referrel_user->user_type   = $usedRef->user_type;
+                    $referrel_user->save();                   
+                }
+
+                $user->used_referral_code = $usedRef->referral_code;
+
+            }
 
 
             $user->save();
 
-            $usedRef = ReferralUser::where([['user_id', "=",  $request->id],['payment_status', '=', 'Expired']])->first();
-                if($usedRef == '') {
+            // $usedRef = ReferralUser::where([['user_id', "=",  $request->id],['payment_status', '=', 'Expired']])->first();
+            //     if($usedRef == '') {
 
-                            $usedRef = new ReferralUser;
+            //                 $usedRef = new ReferralUser;
 
-                             $refSettings = ReferralSetting::where("user_type", "Driver")->get();
+            //                  $refSettings = ReferralSetting::where("user_type", "Driver")->get();
 
-                            $usedRef->user_id = $request->id;
-                            $usedRef->referral_id = $request->referrer_id;
-                            $usedRef->user_type = 'Rider';
-                            $usedRef->start_date = date("Y-m-d");
-                            $usedRef->end_date = date("Y-m-d");
+            //                 $usedRef->user_id = $request->id;
+            //                 $usedRef->referral_id = $request->referrer_id;
+            //                 $usedRef->user_type = 'Rider';
+            //                 $usedRef->start_date = date("Y-m-d");
+            //                 $usedRef->end_date = date("Y-m-d");
                           
-                            $usedRef->payment_status = "Expired";
-                            $usedRef->created_at = date("Y-m-d H:i:s");
-                            $usedRef->updated_at = date("Y-m-d H:i:s");
+            //                 $usedRef->payment_status = "Expired";
+            //                 $usedRef->created_at = date("Y-m-d H:i:s");
+            //                 $usedRef->updated_at = date("Y-m-d H:i:s");
                         
-                            foreach($refSettings as $rs) {
-                                switch($rs["name"]) {
-                                    case "number_of_trips":
-                                        $usedRef->trips = $rs["value"];
-                                    break;
-                                    case "number_of_days":
-                                        $usedRef->days = $rs["value"];
-                                    break;
-                                    case "referral_amount":
-                                        $usedRef->amount = $rs["value"];
-                                        $usedRef->pending_amount = $rs["value"];
-                                    break;
-                                    case "currency_code";
-                                        $usedRef->currency_code = $rs["value"];
-                                    break;
-                                }
-                            
-                            }
-                            
-                           
-
-            }
-            else {
-                $usedRef->referral_id = $request->referrer_id;
-                $usedRef->updated_at = date("Y-m-d H:i:s");
-            }
-            $usedRef->save();
+            //                 foreach($refSettings as $rs) {
+            //                     switch($rs["name"]) {
+            //                         case "number_of_trips":
+            //                             $usedRef->trips = $rs["value"];
+            //                         break;
+            //                         case "number_of_days":
+            //                             $usedRef->days = $rs["value"];
+            //                         break;
+            //                         case "referral_amount":
+            //                             $usedRef->amount = $rs["value"];
+            //                             $usedRef->pending_amount = $rs["value"];
+            //                         break;
+            //                         case "currency_code";
+            //                             $usedRef->currency_code = $rs["value"];
+            //                         break;
+            //                     }
+            //                 }
+            // }
+            // else {
+            //     $usedRef->referral_id = $request->referrer_id;
+            //     $usedRef->updated_at = date("Y-m-d H:i:s");
+            // }
+            // $usedRef->save();
 
             $location = RiderLocation::where('user_id',$request->id)->first();
             if($location == '') {
