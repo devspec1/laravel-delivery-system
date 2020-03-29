@@ -64,6 +64,14 @@ class ReferralUser extends Model
         return ($remaining_days < 0) ? 0 : $remaining_days;
     }
 
+
+    public static function getExpiredRef($id) {
+        $exp = ReferralUser::where([['user_id', '=', $id], ['payment_status', '=', 'Expired']])->first();
+        if($exp)
+            return $exp->referral_id;
+        else
+            return false;
+    }
     // Get the Remaining trips to get payment
     public function getRemainingTripsAttribute()
     {

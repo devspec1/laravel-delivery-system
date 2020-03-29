@@ -27,6 +27,7 @@ use App\Models\ProfilePicture;
 use App\Models\Company;
 use App\Models\Vehicle;
 use App\Models\ReferralUser;
+use App\Models\ReferralSetting;
 use App\Models\DriverOweAmount;
 use App\Models\PayoutPreference;
 use App\Models\PayoutCredentials;
@@ -54,6 +55,7 @@ class DriverController extends Controller
     {
         $this->helper = new Helpers;
         $this->otp_helper = resolve('App\Http\Helper\OtpHelper');
+
         
     }
 
@@ -657,6 +659,9 @@ class DriverController extends Controller
                 $data['country_code_option']=Country::select('long_name','phone_code')->get();
                 $data['company']=Company::where('status','Active')->pluck('name','id');
                 $data['path']               = url('images/users/'.$request->id);
+                $data['referrer'] = ReferralUser::getExpiredRef($request->id);
+
+     
                 return view('admin.driver.edit', $data);
             }
 
@@ -762,11 +767,53 @@ class DriverController extends Controller
             $user->country_code = $country_code;
             $user->referral_code = $request->referral_code;
             
-
            
             $user->setUsedReferralCodeAttribute($request->used_referral_code);
-           
 
+            $usedRef = ReferralUser::where([['user_id', "=",  $request->id],['payment_status', '=', 'Expired']])->first();
+                if($usedRef == '') {
+
+                            $usedRef = new ReferralUser;
+
+                             $refSettings = ReferralSetting::where("user_type", "Driver")->get();
+
+                            $usedRef->user_id = $request->id;
+                            $usedRef->referral_id = $request->referrer_id;
+                            $usedRef->user_type = 'Driver';
+                            $usedRef->start_date = date("Y-m-d");
+                            $usedRef->end_date = date("Y-m-d");
+                          
+                            $usedRef->payment_status = "Expired";
+                            $usedRef->created_at = date("Y-m-d H:i:s");
+                            $usedRef->updated_at = date("Y-m-d H:i:s");
+                        
+                            foreach($refSettings as $rs) {
+                                switch($rs["name"]) {
+                                    case "number_of_trips":
+                                        $usedRef->trips = $rs["value"];
+                                    break;
+                                    case "number_of_days":
+                                        $usedRef->days = $rs["value"];
+                                    break;
+                                    case "referral_amount":
+                                        $usedRef->amount = $rs["value"];
+                                        $usedRef->pending_amount = $rs["value"];
+                                    break;
+                                    case "currency_code";
+                                        $usedRef->currency_code = $rs["value"];
+                                    break;
+                                }
+                            
+                            }
+                            
+                           
+
+            }
+            else {
+                $usedRef->referral_id = $request->referrer_id;
+                $usedRef->updated_at = date("Y-m-d H:i:s");
+            }
+            $usedRef->save();
 
             if($request->mobile_number!="") {
                 $user->mobile_number = $request->mobile_number;
