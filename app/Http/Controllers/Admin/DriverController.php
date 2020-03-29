@@ -756,7 +756,7 @@ class DriverController extends Controller
                 if($referral_c){
                     $validator->errors()->add('referral_code',trans('messages.referrals.referral_exists'));
                 }
-                
+
             });
 
             if ($validator->fails()) {
@@ -782,9 +782,11 @@ class DriverController extends Controller
                 //remove old reference if used referral code updated
                 if($usedRef->used_referral_code != $user->used_referral_code){
                     $old_reffered = User::where('referral_code', $user->used_referral_code)->first();
-                    $reference = ReferralUser::where('user_id', $old_reffered->id)->where('referral_id', $request->id)->first();
-                    if($reference){
-                        $reference->delete();
+                    if($old_reffered){
+                        $reference = ReferralUser::where('user_id', $old_reffered->id)->where('referral_id', $request->id)->first();
+                        if($reference){
+                            $reference->delete();
+                        }
                     }
                 }
 
