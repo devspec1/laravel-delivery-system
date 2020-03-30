@@ -400,7 +400,7 @@ class PayoutDetailController extends Controller
     {
         $user_details = JWTAuth::parseToken()->authenticate();
         $payout_methods = getPayoutMethods($user_details->company_id);
-        $payout_methods = implode($payout_methods,',');
+        $payout_methods = implode(',',$payout_methods);
 
         $rules = array(
             'payout_method' => 'required|in:'.$payout_methods,

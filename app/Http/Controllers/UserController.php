@@ -1037,7 +1037,7 @@ class UserController extends Controller
     {
         $user_details = Auth::user();
         $payout_methods = getPayoutMethods(Auth::user()->company_id);
-        $payout_methods = implode($payout_methods,',');
+        $payout_methods = implode(',',$payout_methods);
 
         $rules = array(
             'payout_method' => 'required|in:'.$payout_methods,

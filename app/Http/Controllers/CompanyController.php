@@ -97,7 +97,7 @@ class CompanyController extends Controller
     {
         $company_id = auth('company')->id();
         $payout_methods = getPayoutMethods();
-        $payout_methods = implode($payout_methods,',');
+        $payout_methods = implode(',',$payout_methods);
 
         $rules = array(
             'payout_method' => 'required|in:'.$payout_methods,

@@ -33,7 +33,7 @@ class CompanyDataTable extends DataTable
                 return protectedString($companies->email);
             })
             ->addColumn('drivers', function($companies) {
-                $driver_ids = $companies->drivers->implode('id',',');
+                $driver_ids = $companies->drivers->implode(',','id');
                 return '<p class="company_driver_list">'.$driver_ids.'</p>';
             })
             ->addColumn('action', function ($companies) {
