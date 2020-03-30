@@ -146,7 +146,7 @@ class EarningController extends Controller
 		}
 
 		$trip = Trips::find($request->trip_id); 
-		if($trip->status != 'Payment') {
+		if($trip->status != 'Payment' && $trips->status != 'Rating') {
 			return response()->json([
 				'status_code' => '0',
 				'status_message' => __('messages.api.something_went_wrong'),

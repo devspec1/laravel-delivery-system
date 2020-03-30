@@ -155,7 +155,7 @@ class RatingController extends Controller
 			ScheduleRide::where('id', $rideRequest->schedule_id)->update(['payment_method' => $rideRequest->payment_mode]);
 		}
 
-		if ($trips->status == 'Payment') {
+		if ($trips->status == 'Payment' || $trips->status == 'Rating') {
 			$data = [
 				'trip_id' 	=> $request->trip_id,
 				'user_type' => $request->user_type,
