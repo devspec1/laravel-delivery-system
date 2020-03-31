@@ -11,6 +11,10 @@ Homestead.yaml
 /public/trip_file
 /public/images/users
 /public/images/map
+/public/images/vehicle
+/public/images/driver
+/public/images/companies
+!/public/images/users/user.jpeg
 
 /nbproject
 .idea
