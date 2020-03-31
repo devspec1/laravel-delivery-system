@@ -9,8 +9,6 @@ Homestead.json
 Homestead.yaml
 
 /public/trip_file
-/public/images
-/public/images/logos
 /public/images/users
 /public/images/map
 
