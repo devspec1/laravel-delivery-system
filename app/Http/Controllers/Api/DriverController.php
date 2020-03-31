@@ -275,7 +275,7 @@ class DriverController extends Controller
             ];
         }
 
-		$user = User::where('id', $user_details->id)->where('user_type', $request->user_type)->first();
+		$user = User::where('id', $user_details->id)->first();
 
 		if ($user == '') {
 			return response()->json([
