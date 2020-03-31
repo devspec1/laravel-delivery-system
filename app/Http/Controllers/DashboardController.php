@@ -20,6 +20,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Trips;
 use App\Models\Rating;
+use App\Models\DriverAddress;
 use App\Models\ProfilePicture;
 use App\Models\ReferralSetting;
 use App\Models\ReferralUser;
