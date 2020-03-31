@@ -107,7 +107,9 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 
 	Route::post('ajax_payment', 'DriverDashboardController@ajax_payment');
 	Route::get('driver_referral', 'DashboardController@driver_referral')->name('driver_referral');
-
+    Route::get('get_passengers_for_drivers', 'DashboardController@get_passengers_for_drivers');
+    Route::get('get_drivers_for_drivers', 'DashboardController@get_drivers_for_drivers');
+    
 	// profile update
 	Route::post('driver_update_profile/{id}', 'DriverDashboardController@driver_update_profile');
 	Route::get('driver_invoice', 'DriverDashboardController@show_invoice');
