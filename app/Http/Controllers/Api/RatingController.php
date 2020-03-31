@@ -232,7 +232,22 @@ class RatingController extends Controller
 			Rating::updateOrCreate(['trip_id' => $request->trip_id], $data);
 		}
 
-		$trip = Trips::where('id', $request->trip_id)->first();
+        $trip = Trips::where('id', $request->trip_id)->first();
+        
+        if($trip->status == 'Completed'){
+            if($user_type == 'rider') {
+                $currency_code = $user_details->currency->code;
+                $tips 		= currencyConvert($currency_code, $trip->getOriginal('currency_code'),$request->tips);
+                $trip->tips = $tips;
+            }
+    
+            $trip->save();
+            
+            return response()->json([
+                'status_code' => '1',
+                'status_message' => "Rating successfully",
+            ]);
+        }
 
 		if(!in_array($trip->status,['Rating','Payment'])) {
 			return response()->json([
