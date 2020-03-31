@@ -359,7 +359,8 @@ return [
 		'content_block' => 'The content you requested cannot be found.',
 		'oops' => 'Oops!',
 		'cannot_find' => 'We can\'t seem to find the page you\'re looking for.',
-		'be_right_back' => 'Be Right Back',
+        'be_right_back' => 'Be Right Back',
+        'unsuccessful' => 'Unsuccessful',
 	],
 	'ride' =>[
 		'ride_with_gofer' => 'Start riding with :site_name',

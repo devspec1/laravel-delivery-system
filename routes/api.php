@@ -82,7 +82,8 @@ Route::group(['middleware' => 'jwt.verify'], function () {
 	Route::get('arive_now', 'TripController@ariveNow');
 	Route::get('begin_trip', 'TripController@beginTrip');
 	Route::get('accept_request', 'TripController@acceptTrip');
-	Route::get('cash_collected', 'DriverController@cash_collected');
+    Route::get('cash_collected', 'DriverController@cash_collected');
+    Route::get('profile_status', 'DriverController@profile_status');
 	
 	Route::match(array('GET', 'POST'), 'document_upload','ProfileController@document_upload');
 	Route::match(array('GET', 'POST'), 'map_upload','TripController@map_upload');

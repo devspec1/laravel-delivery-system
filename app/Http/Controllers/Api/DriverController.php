@@ -33,6 +33,7 @@ use App\Models\BankDetail;
 use App\Models\AppliedReferrals;
 use App\Models\ReferralUser;
 use App\Models\Fees;
+use App\Models\ProfilePicture;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -248,6 +249,61 @@ class DriverController extends Controller
 			'status_code' 		=> '1',
 			'status_message' 	=> trans('messages.success'),
 			'driver_status' 	=> @$user->status != '' ? $user->status : '',
+		]);
+    }
+    
+    /**
+	 * Check the Document status for each document
+	 *
+	 * @param Get method request inputs
+	 * @return @return Response in Json
+	 */
+	public function profile_status(Request $request)
+	{
+		$user_details = JWTAuth::parseToken()->authenticate();
+
+		$rules = array(
+			'document_type' => 'required|in:profile_image,driver_license_back,driver_license_front,motor_insurance,certificate_of_registration,driver_accreditation',
+		);
+
+		$validator = Validator::make($request->all(), $rules);
+
+		if($validator->fails()) {
+            return [
+            	'status_code' => '0',
+            	'status_message' => $validator->messages()->first()
+            ];
+        }
+
+		$user = User::where('id', $user_details->id)->where('user_type', $request->user_type)->first();
+
+		if ($user == '') {
+			return response()->json([
+				'status_code' 		=> '0',
+				'status_message'	=> trans('messages.api.invalid_credentials'),
+			]);
+        }
+        switch ($request->document_type){
+            case 'profile_image':
+                $user_profile_image = ProfilePicture::find($user_details->id);
+                if(!$user_profile_image || $user_profile_image == url('images/user.jpeg')){
+                    return response()->json([
+                        'status_code' 		=> '0',
+                        'status_message' 	=> trans('messages.errors.unsuccessful'),
+                    ]);
+                }
+                break;
+            case 'driver_license_back':
+                return response()->json([
+                    'status_code' 		=> '0',
+                    'status_message' 	=> trans('messages.errors.unsuccessful'),
+                ]);
+                break;
+        }
+        
+		return response()->json([
+			'status_code' 		=> '1',
+			'status_message' 	=> trans('messages.success'),
 		]);
 	}
 
