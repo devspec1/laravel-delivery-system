@@ -87,9 +87,6 @@ class DriverController extends Controller
 
             if ($request->input('submit') != null) {
 
-                
-          
-
                 $file = $request->file('file');
 
                 // File Details 
@@ -296,7 +293,7 @@ class DriverController extends Controller
                                         $data['country_code'] = $country_code;
                                         $data['mobile_no'] = $mobile_number;
 
-                                        $this->sendMailAndMessage($user, $data);
+                                        //$this->sendMailAndMessage($user, $data);
                                     }
                                 } else {
 
