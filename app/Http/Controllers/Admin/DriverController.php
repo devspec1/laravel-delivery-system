@@ -173,7 +173,7 @@ class DriverController extends Controller
                                 $user_data = User::where('email', $email)->get();
                                 $user_count = User::where('email', $email)->count();
 
-                                if (!(user_count > 0)) {
+                                if (!($user_count > 0)) {
 
                                     if (empty($referral_code)) {
                                         $referral_code = 'TEST' . $index;
