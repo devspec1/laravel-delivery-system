@@ -613,4 +613,72 @@ class DriverDashboardController extends Controller
             return json_encode($check_otp_responce);
         }
     }
+
+    /*
+    * Shows All Driver Inbox
+    */
+    public function show_inbox()
+    {
+        return view('driver_dashboard.driver_inbox');
+    }
+
+
+    /*
+    * Shows All Driver Earnings
+    */
+    public function show_earnings()
+    {
+        return view('driver_dashboard.driver_earnings');
+    }
+
+
+    /*
+    * Shows All Driver DriverTeam
+    */
+    public function show_driverteam()
+    {
+        return view('driver_dashboard.driver_driverteam');
+    }
+
+    /*
+    * Shows All Driver Passengers
+    */
+    public function show_passengers()
+    {
+        return view('driver_dashboard.driver_passengers');
+    }
+
+    /*
+    * Shows All Driver Account
+    */
+    public function show_account()
+    {
+        return view('driver_dashboard.driver_account');
+    }
+
+    /*
+    * Shows All Driver Help
+    */
+    public function show_help()
+    {
+        return view('driver_dashboard.driver_help');
+    }
+
+    /*
+    * Shows Info about Driver's Vehicle
+    */
+    public function vehicle_view()
+    {
+        return view('driver_dashboard.vehicle_view');
+    }
+
+    /*
+    * Manage membership
+    */
+    public function membership()
+    {
+        return view('driver_dashboard.manage_membership');
+    }
+
+    
 }

@@ -88,6 +88,24 @@ return [
 		'how_it_works' => 'How it Works',
 		'menu' => 'Menu',
 		'help' => 'Help',
+		'inbox' => 'Inbox',			// Added new
+		'earnings' => [
+			'root' => 'Earnings',
+			'trips_payments' => 'Trips & Payments',
+			'pay_statements' => 'Pay Statements'
+		],
+		'driverteam' => 'Driver Team',
+		'passengers' => 'Passengers',
+		'account' => [
+			'root' => 'Account',
+			'edit_profile' => 'Edit Profile',
+			'vehicle_view' => 'Vehicle View',
+			'documents' => 'Documents',
+			'manage_membership' => 'Manage Membership',
+			'bank_details' => 'Bank Details',
+			'referral' => 'Referral'
+		],
+		'help' => 'Help'
 	],
 	'dashboard' =>[
 		'trip_invoice' => 'Trip Invoices',

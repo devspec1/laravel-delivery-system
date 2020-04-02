@@ -120,6 +120,22 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 	Route::post('update_payout_preference','UserController@updatePayoutPreference')->name('update_payout_preference');
 	Route::get('payout_delete/{id}', 'UserController@payoutDelete')->where('id', '[0-9]+')->name('payout_delete');
 	Route::get('payout_default/{id}', 'UserController@payoutDefault')->where('id', '[0-9]+')->name('payout_default');
+
+	//New Routes (Menu)
+	Route::get('driver/inbox', 'DriverDashboardController@show_inbox');
+	Route::get('driver/trips_payments', 'DriverDashboardController@driver_trip');
+	Route::get('driver/trips_payments_detail/{id}', 'DriverDashboardController@driver_trip_detail');
+	Route::get('driver/pay_statements', 'DriverDashboardController@driver_payment');
+	Route::get('driver/driverteam', 'DriverDashboardController@show_driverteam');
+	Route::get('driver/passengers', 'DriverDashboardController@show_passengers');
+	Route::get('driver/edit_profile', 'DriverDashboardController@driver_profile');
+	Route::get('driver/vehicle_view', 'DriverDashboardController@vehicle_view');
+	Route::get('driver/documents', 'DriverDashboardController@documents');
+	Route::get('driver/membership', 'DriverDashboardController@membership');
+	Route::get('driver/bank_details', 'DriverDashboardController@payoutPreferences')->name('driver_payout_preference');
+	Route::get('driver/referral', 'DashboardController@driver_referral')->name('driver_referral');
+	Route::get('driver/help', 'DriverDashboardController@show_help');
+
 });
 
 Route::get('sign_out', function () {
