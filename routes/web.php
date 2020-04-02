@@ -127,7 +127,7 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 	Route::get('driver/trips_payments_detail/{id}', 'DriverDashboardController@driver_trip_detail');
 	Route::get('driver/pay_statements', 'DriverDashboardController@driver_payment');
 	Route::get('driver/driverteam', 'DashboardController@get_drivers_for_drivers');
-	Route::get('driver/passengers', 'DriverDashboardController@show_passengers');
+	Route::get('driver/passengers', 'DashboardController@get_passengers_for_drivers');
 	Route::get('driver/edit_profile', 'DriverDashboardController@driver_profile');
 	Route::get('driver/vehicle_view', 'DriverDashboardController@vehicle_view');
 	Route::get('driver/documents', 'DriverDashboardController@documents');

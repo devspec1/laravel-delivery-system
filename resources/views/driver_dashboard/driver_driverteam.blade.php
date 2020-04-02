@@ -4,6 +4,7 @@
   <div class="page-lead separated--bottom  text--center text--uppercase">
     <h1 class="flush-h1 flush">{{trans('messages.header.driverteam')}}</h1>
   </div>
+  
   <ul class="user-list">
     @foreach ($referrals as $user)
       <li>
