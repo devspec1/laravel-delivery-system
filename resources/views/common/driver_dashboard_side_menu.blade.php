@@ -1,7 +1,7 @@
 <div class="container mar-zero" style="padding:0px;">
     <div class="col-lg-10 col-md-10 col-sm-13 col-xs-12  height--full dash-panel">
         <div class="height--full pull-left separated--sides full-width">
-            <div style="padding:0px; background-color:black;" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 flexbox__item one-fifth page-sidebar hidden--portable hide-sm-760">
+            <div style="padding:0px; background-color:black; height:100vh" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 flexbox__item one-fifth page-sidebar hidden--portable hide-sm-760">
                 <ul class="driver-nav">
                     <div class="soft--ends">
                         <div class="center-block three-quarters push-half--bottom">
@@ -111,9 +111,3 @@
                     });
                 }
             </script>
-
-<style>
-    .driver-nav {
-        height:1000px;
-    }
-</style>

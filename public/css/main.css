@@ -4593,3 +4593,11 @@ ul.driver-dashboard-treeview-menu > li.active a {
 .user-list li > span {
     padding: 5px;
 }
+
+@media (max-width: 767px) {
+    .navbar-toggle {
+        position: relative !important;
+        margin: 20x 0px 8px !important;
+        
+    }
+}

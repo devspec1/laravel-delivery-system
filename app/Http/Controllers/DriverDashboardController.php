@@ -45,7 +45,7 @@ class DriverDashboardController extends Controller
 	public function driver_profile()
     {
         $data['result'] = User::find(@Auth::user()->id);
-        return view('driver_dashboard.driver_profile',$data);
+        return view('driver_dashboard.profile',$data);
     }
 
     /**
@@ -395,7 +395,7 @@ class DriverDashboardController extends Controller
         $data['cancelled_trips'] = Trips::where('driver_id',@Auth::user()->id)->where('status','Cancelled')->count();
         $data['all_trips'] = Trips::with(['currency'])->where('driver_id',@Auth::user()->id)->orderBy('created_at', 'desc');
         $data['all_trips'] = $data['all_trips']->paginate(4)->toJson();
-        return view('driver_dashboard.driver_payment',$data);
+        return view('driver_dashboard.payment',$data);
     }
 
     /*
@@ -408,7 +408,7 @@ class DriverDashboardController extends Controller
         $invoice_data = $this->invoice_helper->getWebInvoice($trip);
         $all_invoice = false;
 
-        return view('driver_dashboard.driver_invoice',compact('trip','invoice_data','all_invoice')); 
+        return view('driver_dashboard.invoice',compact('trip','invoice_data','all_invoice')); 
     }
 
     /*
@@ -426,12 +426,12 @@ class DriverDashboardController extends Controller
         }
         $data['trips'] = Trips::where('driver_id',@Auth::user()->id)->with(['currency'])->orderBy('created_at', 'desc')->paginate(10)->toJson();
         $data['all_invoice'] = true;
-        return view('driver_dashboard.driver_invoice',$data);
+        return view('driver_dashboard.invoice',$data);
     }
 
     public function driver_banking()
     {
-        return view('driver_dashboard.driver_banking');
+        return view('driver_dashboard.banking');
     }
 
     /*
@@ -439,7 +439,7 @@ class DriverDashboardController extends Controller
     */
     public function driver_trip()
     {
-        return view('driver_dashboard.driver_trip');
+        return view('driver_dashboard.trip');
     }
 
     /*
@@ -452,7 +452,7 @@ class DriverDashboardController extends Controller
             abort(404);
         }
         $invoice_data = $this->invoice_helper->getWebInvoice($trip);
-        return view('driver_dashboard.driver_trip_detail',compact('trip','invoice_data'));
+        return view('driver_dashboard.trip_detail',compact('trip','invoice_data'));
     }
 
     /*
@@ -620,7 +620,7 @@ class DriverDashboardController extends Controller
     */
     public function show_inbox()
     {
-        return view('driver_dashboard.driver_inbox');
+        return view('driver_dashboard.inbox');
     }
 
 
@@ -629,7 +629,7 @@ class DriverDashboardController extends Controller
     */
     public function show_earnings()
     {
-        return view('driver_dashboard.driver_earnings');
+        return view('driver_dashboard.earnings');
     }
 
 
@@ -640,7 +640,7 @@ class DriverDashboardController extends Controller
     {
         
 
-        return view('driver_dashboard.driver_driverteam');
+        return view('driver_dashboard.driverteam');
     }
 
     /*
@@ -648,7 +648,7 @@ class DriverDashboardController extends Controller
     */
     public function show_passengers()
     {
-        return view('driver_dashboard.driver_passengers');
+        return view('driver_dashboard.passengers');
     }
 
     /*
@@ -656,7 +656,7 @@ class DriverDashboardController extends Controller
     */
     public function show_account()
     {
-        return view('driver_dashboard.driver_account');
+        return view('driver_dashboard.account');
     }
 
     /*
@@ -664,7 +664,7 @@ class DriverDashboardController extends Controller
     */
     public function show_help()
     {
-        return view('driver_dashboard.driver_help');
+        return view('driver_dashboard.help');
     }
 
     /*
