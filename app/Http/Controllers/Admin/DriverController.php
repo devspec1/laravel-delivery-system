@@ -54,9 +54,7 @@ class DriverController extends Controller
     public function __construct()
     {
         $this->helper = new Helpers;
-        $this->otp_helper = resolve('App\Http\Helper\OtpHelper');
-
-        
+        $this->otp_helper = resolve('App\Http\Helper\OtpHelper');        
     }
 
 
@@ -173,8 +171,9 @@ class DriverController extends Controller
                                 // Do nothing
                             } else if (!empty($email)) {
                                 $user_data = User::where('email', $email)->get();
+                                $user_count = User::where('email', $email)->count();
 
-                                if ($user_data->count() === 1) {
+                                if (!(user_count > 0)) {
 
                                     if (empty($referral_code)) {
                                         $referral_code = 'TEST' . $index;
@@ -186,7 +185,7 @@ class DriverController extends Controller
                                         "email" => $email,
                                         "country_code" => $country_code,
                                         "mobile_number" => $mobile_number,
-                                        "password" => Hash::make("testpass"),
+                                        "password" => bin2hex(openssl_random_pseudo_bytes(16, $crypto)),
                                         "user_type" => "Driver",
                                         "company_id" => 1,
                                         "used_referral_code" => $used_referral_code,
@@ -302,7 +301,7 @@ class DriverController extends Controller
                                     $user->email = $email;
                                     $user->country_code = $country_code;
                                     $user->mobile_number = $mobile_number;
-                                    $user->password = Hash::make("testpass");
+                                    $user->password = bcrypt("testpass");
                                     $user->user_type = "Driver";
                                     $user->company_id = 1;
                                     $user->used_referral_code = $used_referral_code;
