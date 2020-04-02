@@ -708,6 +708,21 @@ class DriverDashboardController extends Controller
     */
     public function vehicle_view()
     {
+		$user = User::where('id', @Auth::user()->id)->first();
+
+        if ($user == '') {
+			abort(404);
+		}
+        $vehicle_details = array(
+    	    ["key" => "car_id", "value" => @$user->driver_documents->vehicle_id ?: '1'],
+    	    ["key" => "car_type", "value" => $user->car_type],
+            ["key" => "car_image", "value" => @$user->driver_documents->car_type->vehicle_image],
+            ["key" => "car_active_image", "value" => @$user->driver_documents->car_type->active_image],
+            ["key" => "vehicle_name", "value" => @$user->driver_documents->vehicle_name ?? ''],
+            ["key" => "vehicle_number", "value" => @$user->driver_documents->vehicle_number ?? ''],
+        );
+
+		//return response()->json($vehicle_details);
         return view('driver_dashboard.vehicle_view');
     }
 
