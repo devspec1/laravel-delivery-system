@@ -510,8 +510,8 @@ class DashboardController extends Controller
         $response_array['total_earning']  		= $user->total_referral_earnings;
         $response_array['referrals']        	= $pending_referrals;
         
-        //return view('dashboard.drive_team',$response_array);
+        return view('driver_dashboard.driver_driverteam',$response_array);
 
-		return response()->json($response_array);
+		// return response()->json($response_array);
 	}
 }

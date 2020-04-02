@@ -479,6 +479,9 @@
 		</div>
 	</div>
 </div>
+</div>
+</div>
+</div>
 @endsection
 @push('scripts')
 <script src="https://js.stripe.com/v3/"></script>

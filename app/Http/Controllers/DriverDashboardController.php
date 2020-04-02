@@ -390,6 +390,7 @@ class DriverDashboardController extends Controller
         else {
             $data['acceptance_rate'] = '0%';
         }
+
         $data['completed_trips'] = Trips::where('driver_id',@Auth::user()->id)->where('status','Completed')->count();
         $data['cancelled_trips'] = Trips::where('driver_id',@Auth::user()->id)->where('status','Cancelled')->count();
         $data['all_trips'] = Trips::with(['currency'])->where('driver_id',@Auth::user()->id)->orderBy('created_at', 'desc');

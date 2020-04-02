@@ -4577,3 +4577,19 @@ ul.driver-dashboard-treeview-menu > li.active a {
     background-color: #444;
     color: #fff;
 }
+
+.user-profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+.user-list {
+    list-style: none;
+    padding: 0px;
+}
+.user-list li {
+    padding: 20px 20px;
+}
+.user-list li > span {
+    padding: 5px;
+}

@@ -4,8 +4,16 @@
   <div class="page-lead separated--bottom  text--center text--uppercase">
     <h1 class="flush-h1 flush">{{trans('messages.header.driverteam')}}</h1>
   </div>
-
-{{ Form::close() }}
+  <ul class="user-list">
+    @foreach ($referrals as $user)
+      <li>
+        <span>
+          <img class="user-profile-image" src="{{ $user["profile_image"] }}" alt="user-profile" />
+        </span>
+        <span>{{ $user["name"] }}</span>
+      </li>
+    @endforeach
+  </ul>
 </div>
 </div>
 </div>
