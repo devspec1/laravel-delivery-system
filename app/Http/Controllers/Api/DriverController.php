@@ -34,6 +34,8 @@ use App\Models\AppliedReferrals;
 use App\Models\ReferralUser;
 use App\Models\Fees;
 use App\Models\ProfilePicture;
+use App\Models\Vehicle;
+use App\Models\DriverDocuments;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -283,12 +285,13 @@ class DriverController extends Controller
 				'status_message'	=> trans('messages.api.invalid_credentials'),
 			]);
         }
+
         $response_array = array();
         $response_array['status_code'] = '1';
         $response_array['status_message'] = trans('messages.api.listed_successfully');
         $response_array['profile_image'] = '1';
         $response_array['driver_license_back'] = '1';
-        $response_array['driver_license_front'] = '0';
+        $response_array['driver_license_front'] = '1';
         $response_array['motor_insurance'] = '1';
         $response_array['certificate_of_registration'] = '1';
         $response_array['driver_accreditation'] = '1';
@@ -298,7 +301,39 @@ class DriverController extends Controller
         if(!$user_profile_image || $user_profile_image->src == url('images/user.jpeg')){
             $response_array['profile_image'] = '0';
         }
+
+        $vehicle = Vehicle::where('user_id', $user->id)->first();
+        if($vehicle){
+            if(!$vehicle->rc){
+                $response_array['certificate_of_registration'] = '0';
+            }
+            if(!$vehicle->permit){
+                $response_array['driver_accreditation'] = '0';
+            }
+            if(!$vehicle->insurance){
+                $response_array['motor_insurance'] = '0';
+            }
+        }
+        else{
+            $response_array['motor_insurance'] = '0';
+            $response_array['certificate_of_registration'] = '0';
+            $response_array['driver_accreditation'] = '0';
+        }
         
+        $driver_docs = DriverDocuments::where('user_id', $user->id)->first();
+
+        if($driver_docs){
+            if (!$driver_docs->license_front) {
+                $response_array['driver_license_back'] = '0';
+            }
+            if (!$driver_docs->license_back) {
+                $response_array['driver_license_back'] = '0';
+            }
+        }
+        else{
+            $response_array['driver_license_back'] = '0';
+            $response_array['driver_license_front'] = '0';
+        }
 
         // return response()->json([
         //     'status_code' 		=> '0',
