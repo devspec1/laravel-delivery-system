@@ -664,6 +664,42 @@ class DriverDashboardController extends Controller
     */
     public function show_help()
     {
+        $faq_array_1 = array("question" => "What is the booking commission for drivers?" ,
+        "answer" => "Zero. Zip. Nada. Drivers earn a combination of fares, profit bonuses and residual income for their membership fee of $9.95 per week." );
+
+        $faq_array_2 = array("question" => "When do we launch / start in my city?" ,
+                "answer" => "As a driver owned enterprise, we are in the pre-launch phase in 3 countries which means we are recruiting our base of RODO (driver owners) and complying with all the regulatory requirements in each market. Each country and city has different expected launch dates. Keep connected to learn more as and when we know." );
+
+        $faq_array_3 = array("question" => "Who or what are RODOs?" ,
+                "answer" => "RODO is an abbreviation of Ride On Driver Owners. RODOs are member owners of The Ride On Driver Owner Group Pty Ltd (a company registered specifically for drivers). RODOs have all the freedoms to change their workload anytime earning as much as they want." );
+
+        $faq_array_4 = array("question" => "What's the benefit of joining pre-launch?" ,
+                    "answer" => "We offer RODOs that join pre-launch a range of benefits that include Founder Status, a free BLACK RIDE ON Card and the maximum earning capacity from our compensation plan including double the residuals on driver team referrals." );
+
+
+
+        $faq_array_5 = array("question" => "What is a RODO's compensation plan?" ,
+                "answer" => "Earning opportunities at Ride On are exceptional. There are four income streams. First, all drivers will earn the usual fare income for distance and time traveled by a passenger. Secondly, all qualified RODOs can earn up to 10% from the revenue of the owners group through a monthly proﬁt share. This depends on such factors as performance, customer reviews and a number of hours they worked. Thirdly, RODOs who recruit or refer other drivers to Ride On can earn a residual income from a 1% rider on their team's booking income for as long as they continue to drive for Ride On. You can listen to the Compensation Plan here: https://tinyurl.com/w9d93e6" );
+
+
+        $faq_array_6 = array("question" => "Car inspections, medical check ups, free coffee?" ,
+                    "answer" => "Like all other companies operating in your market, we comply with the regulatory requirements of each country, city and state. Car inspections and medical check ups are done by the same 3rd party providers such as Red Books, Job Fit etc. If you already drive for Uber, you will already have those documents and they can be used in your application with Ride On. We don't spend money on fancy offices with free coffee and kids in black t-shirts. We would rather give that money back to our RODOs in profit bonuses. If you want the free coffee, stick to Uber." );
+
+        $faq_array_7 = array("question" => "What is your company registration number?" ,
+                    "answer" => "In Australia we trade as Ride On Driver Owners Group under ABN 21 554 054 343 Intercargo Logistics Pty Ltd. This is a 10 year old company originally incorporated by Yossi Lavy, our co-founder." );
+
+        $faq_array_8 = array("question" => "Why did you delete my posts on Facebook?" ,
+                    "answer" => "We have a zero tolerance policy for rude, whinny, trolls. If you don't like what we are doing, how we're doing it or if you feel entitled to things and feel you can dump on us and other people's dreams of building something new; you're not for us and more importantly, our customers. Thank you. Love and kisses." );
+
+        $faq = array( $faq_array_1 , $faq_array_2 , $faq_array_3 , $faq_array_4 , $faq_array_5 , $faq_array_6 , $faq_array_7 , $faq_array_8);
+
+        // return response()->json([
+        // 'status_code'       => '1' , 
+        // 'status_message'    => 'Success',
+        // 'faq'        => $faq
+        // ]);
+
+        //return view('', $faq);
         return view('driver_dashboard.help');
     }
 
