@@ -324,7 +324,7 @@ class DriverController extends Controller
 
         if($driver_docs){
             if (!$driver_docs->license_front) {
-                $response_array['driver_license_back'] = '0';
+                $response_array['driver_license_front'] = '0';
             }
             if (!$driver_docs->license_back) {
                 $response_array['driver_license_back'] = '0';
