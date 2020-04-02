@@ -2,7 +2,7 @@
 @section('main')
 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content driver_payment" style="padding:0px;" ng-controller="payment" ng-cloak>
     <div class="page-lead separated--bottom  text--center text--uppercase">
-        <h1 class="flush-h1 flush"> @lang('messages.header.payment') </h1>
+        <h1 class="flush-h1 flush"> @lang('messages.header.earnings.pay_statements') </h1>
     </div>
     <div style="padding:0px 15px;">
         <div class="page-lead separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="    padding: 20px 20px 10px;border-bottom:0px !important;">
@@ -117,6 +117,8 @@
         </div>
     </div>
 </div>
+</div>
+
 @endsection
 @push('scripts')
     <style type="text/css">

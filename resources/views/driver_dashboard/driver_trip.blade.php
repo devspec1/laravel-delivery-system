@@ -12,7 +12,7 @@
                 </div>
                 <div class="flexbox__item col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <h1 class="flush flush-h1">
-                        @lang('messages.header.mytrips')
+                        @lang('messages.header.earnings.trips_payments')
                     </h1>
                 </div>
                 <div class="flexbox__item col-lg-4 col-md-4 col-sm-4 col-xs-12 text--right"></div>
