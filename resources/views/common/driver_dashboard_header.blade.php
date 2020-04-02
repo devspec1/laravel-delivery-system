@@ -50,7 +50,80 @@
                                 </div>
                             </div>
                         </li>
-                        <li>
+                        <ul class="driver-nav">
+                            <li class="{{ (Route::current()->uri() == 'driver/inbox') ? 'active' : '' }}">
+                                <a href="{{ url('driver/inbox') }}" >
+                                    {{trans('messages.header.inbox')}}
+                                </a>
+                            </li>
+                            <li class="driver-dashboard-treeview {{ (Route::current()->uri() == 'driver/trips_payments' || Route::current()->uri() == 'driver/pay_statements') ? 'active' : ''  }}">
+                                <a href="#">
+                                    <span>{{trans('messages.header.earnings.root')}}</span><i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="driver-dashboard-treeview-menu">
+                                    <li class="{{ (Route::current()->uri() == 'driver/trips_payments') ? 'active' : ''  }}">
+                                        <a href="{{ url('driver/trips_payments') }}">
+                                            <span>{{trans('messages.header.earnings.trips_payments')}}</span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="{{ (Route::current()->uri() == 'driver/pay_statements') ? 'active' : ''  }}">
+                                        <a href="{{ url('driver/pay_statements') }}">
+                                            <span>{{trans('messages.header.earnings.pay_statements')}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="{{ (Route::current()->uri() == 'driver/driverteam') ? 'active' : '' }}">
+                                <a href="{{ url('driver/driverteam') }}">{{trans('messages.header.driverteam')}}</a>
+                            </li>
+                            <li class="{{ (Route::current()->uri() == 'driver/passengers') ? 'active' : '' }}">
+                                <a href="{{ url('driver/passengers') }}">{{trans('messages.header.passengers')}}</a>
+                            </li>
+                            <li class="driver-dashboard-treeview {{ (Route::current()->uri() == 'driver/edit_profile' || Route::current()->uri() == 'driver/vehicle_view'  || Route::current()->uri() == 'driver/documents' || Route::current()->uri() == 'driver/membership' || Route::current()->uri() == 'driver/bank_details' || Route::current()->uri() == 'driver/referral') ? 'active' : ''  }}">
+                                <a href="#">
+                                    <span>{{trans('messages.header.account.root')}}</span><i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="driver-dashboard-treeview-menu">
+                                    <li class="{{ (Route::current()->uri() == 'driver/edit_profile') ? 'active' : ''  }}">
+                                        <a href="{{ url('driver/edit_profile') }}">
+                                            <span>{{trans('messages.header.account.edit_profile')}}</span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="{{ (Route::current()->uri() == 'driver/vehicle_view') ? 'active' : ''  }}">
+                                        <a href="{{ url('driver/vehicle_view') }}">
+                                            <span>{{trans('messages.header.account.vehicle_view')}}</span>
+                                        </a>
+                                    </li>
+                                    <li class="{{ (Route::current()->uri() == 'driver/documents') ? 'active' : ''  }}">
+                                        <a href="{{ url('driver/documents') }}">
+                                            <span>{{trans('messages.header.account.documents')}}</span>
+                                        </a>
+                                    </li>
+                                    <li class="{{ (Route::current()->uri() == 'driver/membership') ? 'active' : ''  }}">
+                                        <a href="{{ url('driver/membership') }}">
+                                            <span>{{trans('messages.header.account.manage_membership')}}</span>
+                                        </a>
+                                    </li>
+                                    <li class="{{ (Route::current()->uri() == 'driver/bank_details') ? 'active' : ''  }}">
+                                        <a href="{{ url('driver/bank_details') }}">
+                                            <span>{{trans('messages.header.account.bank_details')}}</span>
+                                        </a>
+                                    </li>
+                        
+                                    <li class="{{ (Route::current()->uri() == 'driver/referral') ? 'active' : ''  }}">
+                                        <a href="{{ url('driver/referral') }}">
+                                            <span>{{trans('messages.header.account.referral')}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="{{ (Route::current()->uri() == 'driver/help') ? 'active' : ''  }}">
+                                <a href="{{ url('driver/help') }}">{{trans('messages.header.help')}}</a>
+                            </li>
+                        </ul>
+                        {{-- <li>
                             <a href="{{ url('driver_profile') }}">@lang('messages.header.profil') </a>
                         </li>
                         
@@ -73,7 +146,7 @@
                         @endif
                         <li>
                             <a href="{{ url('sign_out')}}" class="free-rides-button hide-md-760">@lang('messages.header.logout') </a>
-                        </li>
+                        </li> --}}
                     </ul>
                     <div class="soft-half hide-sm-760">
                         <ul class="block-list text--uppercase">
@@ -108,7 +181,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="{{ url('driver_profile') }}" > @lang('messages.header.profil') </a>
                             </li>
                             <li>
@@ -127,7 +200,7 @@
                             <li>
                                 <a href="{{ route('driver_referral') }}"> @lang('messages.referrals.referral') </a>
                             </li>
-                            @endif
+                            @endif --}}
                             <li>
                                 <a href="{{ url('sign_out')}}"> @lang('messages.header.logout') </a>
                             </li>

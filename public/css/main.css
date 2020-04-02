@@ -2750,7 +2750,7 @@ button:focus {
 .site-nav>li>.trip-filter__origin-link.collapsed,
 .site-nav>li>a {
     padding: 10px;
-    border-bottom: 1px solid #efefef;
+     border-bottom: 1px solid #efefef; 
 }
 
 .block-list>li,
@@ -2899,7 +2899,7 @@ button:focus {
 .site-nav>li>.trip-filter__origin-link.collapsed,
 .site-nav>li>a {
     padding: 10px;
-    border-bottom: 1px solid #efefef;
+    border-bottom: 1px solid #efefef; 
 }
 
 .block-list>li>.trip-filter__origin-link.collapsed,
@@ -4514,4 +4514,90 @@ button:focus {
 }
 
 
-/*how it work page*/
+/*Driver Dashboard menu-bar styles*/
+
+a.driver-dashboard-side-menu_link {
+    color: white;
+}
+
+.driver-dashboard-treeview .driver-dashboard-treeview-menu {
+    display: none;
+}
+
+.active {
+    background: #1fbad6;
+}
+.active .driver-dashboard-treeview-menu {
+    display: block !important;
+}
+
+ul.driver-nav {
+    padding: 0;
+    list-style: none;
+}
+
+ul.driver-nav > li > a {
+    display: block;
+    padding: 10px 12px;
+    font-size: 16px;
+    font-weight: 200;
+    color: #fff;
+}
+
+ul.driver-nav > li:hover > a{
+    color: #fff;
+    background-color: #1fbad6;
+}
+ul.driver-nav > li:hover > a {
+    color: #fff;
+    font-weight: bold;
+}
+li.driver-dashboard-treeview {
+    padding: 0 !important;
+}
+
+ul.driver-dashboard-treeview-menu {
+    background: #000;
+    list-style:none;
+    padding-left: 0px;
+}
+
+ul.driver-dashboard-treeview-menu > li > a {
+    display: block;
+    padding: 8px 12px 8px 30px;
+    font-size: 16px;
+    font-weight: 200;
+}
+
+ul.driver-dashboard-treeview-menu > li:hover > a {
+    color: #fff;
+    background-color: #333;
+}
+ul.driver-dashboard-treeview-menu > li.active a {
+    background-color: #444;
+    color: #fff;
+}
+
+.user-profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+.user-list {
+    list-style: none;
+    padding: 0px;
+}
+.user-list li {
+    padding: 20px 20px;
+}
+.user-list li > span {
+    padding: 5px;
+}
+
+@media (max-width: 767px) {
+    .navbar-toggle {
+        position: relative !important;
+        margin: 20x 0px 8px !important;
+        
+    }
+}

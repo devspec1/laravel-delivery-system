@@ -1,6 +1,7 @@
+<title>Edit Profile</title>
 @extends('template_driver_dashboard') 
 @section('main')
-<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content" style="padding:0px;" ng-controller="facebook_account_kit">
+<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content" style="padding:0px !important;" ng-controller="facebook_account_kit">
   <div class="page-lead separated--bottom  text--center text--uppercase">
     <h1 class="flush-h1 flush">{{trans('messages.header.profil')}}</h1>
   </div>
@@ -38,10 +39,10 @@
     @endif
   </div>
 </div>
-<div class="page-lead separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="border-bottom:0px !important;">
+{{-- <div class="page-lead separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="border-bottom:0px !important;">
   <a href="{{ url('documents/'.@Auth::user()->id) }}" style="    padding: 0px 30px !important;
   font-size: 14px !important;" type="submit" class="btn btn--primary btn-blue">{{trans('messages.driver_dashboard.manage_documents')}}</a>
-</div>
+</div> --}}
 <div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="    padding: 25px 0px 15px;">
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-6" style="padding:6px 0px;">

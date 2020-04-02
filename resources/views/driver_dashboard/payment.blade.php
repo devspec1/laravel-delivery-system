@@ -2,7 +2,7 @@
 @section('main')
 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content driver_payment" style="padding:0px;" ng-controller="payment" ng-cloak>
     <div class="page-lead separated--bottom  text--center text--uppercase">
-        <h1 class="flush-h1 flush"> @lang('messages.header.payment') </h1>
+        <h1 class="flush-h1 flush"> @lang('messages.header.earnings.pay_statements') </h1>
     </div>
     <div style="padding:0px 15px;">
         <div class="page-lead separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="    padding: 20px 20px 10px;border-bottom:0px !important;">
@@ -28,21 +28,21 @@
         </div>
         <div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12 pay_period_details" style="    padding: 15px 0px 15px;" >
             <div class="col-lg-4 col-md-3 col-sm-3 col-xs-6 bor-left">
-                <label style="padding:6px 0px;" ng-init="completed_trips={{ $completed_trips }}" ng-model="completed_trips"> @{{ completed_trips }} </label>
+                <label style="padding:6px 0px;" ng-init="completed_trips={{$completed_trips}}" ng-model="completed_trips"> {{ $completed_trips }} </label>
                 <small style="padding:6px 0px;"> @lang('messages.driver_dashboard.completed_trips') </small>
             </div>
             <div class="col-lg-4 col-md-3 col-sm-3 col-xs-6 bor-left">
-                <label style="padding:6px 0px;" ng-init="acceptance_rate='{{ $acceptance_rate }}';" ng-model="acceptance_rate"> {{ $acceptance_rate }} </label>
+                <label style="padding:6px 0px;" ng-init="acceptance_rate='{{$acceptance_rate}}';" ng-model="acceptance_rate"> {{ $acceptance_rate }} </label>
                 <small style="padding:6px 0px;"> @lang('messages.driver_dashboard.acceptance_rate') </small>
             </div>
             <div class="col-lg-4 col-md-3 col-sm-3 col-xs-6 bor-left" style="border-right:0px !important;">
-                <label style="padding:6px 0px;" ng-init="cancelled_trips={{ $cancelled_trips }}" ng-model="cancelled_trips"> @{{ cancelled_trips }} </label>
+                <label style="padding:6px 0px;" ng-init="cancelled_trips={{$cancelled_trips}}" ng-model="cancelled_trips"> {{ $cancelled_trips }} </label>
                 <small style="padding:6px 0px;"> @lang('messages.driver_dashboard.cancelled_trips') </small>
             </div>
         </div>
         <h2 class="flush-h2 pull-left" style="padding: 0px 20px;
         "> @lang('messages.driver_dashboard.daily_earnings') </h2>
-        <div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="    padding: 20px;">
+        <div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="padding: 20px;">
             <div class="pull-left">
                 <input type="text" id="begin_trip" readonly="readonly" class="checkin ui-datepicker-target" autocomplete="off" name="date" placeholder="{{trans('messages.user.begin_trip')}}"ng-model="begin_trip">
                 <input type="text" placeholder="{{trans('messages.user.end_trip')}}" readonly="readonly" class="checkin ui-datepicker-target" autocomplete="off" id="end_trip" name="date" ng-model="end_trip">
@@ -116,6 +116,9 @@
             </div>
         </div>
     </div>
+</div>
+</div>
+</div>
 </div>
 @endsection
 @push('scripts')

@@ -1,3 +1,4 @@
+<title>Trips & Payments</title>
 @extends('template_driver_dashboard')
 @section('main')
 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item page-content" style="padding:0px;" ng-controller="trip" ng-cloak>
@@ -12,7 +13,7 @@
                 </div>
                 <div class="flexbox__item col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <h1 class="flush flush-h1">
-                        @lang('messages.header.mytrips')
+                        @lang('messages.header.earnings.trips_payments')
                     </h1>
                 </div>
                 <div class="flexbox__item col-lg-4 col-md-4 col-sm-4 col-xs-12 text--right"></div>
