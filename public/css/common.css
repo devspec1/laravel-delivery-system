@@ -1,5 +1,6 @@
 body {
-    font-family: 'Open Sans', sans-serif;
+    /* font-family: 'Open Sans', sans-serif; */
+    font-family: roboto, helvetica, sans-serif;
     overflow-x: hidden;
 }
 

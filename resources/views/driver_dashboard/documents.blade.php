@@ -2,19 +2,30 @@
 @extends('template_driver_dashboard') 
 
 @section('main')
-<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content" ng-controller="payment" style="padding:0px;">
+<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content" style="padding:0px !important;" ng-controller="facebook_account_kit">
   <div class="" style="padding:0px 15px;" ng-init="license_back= '{{trans('messages.driver_dashboard.driver_license_back')}}';license_front= '{{trans('messages.driver_dashboard.driver_license_front')}}';insurance= '{{trans('messages.driver_dashboard.motor_insurance')}}';rc= '{{trans('messages.driver_dashboard.reg_certificate')}}';permit= '{{trans('messages.driver_dashboard.carriage_permit')}}';select_file= '{{trans('messages.driver_dashboard.select_file')}}';upload_file ='{{trans('messages.dashboard.upload_file')}}';">
     <div class="page-lead separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border-bottom:0px !important;">
       <a class="btn btn--link hard--bottom rider-signup primary-font--bold  borderless--left col-lg-12 col-md-12 col-sm-12 col-xs-12" href="{{ url('driver_profile') }}" style="    text-transform: capitalize !important;color:#2ec5e1 !important;    text-align: left;
     padding-bottom: 40px;font-weight: bold;"><i class="icon icon_left-arrow push-tiny--left"></i>{{trans('messages.driver_dashboard.back_profile')}}</i></a>
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-    <div class="img--circle img--bordered img--shadow driver-avatar profile_picture doc_avatar">
+    <div class="img--circle img--bordered img--shadow driver-avatar profile_picture doc_avatar" style="margin-bottom: 40px;">
     @if(@Auth::user()->profile_picture->src == '')
     <img src="https://d1w2poirtb3as9.cloudfront.net/default.jpeg" class="">
     @else
     <img src="{{ @Auth::user()->profile_picture->src }}" class="">
     @endif
     </div>
+    </div>
+    <div class="" style="padding:0px 15px;">
+      {{ Form::open(array('url' => 'driver_update_profile/','id'=>'form','class' => 'layout layout--flush','files' => 'true','enctype'=>'multipart/form-data','name'=>'driver_profile')) }}
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pull-right">
+      <button type="button" class="btn btn--primary btn-blue doc-button" ng-click="selectFile()">
+        <span style="padding: 0px 30px !important;font-size: 14px !important;" id="span-cls">{{trans('messages.driver_dashboard.add_photo')}}
+        </span>
+      </button>
+      <input type="file" ng-model="profile_image" style="display:none" accept="image/*"
+      id="file" name='profile_image' onchange="angular.element(this).scope().fileNameChanged(this)" />
     </div>
     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-6">
     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-6" style="   font-weight: normal;

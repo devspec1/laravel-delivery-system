@@ -89,6 +89,7 @@ return [
 		'menu' => 'Menu',
 		'help' => 'Help',
 		'inbox' => 'Inbox',			// Added new
+		'home' => 'Home',
 		'earnings' => [
 			'root' => 'Earnings',
 			'trips_payments' => 'Trips & Payments',
