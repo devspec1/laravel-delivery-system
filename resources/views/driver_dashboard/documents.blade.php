@@ -8,7 +8,7 @@
       <a class="btn btn--link hard--bottom rider-signup primary-font--bold  borderless--left col-lg-12 col-md-12 col-sm-12 col-xs-12" href="{{ url('driver_profile') }}" style="    text-transform: capitalize !important;color:#2ec5e1 !important;    text-align: left;
     padding-bottom: 40px;font-weight: bold;"><i class="icon icon_left-arrow push-tiny--left"></i>{{trans('messages.driver_dashboard.back_profile')}}</i></a>
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-    <div class="img--circle img--bordered img--shadow driver-avatar profile_picture doc_avatar">
+    <div class="img--circle img--bordered img--shadow driver-avatar profile_picture doc_avatar" style="margin-bottom: 40px;">
     @if(@Auth::user()->profile_picture->src == '')
     <img src="https://d1w2poirtb3as9.cloudfront.net/default.jpeg" class="">
     @else

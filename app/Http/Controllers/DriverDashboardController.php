@@ -700,7 +700,7 @@ class DriverDashboardController extends Controller
         // ]);
 
         //return view('', $faq);
-        return view('driver_dashboard.help');
+        return view('driver_dashboard.help', $faq);
     }
 
     /*

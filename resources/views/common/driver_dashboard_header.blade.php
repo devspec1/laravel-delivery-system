@@ -53,12 +53,17 @@
                         <ul class="driver-nav">
                             <li class="{{ (Route::current()->uri() == 'driver/inbox') ? 'active' : '' }}">
                                 <a href="{{ url('driver/inbox') }}" >
+                                    {{trans('messages.header.home')}}
+                                </a>
+                            </li>
+                            <li class="{{ (Route::current()->uri() == 'driver/inbox') ? 'active' : '' }}">
+                                <a href="{{ url('driver/inbox') }}" >
                                     {{trans('messages.header.inbox')}}
                                 </a>
                             </li>
                             <li class="driver-dashboard-treeview {{ (Route::current()->uri() == 'driver/trips_payments' || Route::current()->uri() == 'driver/pay_statements') ? 'active' : ''  }}">
                                 <a href="#">
-                                    <span>{{trans('messages.header.earnings.root')}}</span><i class="fa fa-angle-left pull-right"></i>
+                                    <span>{{trans('messages.header.earnings.root')}}</span><i class="fa fa-angle-right pull-right"></i>
                                 </a>
                                 <ul class="driver-dashboard-treeview-menu">
                                     <li class="{{ (Route::current()->uri() == 'driver/trips_payments') ? 'active' : ''  }}">
@@ -82,7 +87,7 @@
                             </li>
                             <li class="driver-dashboard-treeview {{ (Route::current()->uri() == 'driver/edit_profile' || Route::current()->uri() == 'driver/vehicle_view'  || Route::current()->uri() == 'driver/documents' || Route::current()->uri() == 'driver/membership' || Route::current()->uri() == 'driver/bank_details' || Route::current()->uri() == 'driver/referral') ? 'active' : ''  }}">
                                 <a href="#">
-                                    <span>{{trans('messages.header.account.root')}}</span><i class="fa fa-angle-left pull-right"></i>
+                                    <span>{{trans('messages.header.account.root')}}</span><i class="fa fa-angle-right pull-right"></i>
                                 </a>
                                 <ul class="driver-dashboard-treeview-menu">
                                     <li class="{{ (Route::current()->uri() == 'driver/edit_profile') ? 'active' : ''  }}">

@@ -153,7 +153,7 @@
     overflow: auto;
     position: fixed;
     height: 100%;
-    width: 500px;
+    /* width: 500px; */
     left: -500px;
     max-width: 81.25%;
     background-color: rgb(0, 0, 0);
@@ -3449,7 +3449,7 @@ button:focus {
         font-size: 14px;
         font-size: 1.07692rem;
         line-height: 1.5;
-        text-transform: uppercase;
+        /* text-transform: uppercase; */
     }
     .soft--top.milli a {
         color: #fff;
@@ -4598,6 +4598,6 @@ ul.driver-dashboard-treeview-menu > li.active a {
     .navbar-toggle {
         position: relative !important;
         margin: 20x 0px 8px !important;
-        
+
     }
 }
