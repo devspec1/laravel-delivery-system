@@ -42,10 +42,11 @@
     padding-right:10px;
     font-size: 16px;
   }
-  li > div > div.answer:active {
+  li > div > div.answer.active {
     display: flex; 
     padding-right:10px;
     font-size: 16px;
+    background-color: white;
   }
 </style>
 

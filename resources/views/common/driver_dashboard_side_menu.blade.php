@@ -60,7 +60,7 @@
                         </a>
                         <ul class="driver-dashboard-treeview-menu">
                             <li class="{{ (Route::current()->uri() == 'driver/edit_profile') ? 'active' : ''  }}">
-                                <a href="{{ url('driver_edit_profile') }}">
+                                <a href="{{ url('driver/edit_profile') }}">
                                     <span>{{trans('messages.header.account.edit_profile')}}</span>
                                 </a>
                             </li>
