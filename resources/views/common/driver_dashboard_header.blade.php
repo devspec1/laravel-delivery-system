@@ -51,8 +51,8 @@
                             </div>
                         </li>
                         <ul class="driver-nav">
-                            <li class="{{ (Route::current()->uri() == 'driver/inbox') ? 'active' : '' }}">
-                                <a href="{{ url('driver/inbox') }}" >
+                            <li class="{{ (Route::current()->uri() == '') ? 'active' : '' }}">
+                                <a href="/" >
                                     {{trans('messages.header.home')}}
                                 </a>
                             </li>
