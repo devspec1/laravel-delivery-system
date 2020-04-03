@@ -6,7 +6,7 @@
                 <span class="icon icon_settings-alt push-half--right color--neutral micro"></span> @lang('messages.header.menu')
             </a>
             </button>
-            <div class="nav-div" style="padding:0px !important;">
+            <div class="nav-div" style="padding:0px !important; width:150px">
                 <div class="icon-remove remove-bold" style="padding: 15px 15px !important;float: right !important;"> </div>
                 <div class="flexbox__item flexbox__item--expand">
                     <ul class="site-nav site-nav--flush site-nav--dark block-list push-half--bottom">

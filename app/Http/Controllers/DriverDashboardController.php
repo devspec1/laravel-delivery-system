@@ -698,9 +698,9 @@ class DriverDashboardController extends Controller
         // 'status_message'    => 'Success',
         // 'faq'        => $faq
         // ]);
-
+        $data['faq_array'] = $faq;
         //return view('', $faq);
-        return view('driver_dashboard.help', $faq);
+        return view('driver_dashboard.help', $data);
     }
 
     /*

@@ -153,7 +153,7 @@
     overflow: auto;
     position: fixed;
     height: 100%;
-    /* width: 500px; */
+    width: 500px;
     left: -500px;
     max-width: 81.25%;
     background-color: rgb(0, 0, 0);
@@ -4601,3 +4601,4 @@ ul.driver-dashboard-treeview-menu > li.active a {
 
     }
 }
+
