@@ -32,6 +32,7 @@
     justify-content: space-between; 
     padding-right:10px;
     font-size: 20px;
+    padding-bottom: 15px;
   }
   li > div > div.question:hover {
     cursor: pointer;
@@ -41,6 +42,7 @@
     display: none;
     padding-right:10px;
     font-size: 16px;
+    padding-bottom: 15px;
   }
   li > div > div.answer.active {
     display: flex; 
