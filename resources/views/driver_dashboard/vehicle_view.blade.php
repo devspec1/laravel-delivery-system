@@ -5,8 +5,17 @@
   <div class="page-lead separated--bottom  text--center text--uppercase">
     <h1 class="flush-h1 flush">{{trans('messages.header.account.vehicle_view')}}</h1>
   </div>
-
-{{ Form::close() }}
+  <div style="display: flex; flex-wrap: wrap;">
+    <div>
+      <img src="{{$car_active_image}}" width="250px"/>
+    </div>
+    <div style="align-self: center; padding-left: 50px; text-align:center">
+      <div><h2>{{$vehicle_name}}</h2></div>
+      <div>{{$vehicle_number}}</div>
+      <div>{{$car_type}}</div>
+    </div>
+  </div>
+  
 </div>
 </div>
 </div>
