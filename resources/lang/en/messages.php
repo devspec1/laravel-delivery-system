@@ -88,6 +88,25 @@ return [
 		'how_it_works' => 'How it Works',
 		'menu' => 'Menu',
 		'help' => 'Help',
+		'inbox' => 'Inbox',			// Added new
+		'home' => 'Home',
+		'earnings' => [
+			'root' => 'Earnings',
+			'trips_payments' => 'Trips & Payments',
+			'pay_statements' => 'Pay Statements'
+		],
+		'driverteam' => 'Driver Team',
+		'passengers' => 'Passengers',
+		'account' => [
+			'root' => 'Account',
+			'edit_profile' => 'Edit Profile',
+			'vehicle_view' => 'Vehicle View',
+			'documents' => 'Documents',
+			'manage_membership' => 'Manage Membership',
+			'bank_details' => 'Bank Details',
+			'referral' => 'Referral'
+		],
+		'help' => 'Help'
 	],
 	'dashboard' =>[
 		'trip_invoice' => 'Trip Invoices',
@@ -359,7 +378,8 @@ return [
 		'content_block' => 'The content you requested cannot be found.',
 		'oops' => 'Oops!',
 		'cannot_find' => 'We can\'t seem to find the page you\'re looking for.',
-		'be_right_back' => 'Be Right Back',
+        'be_right_back' => 'Be Right Back',
+        'unsuccessful' => 'Unsuccessful',
 	],
 	'ride' =>[
 		'ride_with_gofer' => 'Start riding with :site_name',
@@ -827,8 +847,8 @@ return [
 		'bank_transfer'			=> 'Bank Transfer',
 		'paypal'				=> 'PayPal',
 		'stripe'				=> 'Stripe',
-		'change_debit_card'		=> 'Change Debit Card',
-		'add_debit_card'		=> 'Add Debit Card',
+		'change_debit_card'		=> 'Change Payment Card',
+		'add_debit_card'		=> 'Add Payment Card',
 		'Cash'					=> 'Cash',
 		'PayPal'				=> 'PayPal',
 		'Card Payment'			=> 'Card Payment',
