@@ -1,3 +1,4 @@
+<title>Bank Details</title>
 @extends('template_driver_dashboard')
 @section('main')
 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content" ng-controller="payout_preferences">
@@ -478,6 +479,9 @@
 			{!! Form::close() !!}
 		</div>
 	</div>
+</div>
+</div>
+</div>
 </div>
 @endsection
 @push('scripts')
