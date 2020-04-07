@@ -330,7 +330,8 @@ class ProfileController extends Controller
 		$promo_details = $invoice_helper->getUserPromoDetails($user_details->id);
 
 		$user_data['wallet_amount'] = $wallet_amount;
-		$user_data['promo_details'] = $promo_details;
+        $user_data['promo_details'] = $promo_details;
+        $user_data['rider_rating'] = getRiderRating($user_details->id);
 
 		return response()->json(array_merge([
 			'status_code' 		=> '1',
