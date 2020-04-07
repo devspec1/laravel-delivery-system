@@ -83,6 +83,7 @@ class TokenAuthController extends Controller
                 'home_longitude'=> optional($rider_location)->home_longitude ?? '',
                 'work_latitude' => optional($rider_location)->work_latitude ?? '',
                 'work_longitude'=> optional($rider_location)->work_longitude ?? '',
+                'rider_rating'  => getRiderRating($user->id),
             );
         }
 
@@ -107,6 +108,7 @@ class TokenAuthController extends Controller
                 'postal_code'       => optional($driver_address)->postal_code ?? '',
                 'company_name'      => $user->company_name,
                 'company_id'        => $user->company_id ?? '',
+                'driver_rating'     => getDriverRating($user->id),
             );
         }
 
