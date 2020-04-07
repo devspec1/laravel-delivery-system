@@ -1,7 +1,5 @@
 @extends('template_driver_dashboard')
 
-<link rel="stylesheet" src=" {{ asset('css/countrySelect.css') }}">
-
 @section('main')
 
 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content" ng-controller="payout_preferences">
@@ -62,7 +60,6 @@
 
 @endsection
 @push('scripts')
-<script src="{{ asset('js/countrySelect.js') }}"></script>
 <script src="https://js.stripe.com/v3/"></script>
 
 <script type="text/javascript">
@@ -75,12 +72,7 @@
 <script>
 
   $(function() {
-    $("#country").countrySelect({
-  defaultCountry: "jp",
-  onlyCountries: ['us', 'gb', 'ch', 'ca', 'do', 'jp'],
-  preferredCountries: ['ca', 'gb', 'us'],
-  responsiveDropdown: true
-});
+ 
 
   var stripe = Stripe('{{ env("STRIPE_KEY") }}');
 
