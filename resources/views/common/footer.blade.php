@@ -26,7 +26,7 @@
         
     </style>
     
-    <footer class="container-fluid top-border" style="background:#000;">
+    <footer style="display: none" class="container-fluid top-border">
     
         <div
             class="col-lg-12 col-md-12 col-sm-12 col-xs-12 footer-back pull-app-gutter--sides soft-app-gutter--sides padd-side-85">
@@ -142,16 +142,14 @@
                     </div> -->
                 </div>
             </div>
-        </div>
         
-        </div>
-        </div>
-    </footer>
-    <div class="footer-copyright">
+     
+        <div class="footer-copyright">
         <div class="text-center footlo">
             <span class="_style_zVjAb p-font" dir="ltr" data-reactid="661"><em>© Ride On Drivers Owners Group Pty Ltd</em></span>
-        </div>
-    </div>
+        </div></div>
+    </footer>
+ 
     <style type="text/css">
     footer .nav-list-one li {
         padding-bottom: 5px;

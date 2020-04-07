@@ -1494,4 +1494,6 @@ class UserController extends Controller
 
         return redirect('user_disabled');
     }
+
+    
 }

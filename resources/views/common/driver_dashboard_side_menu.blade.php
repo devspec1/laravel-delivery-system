@@ -6,11 +6,13 @@
                     <li class="soft--ends">
                         <div class="center-block three-quarters push-half--bottom">
                             <div class="img--circle img--bordered img--shadow fixed-ratio fixed-ratio--1-1">
-                                @if(@Auth::user()->profile_picture->src == '')
+                                 <a href="{{ url('driver_profile') }}">
+                                    @if(@Auth::user()->profile_picture->src == '')
                                 <img src="{{ url('images/user.jpeg')}}" class="img--full fixed-ratio__content">
                                 @else
                                 <img src="{{ @Auth::user()->profile_picture->src }}"  class="img--full fixed-ratio__content profile_picture">
                                 @endif
+                                </a>
                             </div>
                         </div>
                         <div class="text--center">
@@ -21,32 +23,29 @@
                         </div>
                     </li>
                     <li>
-                        <a href="{{ url('driver_profile') }}" aria-selected="{{ (Route::current()->uri() == 'driver_profile') ? 'true' : 'false' }}" class="side-nav-a">{{trans('messages.header.profil')}}</a>
+                        <a href="{{ url('driver_payment') }}" aria-selected="{{ (Route::current()->uri() == 'driver_profile') ? 'true' : 'false' }}" class="{{ (Route::current()->uri() == 'driver_payment') ? 'current' : '' }}" class="side-nav-a">Payment</a>
                     </li>
-                    <li>
-                        <a href="{{ url('driver_payment') }}" aria-selected="{{ (Route::current()->uri() == 'driver_payment') ? 'true' : 'false' }}" class="side-nav-a">{{trans('messages.header.payment')}}</a>
-                    </li>
-                    <li>
-                        <a href="{{ url('driver_invoice') }}" aria-selected="{{ (Route::current()->uri() == 'driver_invoice') ? 'true' : 'false' }}"  class="side-nav-a" >{{trans('messages.header.invoice')}}</a>
-                    </li>
-                    <li>
-                        <a href="{{ url('driver_trip') }}" aria-selected="{{ (Route::current()->uri() == 'driver_trip') ? 'true' : 'false' }}"  class="side-nav-a">{{trans('messages.header.mytrips')}}</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('driver_payout_preference') }}" aria-selected="{{ (Route::current()->uri() == 'payout_preferences') ? 'true' : 'false' }}" class="sidenav-item">{{trans('messages.account.payout')}}</a>
-                    </li>
-                    @if(Auth::user()->company_id == '1')
-                    <li>
-                        <a href="{{ route('driver_referral') }}" aria-selected="{{ (Route::current()->uri() == 'driver_referral') ? 'true' : 'false' }}" class="side-nav-a">
-                            {{trans('messages.referrals.referral')}}
-                        </a>
-                    </li>
-                    @endif
+
                      <li>
-                        <a href="{{ route('driver_payout_preference') }}" aria-selected="{{ (Route::current()->uri() == 'payout_preferences') ? 'true' : 'false' }}" class="sidenav-item">Subscription</a>
+                        <a href="{{ url('driver_invoice') }}" aria-selected="{{ (Route::current()->uri() == 'driver_payment') ? 'true' : 'false' }}" class="side-nav-a">Invoice</a>
                     </li>
                     <li>
-                        <a href="{{ url('sign_out')}}">{{trans('messages.header.logout')}}</a>
+                        <a href="{{ url('driver_trip') }}" aria-selected="{{ (Route::current()->uri() == 'driver_payment') ? 'true' : 'false' }}" class="{{ (Route::current()->uri() == 'driver_payment') ? 'current' : '' }} side-nav-a">My Trips</a>
+                    </li>
+                    <li>
+                        <a href="{{ url('payout_preferences') }}" aria-selected="{{ (Route::current()->uri() == 'driver_payment') ? 'true' : 'false' }}" class="side-nav-a">Payout</a>
+                    </li>
+                     <li>
+                        <a href="{{ url('driver_referral') }}" aria-selected="{{ (Route::current()->uri() == 'driver_trip') ? 'true' : 'false' }}"  class="{{ (Route::current()->uri() == 'driver_payment') ? 'current' : '' }} side-nav-a">Referral</a>
+                    </li>
+                    <li>
+                        <a href="{{ url('subscription') }}" aria-selected="true" class="{{ (Route::current()->uri() == 'subscription') ? 'current' : '' }}">Subscription</a>
+                    </li>
+                     <li>
+                        <a href="{{ url('driver_help') }}" aria-selected="{{ (Route::current()->uri() == 'driver_trip') ? 'true' : 'false' }}"  class="side-nav-a">Help</a>
+                    </li>
+                     <li>
+                        <a href="{{ url('logout') }}" aria-selected="{{ (Route::current()->uri() == 'driver_trip') ? 'true' : 'false' }}"  class="side-nav-a">Logout</a>
                     </li>
                     
 

@@ -15,7 +15,9 @@ Route::get('driver_invoice', 'DriverDashboardController@driver_invoice');
 Route::match(array('GET', 'POST'),'apple_callback', 'UserController@apple_callback');
 Route::get('app/{type}', 'HomeController@redirect_to_app')->name('redirect_to_app');
 
+
 Route::get('referral_api', 'DashboardController@referral_api');
+
 
 Route::group(['middleware' =>'canInstall'], function () {
 	Route::group(['middleware' =>'locale'], function () {
@@ -24,6 +26,12 @@ Route::group(['middleware' =>'canInstall'], function () {
 });
 
 Route::group(['middleware' =>'locale'], function () {
+
+	Route::get('subscription','SubscriptionController@index')->name('driver_subscription_index');
+	Route::get('subscriptionPlan/{plan}', 'SubscriptionController@getSubscriptionPlan');
+	Route::post("create-customer", "SubscriptionController@createCustomer");
+	Route::get("cancel-subscription", "SubscriptionController@cancelSubscription");
+	Route::get("switch-subscription", "SubscriptionController@switchSubscription");
 
 	Route::get('help', 'HomeController@help');
 	Route::get('help/topic/{id}/{category}', 'HomeController@help');
@@ -57,6 +65,7 @@ Route::group(['middleware' =>'locale'], function () {
 	Route::get('safety', 'RideController@safety');
 	Route::get('ride', 'RideController@ride');
 	Route::get('how_it_works', 'RideController@how_it_works');
+
 
 	Route::get('drive', 'DriveController@drive');
 	Route::get('requirements', 'DriveController@requirements');
