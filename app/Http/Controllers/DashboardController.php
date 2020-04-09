@@ -24,6 +24,7 @@ use App\Models\DriverAddress;
 use App\Models\ProfilePicture;
 use App\Models\ReferralSetting;
 use App\Models\ReferralUser;
+use App\Models\RiderLocation;
 use App\Models\Currency;
 use Validator;
 use Auth;
@@ -426,12 +427,16 @@ class DashboardController extends Controller
 			$temp_details['trips'] 			= $referral_user->trips;
 			$temp_details['remaining_trips']= $referral_user->remaining_trips;
 			$temp_details['earnable_amount']= $referral_user->earnable_amount;
-            $temp_details['status'] 		= ($user->status == 'Active' ? 'Active' : 'Inactive');
-            $temp_details['since']          = date_format($user->created_at,"M Y");
+            $temp_details['status'] 		= ($userww->status == 'Active' ? 'Active' : 'Inactive');
+            $temp_details['since']          = date_format($userww->created_at,"M Y");
             
-
-            $temp_details['driver_address'] = $driver_address;
-            $temp_details['location']       = ucfirst(strtolower($driver_address->city)) . ', ' . $driver_address->state;
+            $user_home_address = RiderLocation::where('user_id', $userww->id)->first();
+            if ($user_home_address){
+                $temp_details['location']       = array_slice(explode(',', $user_home_address->home), -2, 1);
+            }
+            else{
+                $temp_details['location']       = 'NA';
+            }
 
 			array_push($pending_referrals,$temp_details);
 
@@ -497,8 +502,8 @@ class DashboardController extends Controller
 			$temp_details['trips'] 			= $referral_user->trips;
 			$temp_details['remaining_trips']= $referral_user->remaining_trips;
 			$temp_details['earnable_amount']= $referral_user->earnable_amount;
-            $temp_details['status'] 		= ($user->status == 'Active' ? 'Active' : 'Inactive');
-            $temp_details['since']          = date_format($user->created_at,"M Y");
+            $temp_details['status'] 		= ($userww->status == 'Active' ? 'Active' : 'Inactive');
+            $temp_details['since']          = date_format($userww->created_at,"M Y");
             
 
             $temp_details['driver_address'] = $driver_address;
