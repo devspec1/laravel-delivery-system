@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\DriverAddress;
 use App\Models\ReferralSetting;
 use App\Models\ReferralUser;
+use App\Models\RiderLocation;
 use JWTAuth;
 use App;
 
