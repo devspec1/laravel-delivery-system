@@ -431,8 +431,8 @@ class DashboardController extends Controller
             $temp_details['since']          = date_format($userww->created_at,"M Y");
             
             $user_home_address = RiderLocation::where('user_id', $userww->id)->first();
-            if ($user_home_address){
-                $temp_details['location']       = array_slice(explode(',', $user_home_address->home), -2, 1);
+            if ($user_home_address && $user_home_address->home != ''){
+                $temp_details['location']       = array_slice(explode(',', $user_home_address->home), -2, 1)[0];
             }
             else{
                 $temp_details['location']       = 'NA';
