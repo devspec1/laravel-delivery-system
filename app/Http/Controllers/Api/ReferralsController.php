@@ -224,9 +224,11 @@ class ReferralsController extends Controller
 			$temp_details['remaining_trips']= $referral_user->remaining_trips;
 			$temp_details['earnable_amount']= $referral_user->earnable_amount;
             $temp_details['status'] 		= ($user->status == 'Active' ? 'Active' : 'Inactive'); //$referral_user->payment_status;
-            $temp_details['since']          = $user->created_at;
+            $temp_details['since']          = date_format($user->created_at,"m Y"); ;
+            
 
             $temp_details['driver_address'] = $driver_address;
+            $temp_details['location']       = $driver_address->city . ', ' . $driver_address->state;
 
 			// $temp_details['check'] 		=    $referral_user->referral_id ;
 			// $temp_details['type'] 		=    $userww->user_type ;
