@@ -426,7 +426,12 @@ class DashboardController extends Controller
 			$temp_details['trips'] 			= $referral_user->trips;
 			$temp_details['remaining_trips']= $referral_user->remaining_trips;
 			$temp_details['earnable_amount']= $referral_user->earnable_amount;
-            $temp_details['status'] 		= $referral_user->payment_status;
+            $temp_details['status'] 		= ($user->status == 'Active' ? 'Active' : 'Inactive');
+            $temp_details['since']          = date_format($user->created_at,"M Y");
+            
+
+            $temp_details['driver_address'] = $driver_address;
+            $temp_details['location']       = ucfirst(strtolower($driver_address->city)) . ', ' . $driver_address->state;
 
 			array_push($pending_referrals,$temp_details);
 
@@ -492,8 +497,12 @@ class DashboardController extends Controller
 			$temp_details['trips'] 			= $referral_user->trips;
 			$temp_details['remaining_trips']= $referral_user->remaining_trips;
 			$temp_details['earnable_amount']= $referral_user->earnable_amount;
-            $temp_details['status'] 		= $referral_user->payment_status;
-			$temp_details['driver_address'] 		= $driver_address;
+            $temp_details['status'] 		= ($user->status == 'Active' ? 'Active' : 'Inactive');
+            $temp_details['since']          = date_format($user->created_at,"M Y");
+            
+
+            $temp_details['driver_address'] = $driver_address;
+            $temp_details['location']       = ucfirst(strtolower($driver_address->city)) . ', ' . $driver_address->state;
 
 			array_push($pending_referrals,$temp_details);
         }
