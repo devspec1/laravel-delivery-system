@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\StripeSubscriptions;
+use App\Models\User;
 use Auth;
 use App;
 use DateTime;
@@ -127,7 +128,7 @@ class SubscriptionController extends Controller
             $subscription_row = new StripeSubscriptions;
             $subscription_row->user_id      = $user->id;
             $subscription_row->stripe_id    = $subscription->id;
-            $subscription_row->status       = 'new';
+            $subscription_row->status       = 'subscribed';
             $subscription_row->email        = $request->email;
             $subscription_row->plan_id      = $plan_id;
             $subscription_row->plan         = 'Founder';
