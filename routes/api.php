@@ -91,7 +91,15 @@ Route::group(['middleware' => 'jwt.verify'], function () {
 	Route::match(array('GET', 'POST'), 'upload_profile_image','ProfileController@upload_profile_image');
 	
 	Route::get('heat_map', 'MapController@heat_map');
-	Route::post('pay_to_admin', 'DriverController@pay_to_admin');
+    Route::post('pay_to_admin', 'DriverController@pay_to_admin');
+    
+
+    //Driver subscriptions APIs
+    Route::get('subscription_info', 'SubscriptionController@index');
+    Route::get('cancel_subscription', 'SubscriptionController@cancelSubscription');
+    Route::get('pause_subscription', 'SubscriptionController@pauseSubscription');
+    Route::get('resume_subscription', 'SubscriptionController@resumeSubscription');
+    Route::get('upgrade_subscription', 'SubscriptionController@switchSubscription');
 
 
 	// TripController
