@@ -57,7 +57,11 @@ class SubscriptionController extends Controller
 
 
 	 public function createCustomer(Request $request){
-        \Stripe\Stripe::setApiKey('sk_test_jARM47D95eF4OUFxS8Dukz49001mIHDUHe');
+        //Set key and api_version from config (PaymentGateway)
+        $stripe_key = payment_gateway('secret','Stripe');
+		$api_version = payment_gateway('api_version','Stripe');
+		\Stripe\Stripe::setApiKey($stripe_key);
+		\Stripe\Stripe::setApiVersion($api_version);
 
         $country = $request->country;
         $card_name = $request->card_name;
@@ -70,7 +74,7 @@ class SubscriptionController extends Controller
 				  ]
 				]);
 
-				$plan_id = "plan_GQJPw5BNB3TXTP"; // FOUNDER
+				$plan_id = "plan_GQJPw5BNB3TXTP"; // FOUNDER -- move to the model
 				$subscription = \Stripe\Subscription::create([
 				  'customer' => $customer->id,
 				  'items' => [
@@ -88,7 +92,11 @@ class SubscriptionController extends Controller
     }
 
     public function cancelSubscription(Request $request) {
-    	\Stripe\Stripe::setApiKey('sk_test_jARM47D95eF4OUFxS8Dukz49001mIHDUHe');
+        //Set key and api_version from config (PaymentGateway)
+    	$stripe_key = payment_gateway('secret','Stripe');
+		$api_version = payment_gateway('api_version','Stripe');
+		\Stripe\Stripe::setApiKey($stripe_key);
+		\Stripe\Stripe::setApiVersion($api_version);
 
     	$sub = DB::table("subscriptions")->where([["uid", '=', auth()->user()->id], ["status", "!=", "canceled"]])->first();
     	$subscription = \Stripe\Subscription::retrieve($sub->stripe_id);
@@ -106,30 +114,33 @@ class SubscriptionController extends Controller
     	switch($type) {
     		case "Founder":
     			$plan = "Regular";
-    			$pid = "plan_GQJRSjXx14TuLc";
+    			$pid = "plan_GQJRSjXx14TuLc"; // -- move to the model
     		break;
     		case "Regular":
     			$plan = "Founder";
-    			$pid = "plan_GQJPw5BNB3TXTP";
+    			$pid = "plan_GQJPw5BNB3TXTP"; // -- move to the model
     		break;
     	}
 
-    	\Stripe\Stripe::setApiKey('sk_test_jARM47D95eF4OUFxS8Dukz49001mIHDUHe');
+        $stripe_key = payment_gateway('secret','Stripe');
+		$api_version = payment_gateway('api_version','Stripe');
+        \Stripe\Stripe::setApiKey($stripe_key);
+		\Stripe\Stripe::setApiVersion($api_version);
     	
-			$subscription = \Stripe\Subscription::retrieve($sub->stripe_id);
-			\Stripe\Subscription::update($sub->stripe_id, [
-			  'cancel_at_period_end' => false,
-			  'items' => [
-			    [
-			      'id' => $subscription->items->data[0]->id,
-			      'plan' => $pid,
-			    ],
-			  ],
-			]);
+        $subscription = \Stripe\Subscription::retrieve($sub->stripe_id);
+        \Stripe\Subscription::update($sub->stripe_id, [
+            'cancel_at_period_end' => false,
+            'items' => [
+            [
+                'id' => $subscription->items->data[0]->id,
+                'plan' => $pid,
+            ],
+            ],
+        ]);
 
-			DB::table("subscriptions")->where("id", $sub->id)->update(["plan_id" => $pid, "plan" => $plan, "updated_at" => date("Y-m-d H:i:s")]);
+        DB::table("subscriptions")->where("id", $sub->id)->update(["plan_id" => $pid, "plan" => $plan, "updated_at" => date("Y-m-d H:i:s")]);
 			
-			return redirect('subscription')->with( ['SubMessage' => 'You have changed your subscription to <b>' . $type . "</b> successfully"] );;
+        return redirect('subscription')->with( ['SubMessage' => 'You have changed your subscription to <b>' . $type . "</b> successfully"] );;
     }
 
     
