@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSubscriptionsTable extends Migration
+class CreateStripeSubscriptionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateSubscriptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('subscriptions', function (Blueprint $table) {
+        Schema::create('stripe_subscriptions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('uid');
+            $table->integer('user_id');
             $table->text('stripe_id');
             $table->text('status');
             $table->text('email');
@@ -35,6 +35,6 @@ class CreateSubscriptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subscriptions');
+        Schema::dropIfExists('stripe_subscriptions');
     }
 }
