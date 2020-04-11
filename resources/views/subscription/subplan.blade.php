@@ -74,7 +74,7 @@
   $(function() {
  
 
-  var stripe = Stripe('{{ env("STRIPE_KEY") }}');
+  var stripe = Stripe(STRIPE_PUBLISH_KEY);
 
 
    var elements = stripe.elements({

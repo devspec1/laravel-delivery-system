@@ -58,9 +58,9 @@ class SubscriptionController extends Controller
 
 	 public function createCustomer(Request $request){
         //Set key and api_version from config (PaymentGateway)
-        $stripe_key = payment_gateway('secret','Stripe');
+        $stripe_skey = payment_gateway('secret','Stripe');
 		$api_version = payment_gateway('api_version','Stripe');
-		\Stripe\Stripe::setApiKey($stripe_key);
+		\Stripe\Stripe::setApiKey($stripe_skey);
 		\Stripe\Stripe::setApiVersion($api_version);
 
         $country = $request->country;
@@ -93,9 +93,9 @@ class SubscriptionController extends Controller
 
     public function cancelSubscription(Request $request) {
         //Set key and api_version from config (PaymentGateway)
-    	$stripe_key = payment_gateway('secret','Stripe');
+    	$stripe_skey = payment_gateway('secret','Stripe');
 		$api_version = payment_gateway('api_version','Stripe');
-		\Stripe\Stripe::setApiKey($stripe_key);
+		\Stripe\Stripe::setApiKey($stripe_skey);
 		\Stripe\Stripe::setApiVersion($api_version);
 
     	$sub = DB::table("subscriptions")->where([["uid", '=', auth()->user()->id], ["status", "!=", "canceled"]])->first();
@@ -122,9 +122,9 @@ class SubscriptionController extends Controller
     		break;
     	}
 
-        $stripe_key = payment_gateway('secret','Stripe');
+        $stripe_skey = payment_gateway('secret','Stripe');
 		$api_version = payment_gateway('api_version','Stripe');
-        \Stripe\Stripe::setApiKey($stripe_key);
+        \Stripe\Stripe::setApiKey($stripe_skey);
 		\Stripe\Stripe::setApiVersion($api_version);
     	
         $subscription = \Stripe\Subscription::retrieve($sub->stripe_id);
