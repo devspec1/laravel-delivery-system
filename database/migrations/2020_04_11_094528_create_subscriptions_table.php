@@ -13,9 +13,8 @@ class CreateSubscriptionsTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('subscriptions');
         Schema::create('subscriptions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->integer('uid');
             $table->text('stripe_id');
             $table->text('status');
@@ -26,9 +25,7 @@ class CreateSubscriptionsTable extends Migration
             $table->text('plan');
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
-
         });
-
     }
 
     /**
@@ -38,6 +35,6 @@ class CreateSubscriptionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('subscriptions');
+        Schema::dropIfExists('subscriptions');
     }
 }
