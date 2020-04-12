@@ -7,7 +7,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Start\Helpers;
 use App\Http\Helper\RequestHelper;
-use App\Models\StripeSubscriptions;
+use App\Models\DriversSubscriptions;
+use App\Models\StripeSubscriptionsPlans;
 use App\Models\User;
 use Auth;
 use App;
@@ -48,9 +49,16 @@ class SubscriptionController extends Controller
 			]);
         }
         else{
-            $subscription = StripeSubscriptions::where('user_id',$user->id)
+            $subscription = DriversSubscriptions::where('user_id',$user->id)
                 ->whereNotIn('status', ['canceled'])
                 ->first();
+
+            if($subscription){
+                $subscription_plan = StripeSubscriptionsPlans::where('id',$subscription->plan)->first();
+
+                $subscription['plan_id'] = $subscription_plan->plan_id;
+                $subscription['plan_name'] = $subscription_plan->plan_name;
+            }
             
             $sub_data = array(
                 'status_code'		=> '1',
@@ -99,26 +107,25 @@ class SubscriptionController extends Controller
                 ]
             ]);
 
-            $plan_id = "plan_GQJPw5BNB3TXTP"; // FOUNDER -- need to move to the model
+            $plan = StripeSubscriptionsPlans::where('plan_name','Founder')->first();
 
             $subscription = \Stripe\Subscription::create([
                 'customer' => $customer->id,
                 'items' => [
                     [
-                        'plan' =>  $plan_id,
+                        'plan' =>  $plan->plan_id,
                     ],
                 ],
                 'expand' => ['latest_invoice.payment_intent'],
             ]);
 
 
-            $subscription_row = new StripeSubscriptions;
+            $subscription_row = new DriversSubscriptions;
             $subscription_row->user_id      = $user->id;
             $subscription_row->stripe_id    = $subscription->id;
             $subscription_row->status       = 'subscribed';
             $subscription_row->email        = $request->email;
-            $subscription_row->plan_id      = $plan_id;
-            $subscription_row->plan         = 'Founder';
+            $subscription_row->plan         = $plan->id;
             $subscription_row->country      = $country;
             $subscription_row->card_name    = $card_name;   
             $subscription_row->save();         
@@ -157,7 +164,7 @@ class SubscriptionController extends Controller
             \Stripe\Stripe::setApiKey($stripe_skey);
             \Stripe\Stripe::setApiVersion($api_version);
 
-            $subscription_row = StripeSubscriptions::where('user_id',$user->id)
+            $subscription_row = DriversSubscriptions::where('user_id',$user->id)
                 ->whereNotIn('status', ['canceled'])
                 ->first();
 
@@ -166,6 +173,12 @@ class SubscriptionController extends Controller
 
             $subscription_row->status = 'canceled';
             $subscription_row->save();
+
+            if($subscription_row){
+                $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
+                $subscription_row['plan_id'] = $plan->plan_id;
+                $subscription_row['plan_name'] = $plan->plan_name;
+            }
 
             $sub_data = array(
                 'status_code'		=> '1',
@@ -201,9 +214,11 @@ class SubscriptionController extends Controller
             \Stripe\Stripe::setApiKey($stripe_skey);
             \Stripe\Stripe::setApiVersion($api_version);
 
-            $subscription_row = StripeSubscriptions::where('user_id',$user->id)
+            $subscription_row = DriversSubscriptions::where('user_id',$user->id)
                 ->whereNotIn('status', ['canceled'])
                 ->first();
+
+            $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
 
             $subscription = \Stripe\Subscription::retrieve($subscription_row->stripe_id);
             \Stripe\Subscription::update($subscription_row->stripe_id, [
@@ -211,15 +226,18 @@ class SubscriptionController extends Controller
                 'items' => [
                     [
                         'id' => $subscription->items->data[0]->id,
-                        'plan' => $subscription_row->plan_id,
+                        'plan' => $plan->plan_id,
                     ],
                 ],
             ]);
 
-            $subscription_row->save();
-
             $subscription_row->status = 'subscribed';
             $subscription_row->save();
+
+            if($subscription_row){
+                $subscription_row['plan_id'] = $plan->plan_id;
+                $subscription_row['plan_name'] = $plan->plan_name;
+            }
 
             $sub_data = array(
                 'status_code'		=> '1',
@@ -255,7 +273,7 @@ class SubscriptionController extends Controller
             \Stripe\Stripe::setApiKey($stripe_skey);
             \Stripe\Stripe::setApiVersion($api_version);
 
-            $subscription_row = StripeSubscriptions::where('user_id',$user->id)
+            $subscription_row = DriversSubscriptions::where('user_id',$user->id)
                 ->whereNotIn('status', ['canceled','paused'])
                 ->first();
 
@@ -270,6 +288,12 @@ class SubscriptionController extends Controller
 
             $subscription_row->status = 'paused';
             $subscription_row->save();
+
+            if($subscription_row){
+                $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
+                $subscription_row['plan_id'] = $plan->plan_id;
+                $subscription_row['plan_name'] = $plan->plan_name;
+            }
 
             $sub_data = array(
                 'status_code'		=> '1',
@@ -305,7 +329,7 @@ class SubscriptionController extends Controller
             \Stripe\Stripe::setApiKey($stripe_skey);
             \Stripe\Stripe::setApiVersion($api_version);
 
-            $subscription_row = StripeSubscriptions::where('user_id',$user->id)
+            $subscription_row = DriversSubscriptions::where('user_id',$user->id)
                 ->whereNotIn('status', ['canceled'])
                 ->first();
 
@@ -318,6 +342,12 @@ class SubscriptionController extends Controller
 
             $subscription_row->status = 'subscribed';
             $subscription_row->save();
+
+            if($subscription_row){
+                $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
+                $subscription_row['plan_id'] = $plan->plan_id;
+                $subscription_row['plan_name'] = $plan->plan_name;
+            }
 
             $sub_data = array(
                 'status_code'		=> '1',
@@ -348,19 +378,18 @@ class SubscriptionController extends Controller
 			]);
         }
         else{
-            $subscription_row = StripeSubscriptions::where('user_id',$user->id)
+            $subscription_row = DriversSubscriptions::where('user_id',$user->id)
                 ->whereNotIn('status', ['canceled'])
                 ->first();
             
-            $type = $subscription_row->plan;
+            $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
+            $type = $plan->plan_name;
             switch($type) {
                 case "Founder":
-                    $plan = "Regular";
-                    $pid = "plan_GQJRSjXx14TuLc"; // -- move to the model
+                    $plan = StripeSubscriptionsPlans::where('plan_name','Regular')->first();
                 break;
                 case "Regular":
-                    $plan = "Founder";
-                    $pid = "plan_GQJPw5BNB3TXTP"; // -- move to the model
+                    $plan = StripeSubscriptionsPlans::where('plan_name','Founder')->first();
                 break;
             }
 
@@ -375,14 +404,18 @@ class SubscriptionController extends Controller
                 'items' => [
                     [
                         'id' => $subscription->items->data[0]->id,
-                        'plan' => $pid,
+                        'plan' => $plan->plan_id,
                     ],
                 ],
             ]);
 
-            $subscription_row->plan_id  = $pid;
-            $subscription_row->plan     = $plan;
+            $subscription_row->plan     = $plan->id;
             $subscription_row->save();
+
+            if($subscription_row){
+                $subscription_row['plan_id'] = $plan->plan_id;
+                $subscription_row['plan_name'] = $plan->plan_name;
+            }
                 
             $sub_data = array(
                 'status_code'		=> '1',

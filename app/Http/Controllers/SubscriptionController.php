@@ -5,7 +5,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\StripeSubscriptions;
+use App\Models\DriversSubscriptions;
+use App\Models\StripeSubscriptionsPlans;
 use App\Models\User;
 use Auth;
 use App;
@@ -39,9 +40,16 @@ class SubscriptionController extends Controller
             return redirect('signin_driver');
         }
         else{
-            $subscription = StripeSubscriptions::where('user_id',$user->id)
+            $subscription = DriversSubscriptions::where('user_id',$user->id)
                 ->whereNotIn('status', ['canceled'])
                 ->first();
+
+            if($subscription){
+                $subscription_plan = StripeSubscriptionsPlans::where('id',$subscription->plan)->first();
+
+                $subscription['plan_id'] = $subscription_plan->plan_id;
+                $subscription['plan_name'] = $subscription_plan->plan_name;
+            }
 
             $subMessage = Session::get("SubMessage");
             
@@ -60,21 +68,25 @@ class SubscriptionController extends Controller
      * @param string $plan  Plan id of driver's subscription
      * @return Static page view file
      */
-	public function getSubscriptionPlan($plan) {
+	public function getSubscriptionPlan($plan_name) {
         $user = User::find(@Auth::user()->id);
         
         if(!$user) {
             return redirect('signin_driver');
         }
         else{
-            $subscription = StripeSubscriptions::where('user_id',$user->id)
+            $subscription = DriversSubscriptions::where('user_id',$user->id)
                 ->whereNotIn('status', ['canceled'])
                 ->first();
 
             if(!$subscription){
-                return view('subscription.subplan')->with(compact("plan"));
+                return view('subscription.subplan')->with(compact("plan_name"));
             }
 	    	else{
+                $subscription_plan = StripeSubscriptionsPlans::where('id',$subscription->plan)->first();
+
+                $subscription['plan_id'] = $subscription_plan->plan_id;
+                $subscription['plan_name'] = $subscription_plan->plan_name;
                 return redirect('subscription');
             }
         }
@@ -108,30 +120,29 @@ class SubscriptionController extends Controller
                 'payment_method' => $request->payment_method,
                 'email' => $request->email,
                 'invoice_settings' => [
-                'default_payment_method' => $request->payment_method
+                    'default_payment_method' => $request->payment_method
                 ]
             ]);
 
-            $plan_id = "plan_GQJPw5BNB3TXTP"; // FOUNDER -- need to move to the model
+            $plan = StripeSubscriptionsPlans::where('plan_name','Founder')->first();
 
             $subscription = \Stripe\Subscription::create([
                 'customer' => $customer->id,
                 'items' => [
                     [
-                        'plan' =>  $plan_id,
+                        'plan' =>  $plan->plan_id,
                     ],
                 ],
                 'expand' => ['latest_invoice.payment_intent'],
             ]);
 
 
-            $subscription_row = new StripeSubscriptions;
+            $subscription_row = new DriversSubscriptions;
             $subscription_row->user_id      = $user->id;
             $subscription_row->stripe_id    = $subscription->id;
             $subscription_row->status       = 'subscribed';
             $subscription_row->email        = $request->email;
-            $subscription_row->plan_id      = $plan_id;
-            $subscription_row->plan         = 'Founder';
+            $subscription_row->plan         = $plan->id;
             $subscription_row->country      = $country;
             $subscription_row->card_name    = $card_name;   
             $subscription_row->save();         
@@ -159,7 +170,7 @@ class SubscriptionController extends Controller
             \Stripe\Stripe::setApiKey($stripe_skey);
             \Stripe\Stripe::setApiVersion($api_version);
 
-            $subscription_row = StripeSubscriptions::where('user_id',$user->id)
+            $subscription_row = DriversSubscriptions::where('user_id',$user->id)
                 ->whereNotIn('status', ['canceled'])
                 ->first();
 
@@ -186,19 +197,19 @@ class SubscriptionController extends Controller
             return redirect('signin_driver');
         }
         else{
-            $subscription_row = StripeSubscriptions::where('user_id',$user->id)
+            $subscription_row = DriversSubscriptions::where('user_id',$user->id)
                 ->whereNotIn('status', ['canceled'])
                 ->first();
             
-            $type = $subscription_row->plan;
+            $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
+            $type = $plan->plan_name;
             switch($type) {
                 case "Founder":
-                    $plan = "Regular";
-                    $pid = "plan_GQJRSjXx14TuLc"; // -- move to the model
+                    $plan = StripeSubscriptionsPlans::where('plan_name','Regular')->first();
+
                 break;
                 case "Regular":
-                    $plan = "Founder";
-                    $pid = "plan_GQJPw5BNB3TXTP"; // -- move to the model
+                    $plan = StripeSubscriptionsPlans::where('plan_name','Founder')->first();
                 break;
             }
 
@@ -213,13 +224,12 @@ class SubscriptionController extends Controller
                 'items' => [
                     [
                         'id' => $subscription->items->data[0]->id,
-                        'plan' => $pid,
+                        'plan' => $plan->plan_id,
                     ],
                 ],
             ]);
 
-            $subscription_row->plan_id  = $pid;
-            $subscription_row->plan     = $plan;
+            $subscription_row->plan     = $plan->id;
             $subscription_row->save();
                 
             return redirect('subscription')->with( ['SubMessage' => 'You have changed your subscription to <b>' . $type . "</b> successfully"] );
