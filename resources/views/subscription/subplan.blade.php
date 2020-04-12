@@ -34,7 +34,7 @@
           <span class="cardLabel1">Card information</span>
           <div class="fieldset">
             <div id="card-card-number" class="field empty StripeElement"></div>
-            <div id="card-card-expiry" class="field emptyStripeElement"></div>
+            <div id="card-card-expiry" class="field empty StripeElement"></div>
             <div id="card-card-cvc" class="field empty half-width StripeElement"></div>
           </div>
           <span class="cardLabel1">Name on card</span>

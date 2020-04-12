@@ -19,7 +19,7 @@
 
         <div class="row">
                 <div style="display: flex; font-size: 140%; flex-direction: column; align-items: center; margin-top: 3em">
-                <span> You are currently subscribed to <b> {{ $subscription->plan }} </b> plan </span>
+                <span> You are currently subscribed to <b> {{ $subscription->plan_name }} </b> plan </span>
                 <a style="text-decoration: none; color: #175b9c; font-size: 110%" href="{{ action('SubscriptionController@cancelSubscription') }}"> Cancel </a>
    
             </div>
