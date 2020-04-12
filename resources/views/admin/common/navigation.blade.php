@@ -153,6 +153,17 @@
 					@endif
 				</ul>
 			</li>
+            @endif
+            @if(@$user->can('manage_admin'))
+			<li class="treeview {{ (Route::current()->uri() == 'admin/admin_users') ? 'active' : ''  }}">
+				<a href="#">
+					<i class="fa fa-handshake-o"></i> <span>Manage Subscriptions</span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					<li class="{{ (Route::current()->uri() == 'admin/admin_user') ? 'active' : ''  }}"><a href="{{ url('admin/admin_user') }}"><i class="fa fa-circle-o"></i><span>Subscription plans</span></a></li>
+					<li class="{{ (Route::current()->uri() == 'admin/roles') ? 'active' : ''  }}"><a href="{{ url('admin/roles') }}"><i class="fa fa-circle-o"></i><span>Subscribed drivers</span></a></li>
+				</ul>
+			</li>
 			@endif
 			@if($company_user ||  @$user->can('manage_statements'))
 			<li class="treeview {{ (Route::current()->uri() == $first_segment.'/statements/{type}') ? 'active' : ''  }}">
