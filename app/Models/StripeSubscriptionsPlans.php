@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StripeSubscriptions extends Model
+class StripeSubscriptionsPlans extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'stripe_subscriptions';
+    protected $table = 'stripe_subscription_plans';
 }
