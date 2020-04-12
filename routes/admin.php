@@ -236,6 +236,12 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
 	Route::group(['middleware' =>  'admin_can:manage_referral_settings'], function() {
 		Route::get('referral_settings', 'ReferralSettingsController@index');
 		Route::post('update_referral_settings', 'ReferralSettingsController@update');
+    });
+    
+    // Manage Subscriptions Settings
+	Route::group(['middleware' =>  'admin_can:manage_referral_settings'], function() {
+		Route::get('subscriptions_settings', 'ReferralSettingsController@index');
+		Route::post('drivers_subscriptions', 'ReferralSettingsController@update');
 	});
 
 	// SiteSetting
