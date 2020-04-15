@@ -99,7 +99,7 @@ Route::group(['middleware' => 'jwt.verify'], function () {
     Route::get('cancel_subscription', 'SubscriptionController@cancelSubscription');
     Route::get('pause_subscription', 'SubscriptionController@pauseSubscription');
     Route::get('resume_subscription', 'SubscriptionController@resumeSubscription');
-    Route::get('upgrade_subscription', 'SubscriptionController@switchSubscription');
+    Route::get('upgrade_subscription', 'SubscriptionController@upgradeSubscription');
 
 
 	// TripController

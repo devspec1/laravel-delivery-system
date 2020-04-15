@@ -426,4 +426,71 @@ class SubscriptionController extends Controller
             return response()->json($sub_data);
         }
     }
+
+     /**
+     * Upgrade driver's stripe subscription
+     *
+     * @param array $request  Input values
+     * @return Json
+     */
+    public function upgradeSubscription(Request $request) {
+        $user_details = JWTAuth::parseToken()->authenticate();
+
+		$user = User::where('id', $user_details->id)->first();
+        
+        if(!$user) {
+            return response()->json([
+				'status_code'		=> '0',
+				'status_message'	=> trans('messages.invalid_credentials'),
+			]);
+        }
+        else{
+            $subscription_row = DriversSubscriptions::where('user_id',$user->id)
+                ->whereNotIn('status', ['canceled'])
+                ->first();
+            
+            $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
+            $type = $plan->plan_name;
+            if($type == "Founder"){
+                return response()->json([
+                    'status_code'		=> '0',
+                    'status_message'	=> 'You are already a member.',
+                ]);
+            }
+            else{
+                $stripe_skey = payment_gateway('secret','Stripe');
+                $api_version = payment_gateway('api_version','Stripe');
+                \Stripe\Stripe::setApiKey($stripe_skey);
+                \Stripe\Stripe::setApiVersion($api_version);
+                
+                $subscription = \Stripe\Subscription::retrieve($subscription_row->stripe_id);
+                \Stripe\Subscription::update($subscription_row->stripe_id, [
+                    'cancel_at_period_end' => false,
+                    'items' => [
+                        [
+                            'id' => $subscription->items->data[0]->id,
+                            'plan' => $plan->plan_id,
+                        ],
+                    ],
+                ]);
+                
+                $subscription_row->plan     = $plan->id;
+                $subscription_row->save();
+                
+                if($subscription_row){
+                    $subscription_row['plan_id'] = $plan->plan_id;
+                    $subscription_row['plan_name'] = $plan->plan_name;
+                }
+                
+                $sub_data = array(
+                    'status_code'		=> '1',
+                    'status_message'	=> trans('messages.subscriptions.upgraded'),
+                    'subscription'      => $subscription_row, 
+                );
+
+                return response()->json($sub_data);
+            }
+
+        }
+    }
 }
