@@ -119,16 +119,21 @@ class SubscriptionController extends Controller
                 'expand' => ['latest_invoice.payment_intent'],
             ]);
 
-
-            $subscription_row = new DriversSubscriptions;
-            $subscription_row->user_id      = $user->id;
+            $subscription_row = DriversSubscriptions::where('user_id',$user->id)
+                ->whereNotIn('status', ['canceled'])
+                ->first();
+            if(!$subscription_row){
+                $subscription_row = new DriversSubscriptions;
+                $subscription_row->user_id      = $user->id;
+            }
             $subscription_row->stripe_id    = $subscription->id;
             $subscription_row->status       = 'subscribed';
             $subscription_row->email        = $request->email;
             $subscription_row->plan         = $plan->id;
             $subscription_row->country      = $country;
             $subscription_row->card_name    = $card_name;   
-            $subscription_row->save();         
+            $subscription_row->save();    
+  
 
             $sub_data = array(
                 'status_code'		=> '1',
