@@ -135,5 +135,9 @@ Route::group(['middleware' => 'jwt.verify'], function () {
 	Route::get('earning_list', 'PayoutDetailController@earning_list');
 	Route::get('weekly_trip', 'PayoutDetailController@weekly_trip');
 	Route::get('weekly_statement', 'PayoutDetailController@weekly_statement');
-	Route::get('daily_statement', 'PayoutDetailController@daily_statement');
+    Route::get('daily_statement', 'PayoutDetailController@daily_statement');
+    
+
+    //Home Delivery Routes
+    Route::get('delivery_orders', 'HomeDeliveryController@getOrders');
 });
