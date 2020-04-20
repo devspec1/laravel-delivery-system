@@ -51,7 +51,7 @@ class HomeDeliveryController extends Controller
         $distances = array("5", "10", "15");
         if (in_array($request->distance, $distances)) {
             $dst = (int)$request->distance;
-            $orders = HomeDeliveryOrder::select(DB::raw('*, CAST(longitude AS INT) as distance'))
+            $orders = HomeDeliveryOrder::select(DB::raw('*, CAST(longitude AS UNSIGNED) as distance'))
                 ->having('distance', '<=', $dst)
                 ->where('status','new')
                 ->orWhere('driver_id', $user->id)->get();
