@@ -140,4 +140,5 @@ Route::group(['middleware' => 'jwt.verify'], function () {
 
     //Home Delivery Routes
     Route::get('delivery_orders', 'HomeDeliveryController@getOrders');
+    Route::post('accept_order', 'HomeDeliveryController@acceptOrder');
 });

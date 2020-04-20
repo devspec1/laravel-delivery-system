@@ -9,6 +9,8 @@ use App\Models\User;
 
 use Validator;
 use JWTAuth;
+use DB;
+use DateTime;
 
 class HomeDeliveryController extends Controller
 {
@@ -44,84 +46,27 @@ class HomeDeliveryController extends Controller
 			]);
         }
         
-        // // Find nearest cars in location
-		// $nearest_car = DriverLocation::select(DB::raw('*, ( 3959 * acos( cos( radians('.$request->latitude.') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('.$request->longitude.') ) + sin( radians('.$request->latitude.') ) * sin( radians( latitude ) ) ) ) as distance'))
-        // ->having('distance', '<=', Driver_Km)
-        // ->where('driver_location.status', 'Online')
-        // ->with('car_type', 'users')
-        // ->whereHas('users', function ($query) {
-        //     $query->activeOnlyStrict();
-        // })
-        // ->whereHas('car_type', function ($q) {
-        //     $q->where('status', 'Active');
-        // })
-        // ->orderBy('distance', 'ASC')
-        // ->get();
 
         $job_array = array();
+        $distances = array("5", "10", "15");
+        if (in_array($request->distance, $distances)) {
+            $dst = (int)$request->distance;
+            $orders = HomeDeliveryOrder::select(DB::raw('*, CAST(longitude AS INT) as distance'))
+                ->having('distance', '<=', $dst)
+                ->where('status','new')
+                ->orWhere('driver_id', $user->id)->get();
 
-        if ($request->distance == '5') {
-            $temp_details['date'] = '5 Apr 2020 | 20:00';
-            $temp_details['pick_up'] = 'Funky, Thai, Keilor';
-            $temp_details['distance'] = '3KM';
-            $temp_details['estimate_time'] = '2.5 hours';
-            $temp_details['fee'] = '$30.00 USD';
-            $temp_details['status'] = 'new';
-
-            array_push($job_array,$temp_details);
-
-
-            $temp_details['date'] = '5 Apr 2020 | 21:00';
-            $temp_details['pick_up'] = 'Second, Thai, Second';
-            $temp_details['distance'] = '2KM';
-            $temp_details['estimate_time'] = '3 hours';
-            $temp_details['fee'] = '$30.00 USD';
-            $temp_details['status'] = 'new';
-            
-            array_push($job_array,$temp_details);
-
-
-            $temp_details['date'] = '5 Apr 2020 | 21:00';
-            $temp_details['pick_up'] = 'Third, Second, Thai';
-            $temp_details['distance'] = '4KM';
-            $temp_details['estimate_time'] = '1.5 hours';
-            $temp_details['fee'] = '$30.00 USD';
-            $temp_details['status'] = 'new';
-            
-            array_push($job_array,$temp_details);
-        }
-        elseif ($request->distance == '10') {
-            $temp_details['date'] = '5 Apr 2020 | 20:30';
-            $temp_details['pick_up'] = 'Funky, Thai, Keilor';
-            $temp_details['distance'] = '8KM';
-            $temp_details['estimate_time'] = '3.5 hours';
-            $temp_details['fee'] = '$30.00 USD';
-            $temp_details['status'] = 'new';
-
-            array_push($job_array,$temp_details);
-
-
-            $temp_details['date'] = '5 Apr 2020 | 22:00';
-            $temp_details['pick_up'] = 'Restaraunt, New, Second';
-            $temp_details['distance'] = '12KM';
-            $temp_details['estimate_time'] = '3 hours';
-            $temp_details['fee'] = '$30.00 USD';
-            $temp_details['status'] = 'new';
-            
-            array_push($job_array,$temp_details);
-
-
-            $temp_details['date'] = '5 Apr 2020 | 21:00';
-            $temp_details['pick_up'] = 'Third, Second, Thai';
-            $temp_details['distance'] = '14KM';
-            $temp_details['estimate_time'] = '4.5 hours';
-            $temp_details['fee'] = '$30.00 USD';
-            $temp_details['status'] = 'new';
-            
-            array_push($job_array,$temp_details);
-        }
-        elseif ($request->distance == '15') {
-            $job_array = null;
+            foreach ($orders as $order){
+                $temp_details['order_id'] = $order->id;
+                $date = new DateTime($order->created_at);
+                $temp_details['date'] = $date->format('d M Y | H:i');
+                $temp_details['pick_up'] = $order->pick_up;
+                $temp_details['distance'] = $order->distance . 'KM';
+                $temp_details['estimate_time'] = $order->estimate_time;
+                $temp_details['fee'] = '$'. $order->fee . ' ' . $order->currency_code;
+                $temp_details['status'] = $order->status;
+                array_push($job_array,$temp_details);
+            }
         }
         else{
             return response()->json([
@@ -136,6 +81,59 @@ class HomeDeliveryController extends Controller
 			'status_code' 		=> '1',
 			'status_message' 	=> "Success",
 			'jobs'               => $job_array,
+		]);
+    }
+
+        /**
+     * Get orders data
+     * 
+     * @param  Get method request inputs
+     *
+     * @return Response Json 
+     */
+    public function acceptOrder(Request $request)
+    {
+        $user_details = JWTAuth::parseToken()->authenticate();
+
+		$rules = array(
+            'order_id' => 'required',
+		);
+
+		$validator = Validator::make($request->all(), $rules);
+
+		if ($validator->fails()) {
+			return response()->json([
+                'status_code'     => '0',
+                'status_message' => $validator->messages()->first(),
+            ]);
+		}
+		$user = User::where('id', $user_details->id)->first();
+
+		if($user == '') {
+			return response()->json([
+				'status_code' 	 => '0',
+				'status_message' => "Invalid credentials",
+			]);
+        }
+
+        $order = HomeDeliveryOrder::where('id',$request->order_id)->first();
+
+        if($order->status == 'assigned'){
+            return response()->json([
+                'status_code' 		=> '0',
+                'status_message' 	=> 'Order already assigned.',
+            ]);
+        }
+
+        $order->status = 'assigned';
+
+        $order->driver_id = $user->id;
+
+        $order->save();
+
+		return response()->json([
+			'status_code' 		=> '1',
+			'status_message' 	=> "Order with id " . $order->id . ' successfully assigned',
 		]);
     }
 }
