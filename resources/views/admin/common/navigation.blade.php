@@ -27,7 +27,18 @@
 		</div>
 		<ul class="sidebar-menu">
 			<li class="header">MAIN NAVIGATION</li>
-			<li class="{{ (Route::current()->uri() == $first_segment.'/dashboard') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/dashboard') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
+            <li class="{{ (Route::current()->uri() == $first_segment.'/dashboard') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/dashboard') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
+            @if(@$user->can('manage_admin'))
+			<li class="treeview {{ (Route::current()->uri() == 'admin/admin_users') ? 'active' : ''  }}">
+				<a href="#">
+					<i class="fa fa-gift"></i> <span>Manage Delivery Orders</span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					<li class="{{ (Route::current()->uri() == 'admin/home_delivery') ? 'active' : ''  }}"><a href="{{ url('admin/home_delivery') }}"><i class="fa fa-circle-o"></i><span>Orders</span></a></li>
+					<li class="{{ (Route::current()->uri() == 'admin/roles') ? 'active' : ''  }}"><a href="{{ url('admin/roles') }}"><i class="fa fa-circle-o"></i><span>Merchants</span></a></li>
+				</ul>
+			</li>
+			@endif
 			@if(@$user->can('manage_admin'))
 			<li class="treeview {{ (Route::current()->uri() == 'admin/admin_users') ? 'active' : ''  }}">
 				<a href="#">
