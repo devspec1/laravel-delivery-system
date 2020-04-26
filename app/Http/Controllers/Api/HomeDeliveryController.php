@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\HomeDeliveryOrder;
+use App\Models\DriverLocation;
 use App\Models\User;
 
 use Validator;
@@ -50,7 +51,10 @@ class HomeDeliveryController extends Controller
         $distances = array("5", "10", "15");
         if (in_array($request->distance, $distances)) {
             $dst = (int)$request->distance;
-            $orders = HomeDeliveryOrder::select(DB::raw('*, CAST(pick_up_longitude AS UNSIGNED) as distance'))
+
+            $driver_location = DriverLocation::where('user_id',$user->id)->first();
+
+            $orders = HomeDeliveryOrder::select(DB::raw('*, ( 6371 * acos( cos( radians(pick_up_latitude) ) * cos( radians( ' . $driver_location->latitude . ' ) ) * cos(radians( ' . $driver_location->longitude . ' ) - radians(pick_up_longitude) ) + sin( radians(pick_up_latitude) ) * sin( radians( ' . $driver_location->latitude . ' ) ) ) ) as distance'))
                 ->having('distance', '<=', $dst)
                 ->where('status','new')
                 ->orWhere('driver_id', $user->id)
@@ -66,7 +70,7 @@ class HomeDeliveryController extends Controller
                     $temp_details['customer_name'] = $order->customer_name;
                     $temp_details['customer_phone_number'] = $order->customer_phone_number;
                 }
-                $temp_details['distance'] = $order->distance . 'KM';
+                $temp_details['distance'] = (string)round((float)$order->distance, 2) . 'KM';
                 $temp_details['estimate_time'] = $order->estimate_time;
                 $temp_details['fee'] = '$'. $order->fee . ' ' . $order->currency_code;
                 $temp_details['status'] = $order->status;
@@ -159,7 +163,10 @@ class HomeDeliveryController extends Controller
         $distances = array("5", "10", "15");
         if (in_array($request->distance, $distances)) {
             $dst = (int)$request->distance;
-            $orders = HomeDeliveryOrder::select(DB::raw('*, CAST(pick_up_longitude AS UNSIGNED) as distance'))
+
+            $driver_location = DriverLocation::where('user_id',$user->id)->first();
+
+            $orders = HomeDeliveryOrder::select(DB::raw('*, ( 6371 * acos( cos( radians(pick_up_latitude) ) * cos( radians( ' . $driver_location->latitude . ' ) ) * cos(radians( ' . $driver_location->longitude . ' ) - radians(pick_up_longitude) ) + sin( radians(pick_up_latitude) ) * sin( radians( ' . $driver_location->latitude . ' ) ) ) ) as distance'))
                 ->having('distance', '<=', $dst)
                 ->where('status','new')
                 ->orWhere('driver_id', $user->id)
@@ -175,7 +182,7 @@ class HomeDeliveryController extends Controller
                     $temp_details['customer_name'] = $ord->customer_name;
                     $temp_details['customer_phone_number'] = $ord->customer_phone_number;
                 }
-                $temp_details['distance'] = $ord->distance . 'KM';
+                $temp_details['distance'] = (string)round((float)$order->distance, 2) . 'KM';
                 $temp_details['estimate_time'] = $ord->estimate_time;
                 $temp_details['fee'] = '$'. $ord->fee . ' ' . $ord->currency_code;
                 $temp_details['status'] = $ord->status;
