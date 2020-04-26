@@ -136,12 +136,12 @@ class HomeDeliveryController extends Controller
 
 
             $nearest_cars = DriverLocation::select(DB::raw('*, ( 6371 * acos( cos( radians(' . $order->pick_up_latitude . ') ) * cos( radians( latitude ) ) * cos(radians( longitude ) - radians(' . $order->pick_up_longitude . ') ) + sin( radians(' . $order->pick_up_latitude . ') ) * sin( radians( latitude ) ) ) ) as distance'))
-            ->having('distance', '<=', 15);
+            ->having('distance', '<=', 15)->get();
 
             foreach ($nearest_cars as $nearest_car) {
                 $driver_details = User::where('id', $nearest_car->user_id)->first();
 
-                if($driver_details->device_id!="")
+                if($driver_details->device_id != "" && $driver_details->status == "Active")
                 {
                     $message = 'New job(s) in your location';
     
