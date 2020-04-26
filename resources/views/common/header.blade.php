@@ -24,7 +24,7 @@
         <li ><a href="{{ url('sign_out') }}">{{trans('messages.header.logout')}}</a></li>
         @endif
         {{-- <li ><a href="{{ url('/') }}/help">{{trans('messages.header.help')}}</a></li> --}}
-            <div class="home__drive-form-sidebar home-sidebar home-sidebar-head" style="width: 320px !important;    margin-right: 50px !important;     margin-top: 25px; ">
+            <div class="home__drive-form-sidebar home-sidebar home-sidebar-head" style="width: 320px !important;    margin-right: 50px !important;     margin-top: 25px; display:none; ">
                 <!--  {{ Form::open(array('url' => 'driver_register','class' => 'layout layout--flush section-drive-hero soft portable-soft-large')) }} -->
                 <div class="layout layout--flush section-drive-hero soft portable-soft-large padd-32" style="padding-bottom: 10px !important; padding-top: 10px !important; background: black;border-radius: 25px;color: white;">
                     <div class="layout__item one-whole align-center">
