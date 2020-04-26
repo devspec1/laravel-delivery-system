@@ -14,6 +14,8 @@ use App\Models\CarType;
 use App\Models\ScheduleRide;
 
 use App\Http\Start\Helpers;
+use App\Http\Helper\RequestHelper;
+use App\Models\DriverLocation;
 
 use Validator;
 use JWTAuth;
@@ -25,10 +27,11 @@ class HomeDeliveryController extends Controller
 
     protected $helper;  // Global variable for instance of Helpers
 
-    public function __construct()
+    public function __construct(RequestHelper $request)
     {
         $this->helper = new Helpers;
-        $this->otp_helper = resolve('App\Http\Helper\OtpHelper');        
+        $this->otp_helper = resolve('App\Http\Helper\OtpHelper');
+        $this->request_helper = $request;        
     }
 
     /**
@@ -129,7 +132,24 @@ class HomeDeliveryController extends Controller
             
             $order->save();
            
-            flashMessage('success', 'Order successfully added');
+            flashMessage('success', 'Order successfully added, Sending push messages to nearest drivers...');
+
+
+            $nearest_cars = DriverLocation::select(DB::raw('*, ( 6371 * acos( cos( radians(' . $order->pick_up_latitude . ') ) * cos( radians( latitude ) ) * cos(radians( longitude ) - radians(' . $order->pick_up_longitude . ') ) + sin( radians(' . $order->pick_up_latitude . ') ) * sin( radians( latitude ) ) ) ) as distance'))
+            ->having('distance', '<=', 15);
+
+            foreach ($nearest_cars as $nearest_car) {
+                $driver_details = User::where('id', $nearest_car->user_id)->first();
+
+                if($driver_details->device_id!="")
+                {
+                    $message = 'New job(s) in your location';
+    
+                    $this->send_custom_pushnotification($driver_details->device_id,$driver_details->device_type,$driver_details->user_type,$message);    
+                }
+            }
+
+            flashMessage('success', 'Drivers notified');
 
             return redirect(LOGIN_USER_TYPE.'/home_delivery');
         }
@@ -292,5 +312,34 @@ class HomeDeliveryController extends Controller
         //     $return = ['status' => 0, 'message' => 'Rider have referrals, So can\'t delete this driver'];
         // }
         return $return;
+    }
+
+    /**
+     * custom push notification
+     *
+     * @return success or fail
+     */
+    public function send_custom_pushnotification($device_id,$device_type,$user_type,$message)
+    {   
+        if (LOGIN_USER_TYPE=='company') {
+            $push_title = "Message from ".Auth::guard('company')->user()->name;    
+        }
+        else {
+            $push_title = "Message from ".SITE_NAME;   
+        }
+
+        try {
+            if($device_type == 1) {
+                $data       = array('custom_message' => array('title' => $message,'push_title'=>$push_title));
+                $this->request_helper->push_notification_ios($message, $data, $user_type, $device_id,$admin_msg=1);
+            }
+            else {
+                $data       = array('custom_message' => array('message_data' => $message,'title' => $push_title ));
+                $this->request_helper->push_notification_android($push_title, $data, $user_type, $device_id,$admin_msg=1);
+            }
+        }
+        catch (\Exception $e) {
+            logger('Could not send push notification');
+        }
     }
 }
