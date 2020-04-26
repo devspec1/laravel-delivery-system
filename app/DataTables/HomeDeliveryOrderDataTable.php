@@ -30,12 +30,9 @@ class HomeDeliveryOrderDataTable extends DataTable
     {
         return datatables()
             ->of($query)
-            ->addColumn('email', function ($users) {
-                return protectedString($users->email);
-            })
-            ->addColumn('action', function ($users) {
-                $edit = (LOGIN_USER_TYPE=='company' || auth('admin')->user()->can('update_driver')) ? '<a href="'.url(LOGIN_USER_TYPE.'/edit_driver/'.$users->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;' : '';
-                $delete = (auth()->guard('company')->user()!=null || auth('admin')->user()->can('delete_driver')) ? '<a data-href="'.url(LOGIN_USER_TYPE.'/delete_driver/'.$users->id).'" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#confirm-delete"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;':'';
+            ->addColumn('action', function ($orders) {
+                $edit = (LOGIN_USER_TYPE=='company' || auth('admin')->user()->can('update_driver')) ? '<a href="'.url(LOGIN_USER_TYPE.'/edit_home_delivery/'.$orders->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;' : '';
+                $delete = (auth()->guard('company')->user()!=null || auth('admin')->user()->can('delete_driver')) ? '<a data-href="'.url(LOGIN_USER_TYPE.'/delete_home_delivery/'.$orders->id).'" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#confirm-delete"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;':'';
                 return $edit.$delete;
             });
     }
@@ -43,22 +40,12 @@ class HomeDeliveryOrderDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param User $model
+     * @param \HomeDeliveryOrder $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(User $model)
+    public function query(HomeDeliveryOrder $model)
     {
-        $orders = DB::Table('delivery_orders')->select('delivery_orders.id', 'delivery_orders.status', 'delivery_orders.estimate_time', DB::raw('CONCAT(delivery_orders.fee, delivery_orders.currency_code) AS fee'));
-        $users = DB::Table('users')->select('users.id as id', 'users.first_name', 'users.last_name','users.email','users.country_code','users.mobile_number', 'users.status','companies.name as company_name','users.created_at',DB::raw('CONCAT("XXXXXX",Right(users.mobile_number,4)) AS hidden_mobile'))
-            ->leftJoin('companies', function($join) {
-                $join->on('users.company_id', '=', 'companies.id');
-            })->where('user_type','Driver')->groupBy('id');
-
-        //If login user is company then get that company drivers only
-        if (LOGIN_USER_TYPE=='company') {
-            $users = $users->where('company_id',auth()->guard('company')->user()->id);
-        }
-        return $users;
+        return $model->all();
     }
 
     /**
@@ -69,13 +56,13 @@ class HomeDeliveryOrderDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('lBfr<"table-responsive"t>ip')
-                    ->orderBy(0)
-                    ->buttons(
-                        ['csv', 'excel', 'print', 'reset']
-                    );
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('lBfr<"table-responsive"t>ip')
+            ->orderBy(0)
+            ->buttons(
+                ['csv', 'excel', 'print', 'reset']
+            );
     }
 
     /**
@@ -85,24 +72,19 @@ class HomeDeliveryOrderDataTable extends DataTable
      */
     protected function getColumns()
     {
-        $mobile_number_column = (isLiveEnv())?'hidden_mobile':'mobile_number';
-        $columns = [
-            ['data' => 'id', 'name' => 'users.id', 'title' => 'Id'],
-            ['data' => 'first_name', 'name' => 'users.first_name', 'title' => 'First Name'],
-            ['data' => 'last_name', 'name' => 'users.last_name', 'title' => 'Last Name'],
+        return [
+            ['data' => 'id', 'name' => 'id', 'title' => 'Id'],
+            ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Created At'],
+            ['data' => 'status', 'name' => 'status', 'title' => 'Status'],
+            ['data' => 'driver_id', 'name' => 'driver_id', 'title' => 'Assigned Driver'],
+            ['data' => 'estimate_time', 'name' => 'orders.estimate_time', 'title' => 'Estimate time'],
+            ['data' => 'fee', 'name' => 'fee', 'title' => 'Fee'],
+            ['data' => 'pick_up_location', 'name' => 'pick_up_location', 'title' => 'Pick Up'],
+            ['data' => 'drop_off_location', 'name' => 'drop_off_location', 'title' => 'Drop Off'],
+            ['data' => 'customer_name', 'name' => 'customer_name', 'title' => 'Customer Name'],
+            ['data' => 'customer_phone_number', 'name' => 'customer_phone_number', 'title' => 'Customer Phone'],
+            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false],
         ];
-        if (LOGIN_USER_TYPE!='company') {
-            $columns[] = ['data' => 'company_name', 'name' => 'companies.name', 'title' => 'Company Name'];
-        }
-        $more_columns = [
-            ['data' => 'email', 'name' => 'users.email', 'title' => 'Email'],
-            ['data' => 'status', 'name' => 'users.status', 'title' => 'Status'],
-            ['data' => $mobile_number_column, 'name' => 'users.mobile_number', 'title' => 'Mobile Number'],
-            ['data' => 'created_at', 'name' => 'users.created_at', 'title' => 'Created At'],
-            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false, 'exportable' => false],
-        ];
-
-        return array_merge($columns,$more_columns);
     }
 
     /**
