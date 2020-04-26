@@ -52,9 +52,9 @@ class HomeDeliveryController extends Controller
             $dst = (int)$request->distance;
             $orders = HomeDeliveryOrder::select(DB::raw('*, CAST(pick_up_longitude AS UNSIGNED) as distance'))
                 ->having('distance', '<=', $dst)
-                ->whereNotIn('status', ['delivered'])
                 ->where('status','new')
-                ->orWhere('driver_id', $user->id)->get();
+                ->orWhere('driver_id', $user->id)
+                ->whereNotIn('status', ['delivered'])->get();
 
             foreach ($orders as $order){
                 $temp_details['order_id'] = $order->id;
@@ -154,8 +154,6 @@ class HomeDeliveryController extends Controller
 
             $assign_status_message = ' successfully assigned';
         }
-
-
 
         $job_array = array();
         $distances = array("5", "10", "15");
