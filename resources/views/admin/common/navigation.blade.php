@@ -35,7 +35,7 @@
 				</a>
 				<ul class="treeview-menu">
 					<li class="{{ (Route::current()->uri() == 'admin/home_delivery') ? 'active' : ''  }}"><a href="{{ url('admin/home_delivery') }}"><i class="fa fa-circle-o"></i><span>Orders</span></a></li>
-					<li class="{{ (Route::current()->uri() == 'admin/roles') ? 'active' : ''  }}"><a href="{{ url('admin/roles') }}"><i class="fa fa-circle-o"></i><span>Merchants</span></a></li>
+					{{-- <li class="{{ (Route::current()->uri() == 'admin/roles') ? 'active' : ''  }}"><a href="{{ url('admin/roles') }}"><i class="fa fa-circle-o"></i><span>Merchants</span></a></li> --}}
 				</ul>
 			</li>
 			@endif
@@ -171,7 +171,7 @@
 					<i class="fa fa-handshake-o"></i> <span>Manage Subscriptions</span> <i class="fa fa-angle-left pull-right"></i>
 				</a>
 				<ul class="treeview-menu">
-					<li class="{{ (Route::current()->uri() == 'admin/admin_user') ? 'active' : ''  }}"><a href="{{ url('admin/admin_user') }}"><i class="fa fa-circle-o"></i><span>Subscription plans</span></a></li>
+					{{-- <li class="{{ (Route::current()->uri() == 'admin/admin_user') ? 'active' : ''  }}"><a href="{{ url('admin/admin_user') }}"><i class="fa fa-circle-o"></i><span>Subscription plans</span></a></li> --}}
 					<li class="{{ (Route::current()->uri() == 'admin/roles') ? 'active' : ''  }}"><a href="{{ url('admin/roles') }}"><i class="fa fa-circle-o"></i><span>Subscribed drivers</span></a></li>
 				</ul>
 			</li>
