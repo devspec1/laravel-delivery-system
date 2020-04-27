@@ -61,6 +61,7 @@ class HomeDeliveryController extends Controller
                 ->whereNotIn('status', ['delivered'])->get();
 
             foreach ($orders as $order){
+                $temp_details = array();
                 $temp_details['order_id'] = $order->id;
                 $date = new DateTime($order->created_at);
                 $temp_details['date'] = $date->format('d M Y | H:i');
@@ -173,6 +174,7 @@ class HomeDeliveryController extends Controller
                 ->whereNotIn('status', ['delivered'])->get();
 
             foreach ($orders as $ord){
+                $temp_details = array();
                 $temp_details['order_id'] = $ord->id;
                 $date = new DateTime($ord->created_at);
                 $temp_details['date'] = $date->format('d M Y | H:i');
