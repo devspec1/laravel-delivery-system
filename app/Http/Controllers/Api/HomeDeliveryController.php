@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\HomeDeliveryOrder;
 use App\Models\DriverLocation;
 use App\Models\User;
+use App\Models\Vehicle;
 
 use Validator;
 use JWTAuth;
@@ -27,7 +28,9 @@ class HomeDeliveryController extends Controller
         $user_details = JWTAuth::parseToken()->authenticate();
 
 		$rules = array(
-			'distance' => 'required|in:5,10,15',
+            'distance' => 'required|in:5,10,15',
+            'latitude' => 'required',
+            'longitude'=> 'required',
 		);
 
 		$validator = Validator::make($request->all(), $rules);
@@ -51,6 +54,29 @@ class HomeDeliveryController extends Controller
         $distances = array("5", "10", "15");
         if (in_array($request->distance, $distances)) {
             $dst = (int)$request->distance;
+
+            $driver_location = DriverLocation::where('user_id',$user->id)->first();
+
+            $data = [
+                'user_id' => $user->id,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+            ];
+
+            $vehicle = Vehicle::where('user_id', $user->id)->first();
+
+            if($vehicle){
+                $data['car_id'] = $vehicle->vehicle_id;
+            }
+            else{
+                $data['car_id'] = '1';
+            }
+    
+            if (!$driver_location) {
+                $data['status'] = "Online";
+            }
+    
+            DriverLocation::updateOrCreate(['user_id' => $user_details->id], $data);
 
             $driver_location = DriverLocation::where('user_id',$user->id)->first();
 
@@ -106,6 +132,8 @@ class HomeDeliveryController extends Controller
 		$rules = array(
             'order_id' => 'required',
             'distance' => 'required|in:5,10,15',
+            'latitude' => 'required',
+            'longitude' => 'required',
 		);
 
 		$validator = Validator::make($request->all(), $rules);
@@ -164,6 +192,29 @@ class HomeDeliveryController extends Controller
         $distances = array("5", "10", "15");
         if (in_array($request->distance, $distances)) {
             $dst = (int)$request->distance;
+
+            $driver_location = DriverLocation::where('user_id',$user->id)->first();
+
+            $data = [
+                'user_id' => $user->id,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+            ];
+
+            $vehicle = Vehicle::where('user_id', $user->id)->first();
+
+            if($vehicle){
+                $data['car_id'] = $vehicle->vehicle_id;
+            }
+            else{
+                $data['car_id'] = '1';
+            }
+    
+            if (!$driver_location) {
+                $data['status'] = "Online";
+            }
+    
+            DriverLocation::updateOrCreate(['user_id' => $user_details->id], $data);
 
             $driver_location = DriverLocation::where('user_id',$user->id)->first();
 
