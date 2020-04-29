@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\DriverAddress;
 use App\Models\ReferralSetting;
 use App\Models\ReferralUser;
+use App\Models\RiderLocation;
 use JWTAuth;
 use App;
 
@@ -142,10 +143,16 @@ class ReferralsController extends Controller
 			$temp_details['trips'] 			= $referral_user->trips;
 			$temp_details['remaining_trips']= $referral_user->remaining_trips;
 			$temp_details['earnable_amount']= $referral_user->earnable_amount;
-            $temp_details['status'] 		= $referral_user->payment_status;
-            //$temp_details['driver_address'] 		= '';
-			// $temp_details['check'] 		=    $referral_user->referral_id ;
-			// $temp_details['type'] 		=    $userww->user_type ;
+            $temp_details['status'] 		= ($userww->status == 'Active' ? 'Active' : 'Inactive');
+            $temp_details['since']          = date_format($userww->created_at,"M Y");
+            
+            $user_home_address = RiderLocation::where('user_id', $userww->id)->first();
+            if ($user_home_address && $user_home_address->home != ''){
+                $temp_details['location']       = ltrim(array_slice(explode(',', $user_home_address->home), -2, 1)[0]," ");
+            }
+            else{
+                $temp_details['location']       = 'NA';
+            }
 
 			//if($referral_user->payment_status == 'Pending') {
 				array_push($pending_referrals,$temp_details);
@@ -223,11 +230,12 @@ class ReferralsController extends Controller
 			$temp_details['trips'] 			= $referral_user->trips;
 			$temp_details['remaining_trips']= $referral_user->remaining_trips;
 			$temp_details['earnable_amount']= $referral_user->earnable_amount;
-            $temp_details['status'] 		= $referral_user->payment_status;
-			$temp_details['driver_address'] 		= $driver_address;
+            $temp_details['status'] 		= ($userww->status == 'Active' ? 'Active' : 'Inactive');
+            $temp_details['since']          = date_format($userww->created_at,"M Y");
+            
 
-			// $temp_details['check'] 		=    $referral_user->referral_id ;
-			// $temp_details['type'] 		=    $userww->user_type ;
+            $temp_details['driver_address'] = $driver_address;
+            $temp_details['location']       = ucfirst(strtolower($driver_address->city)) . ', ' . $driver_address->state;
 
 			// if($referral_user->payment_status == 'Pending') {
 				array_push($pending_referrals,$temp_details);
@@ -246,7 +254,7 @@ class ReferralsController extends Controller
 			'referral_amount' 		=> $referral_amount,
 			'pending_amount' 		=> $user->pending_referral_amount,
 			'total_earning'  		=> $user->total_referral_earnings,
-			'referrals' 	=> $pending_referrals
+			'referrals' 	        => $pending_referrals
 			
 		]);
 	}

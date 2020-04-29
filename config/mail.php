@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'smtp.gmail.com'),
+    'host' => env('MAIL_HOST', 'mail.rideon.group'),
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'port' => env('MAIL_PORT', 25),
+    'port' => env('MAIL_PORT', 587),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'trioangle1@gmail.com'),
-        'name' => env('MAIL_FROM_NAME', 'Gofer'),
+        'address' => env('MAIL_FROM_ADDRESS', 'api@rideon.group'),
+        'name' => env('MAIL_FROM_NAME', 'Ride On Group'),
     ],
 
     /*
@@ -84,9 +84,9 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME','trioangle1@gmail.com'),
+    'username' => env('MAIL_USERNAME','api@rideon.group'),
 
-    'password' => env('MAIL_PASSWORD','hismljhblilxdusd'),
+    'password' => env('MAIL_PASSWORD'),
 
     /*
     |--------------------------------------------------------------------------

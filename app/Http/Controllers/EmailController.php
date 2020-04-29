@@ -47,12 +47,17 @@ class EmailController extends Controller
         $password_resets->save(); // Insert a generated token and email in password_resets table
         $email      = $user->email;
         $content    = [
-            'first_name' => $user->first_name, 
+            'first_name' => $user->first_name,
             'url'=> $url,
             'token' => $token
-            ];
+        ];
+        $data['content'] = $content;
         // Send Forgot password email to give user email
-        Mail::to($email)->queue(new ForgotPasswordMail($content));
+        //Mail::to($email)->queue(new ForgotPasswordMail($content));
+        Mail::send('emails.forgot_password', $data, function($message) use ($email, $content){
+            $message->to($email, $content['first_name'])->subject('Reset Ride On driver password');
+            $message->from('api@rideon.group','Ride on Tech support');
+        });
 
         return true;
     }

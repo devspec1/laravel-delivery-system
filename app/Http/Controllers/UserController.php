@@ -19,6 +19,8 @@ use App\Http\Controllers\EmailController;
 use App\Models\CarType;
 use App\Models\DriverAddress;
 use App\Models\DriverDocuments;
+use App\Models\DriversSubscriptions;
+use App\Models\StripeSubscriptionsPlans;
 use App\Models\PasswordResets;
 use App\Models\ProfilePicture;
 use App\Models\RiderLocation;
@@ -787,7 +789,18 @@ class UserController extends Controller
 						$driver_doc->user_id = $user->id;
 						$driver_doc->document_count = 0;
 						$driver_doc->save();
-					}
+                    }
+
+                    $plan = StripeSubscriptionsPlans::where('plan_name','Regular')->first();
+                    $subscription_row = new DriversSubscriptions;
+                    $subscription_row->user_id      = $user->id;
+                    $subscription_row->stripe_id    = '';
+                    $subscription_row->status       = 'subscribed';
+                    $subscription_row->email        = $user->email;
+                    $subscription_row->plan         = $plan->id;
+                    $subscription_row->country      = '';
+                    $subscription_row->card_name    = '';   
+                    $subscription_row->save(); 
 
 					if (Auth::guard('web')->attempt(['email' => $user->email, 'password' => Session::get('password'), 'user_type' => 'Driver'])) {
 
@@ -1494,4 +1507,6 @@ class UserController extends Controller
 
         return redirect('user_disabled');
     }
+
+    
 }

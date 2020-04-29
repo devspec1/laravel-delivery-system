@@ -219,6 +219,28 @@ if (!function_exists('getDriverRating')) {
 }
 
 /**
+ * Get Given Rider Rating
+ *
+ * @param String $rider_id
+ * @return String $rider_rating
+ */
+if (!function_exists('getRiderRating')) {
+	function getRiderRating($rider_id)
+	{
+		$total_rating = \DB::table('rating')->select(DB::raw('sum(driver_rating) as rating'))
+			->where('user_id', $rider_id)->where('driver_rating', '>', 0)->first()->rating;
+
+		$total_rating_count = Rating::where('user_id', $rider_id)->where('driver_rating', '>', 0)->count();
+		
+		$rider_rating = '0.0';
+		if ($total_rating_count != 0) {
+			$rider_rating = round(($total_rating / $total_rating_count), 2);
+		}
+		return strval($rider_rating);
+	}
+}
+
+/**
  * Get User Wallet Amount
  *
  * @param String $user_id

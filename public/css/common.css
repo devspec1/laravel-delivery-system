@@ -2973,18 +2973,33 @@ i.google-ride {
 
 #newLoginWrp .spanB1 {
     cursor: pointer;
-    width: 65%; border-radius: 6px; padding: 1.2em; font-size: 175%; color: white;  font-weight: bold; font-family: 'MontserratReg'; text-align: center
+    width: 65%; border-radius: 6px; padding: 1.2em; font-size: 175%; color: white;
+      font-weight: bold; font-family: 'MontserratReg'; text-align: center
 }
+.newSignupWrp1 .spanB1 {
+    cursor: pointer;
+    width: 75%; border-radius: 6px; padding: 0.4em; font-size: 175%; color: white;
+      font-weight: bold; font-family: 'MontserratReg'; text-align: center;
+}
+.newSignupWrp2 .spanB1 {
+    cursor: pointer;
+    margin-top :0.5em;
+    text-transform: uppercase;
+    width: 75%; border-radius: 6px; padding: 1.1em; font-size: 110%; color: white;
+      font-weight: bold; font-family: 'MontserratReg'; text-align: center
 
-#newLoginWrp .span1 {
-    font-size: 120%;margin-top: 0.9em; margin-bottom: 0.9em; opacity: 0.7; font-family: 'MontserratReg'; font-weight: bold
+}
+#newLoginWrp .span1, #newSignupWrp .span1 {
+    font-size: 120%;margin-top: 0.9em; margin-bottom: 0.9em; 
+    opacity: 0.7; font-family: 'MontserratReg'; font-weight: bold;
 }
 
 .newDashSubItemRow {
     display: flex; justify-content: flex-start; align-items: center;  width: 100%; padding-left: 1.5em;padding-right: 1.5em; padding-top: 0.85em; padding-bottom: 0.85em; border-bottom: 1px solid rgba(0, 0, 0, 0.10);
 }
 #newDashMainWrp {
-     display: flex; justify-content: space-between; width: 100%; height: 80%; border-top: 1px solid rgba(0, 0, 0, 0.15);padding: 1.5em;  padding-top: 3em; padding-right: 0; font-family: 'MontserratReg';
+     display: flex; justify-content: space-between; width: 100%; height: 80%; 
+     border-top: 1px solid rgba(0, 0, 0, 0.15);padding: 1.5em;  padding-top: 3em; padding-right: 0; font-family: 'MontserratReg';
 }
 #newDashMainWrp > div {
     display: flex; flex-direction: column; width: 23.3%;
@@ -2995,4 +3010,16 @@ i.google-ride {
 }
 #newDashMainWrp .link1 {
     color: #17609c; font-size: 90%; font-family: 'MontserratReg'; font-weight: bold;
+}
+.newSignupWrp1 input::placeholder {
+    color: rgba(0, 0, 0, 0.9);
+}
+.newSignupWrp2 .inputWrp {
+   display: flex; align-items: center; margin-top: 0.4em;margin-bottom: 0.3em;
+   padding: 1.3em; width: 75%; background: rgba(0, 0, 0, 0.02);
+    border:1px solid rgba(0, 0, 0, 0.12);
+}
+.newSignupWrp2 .inputWrp input {
+    width: 100%;
+    border: none; background: transparent; font-size: 100%; font-weight: bold; opacity: 0.8;
 }

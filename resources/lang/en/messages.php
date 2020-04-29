@@ -772,7 +772,15 @@ return [
 		'cancel_reason_id' 	=> 'Cancel Reason Id',
 		'user_type' 		=> 'User Type',
 		'trip_id' 			=> 'Trip Id',
-	],
+    ],
+    
+    'subscriptions' => [
+        'subscribed'    => 'Subscribed successfully',
+        'paused'        => 'Subscription successfully suspended',
+        'cancelled'     => 'Unsubscribed successfully',
+        'resumed'       => 'Subscription resumed successfully',
+        'upgraded'      => 'Subscription upgraded successfully',
+    ],
 
 	'referrals' => [
 		'referral_code' 				=> 'Referral Code',

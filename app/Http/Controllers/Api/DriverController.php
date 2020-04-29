@@ -34,6 +34,8 @@ use App\Models\AppliedReferrals;
 use App\Models\ReferralUser;
 use App\Models\Fees;
 use App\Models\ProfilePicture;
+use App\Models\Vehicle;
+use App\Models\DriverDocuments;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -262,18 +264,18 @@ class DriverController extends Controller
 	{
 		$user_details = JWTAuth::parseToken()->authenticate();
 
-		$rules = array(
-			'document_type' => 'required|in:profile_image,driver_license_back,driver_license_front,motor_insurance,certificate_of_registration,driver_accreditation',
-		);
+		// $rules = array(
+		// 	'document_type' => 'required|in:profile_image,driver_license_back,driver_license_front,motor_insurance,certificate_of_registration,driver_accreditation',
+		// );
 
-		$validator = Validator::make($request->all(), $rules);
+		// $validator = Validator::make($request->all(), $rules);
 
-		if($validator->fails()) {
-            return [
-            	'status_code' => '0',
-            	'status_message' => $validator->messages()->first()
-            ];
-        }
+		// if($validator->fails()) {
+        //     return [
+        //     	'status_code' => '0',
+        //     	'status_message' => $validator->messages()->first()
+        //     ];
+        // }
 
 		$user = User::where('id', $user_details->id)->first();
 
@@ -283,28 +285,62 @@ class DriverController extends Controller
 				'status_message'	=> trans('messages.api.invalid_credentials'),
 			]);
         }
-        switch ($request->document_type){
-            case 'profile_image':
-                $user_profile_image = ProfilePicture::find($user_details->id);
-                if(!$user_profile_image || $user_profile_image == url('images/user.jpeg')){
-                    return response()->json([
-                        'status_code' 		=> '0',
-                        'status_message' 	=> trans('messages.errors.unsuccessful'),
-                    ]);
-                }
-                break;
-            case 'driver_license_back':
-                return response()->json([
-                    'status_code' 		=> '0',
-                    'status_message' 	=> trans('messages.errors.unsuccessful'),
-                ]);
-                break;
+
+        $response_array = array();
+        $response_array['status_code'] = '1';
+        $response_array['status_message'] = trans('messages.api.listed_successfully');
+        $response_array['profile_image'] = '1';
+        $response_array['driver_license_back'] = '1';
+        $response_array['driver_license_front'] = '1';
+        $response_array['motor_insurance'] = '1';
+        $response_array['certificate_of_registration'] = '1';
+        $response_array['driver_accreditation'] = '1';
+        
+
+        $user_profile_image = ProfilePicture::find($user_details->id);
+        if(!$user_profile_image || $user_profile_image->src == url('images/user.jpeg')){
+            $response_array['profile_image'] = '0';
+        }
+
+        $vehicle = Vehicle::where('user_id', $user->id)->first();
+        if($vehicle){
+            if(!$vehicle->rc){
+                $response_array['certificate_of_registration'] = '0';
+            }
+            if(!$vehicle->permit){
+                $response_array['driver_accreditation'] = '0';
+            }
+            if(!$vehicle->insurance){
+                $response_array['motor_insurance'] = '0';
+            }
+        }
+        else{
+            $response_array['motor_insurance'] = '0';
+            $response_array['certificate_of_registration'] = '0';
+            $response_array['driver_accreditation'] = '0';
         }
         
-		return response()->json([
-			'status_code' 		=> '1',
-			'status_message' 	=> trans('messages.success'),
-		]);
+        $driver_docs = DriverDocuments::where('user_id', $user->id)->first();
+
+        if($driver_docs){
+            if (!$driver_docs->license_front) {
+                $response_array['driver_license_front'] = '0';
+            }
+            if (!$driver_docs->license_back) {
+                $response_array['driver_license_back'] = '0';
+            }
+        }
+        else{
+            $response_array['driver_license_back'] = '0';
+            $response_array['driver_license_front'] = '0';
+        }
+
+        // return response()->json([
+        //     'status_code' 		=> '0',
+        //     'status_message' 	=> trans('messages.errors.unsuccessful'),
+        // ]);
+
+		return response()->json($response_array);
 	}
 
 	public function cash_collected(Request $request)

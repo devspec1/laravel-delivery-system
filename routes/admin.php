@@ -72,7 +72,13 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
 	Route::get('driver', 'DriverController@index')->middleware('admin_can:view_driver');
 	Route::match(array('GET', 'POST'), 'add_driver', 'DriverController@add')->middleware('admin_can:create_driver');
 	Route::match(array('GET', 'POST'), 'edit_driver/{id}', 'DriverController@update')->middleware('admin_can:update_driver');
-	Route::match(array('GET', 'POST'), 'delete_driver/{id}', 'DriverController@delete')->middleware('admin_can:delete_driver');
+    Route::match(array('GET', 'POST'), 'delete_driver/{id}', 'DriverController@delete')->middleware('admin_can:delete_driver');
+    
+    //Manage Home Delivery
+    Route::get('home_delivery', 'HomeDeliveryController@index');
+    Route::match(array('GET', 'POST'),'add_home_delivery', 'HomeDeliveryController@add');
+    Route::match(array('GET', 'POST'),'edit_home_delivery/{id}', 'HomeDeliveryController@update');
+    Route::match(array('GET', 'POST'),'delete_home_delivery/{id}', 'HomeDeliveryController@delete');
 	
 	//Import Driver
 	Route::match(array('GET', 'POST'), 'import_drivers', 'DriverController@import_drivers');
@@ -236,6 +242,12 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
 	Route::group(['middleware' =>  'admin_can:manage_referral_settings'], function() {
 		Route::get('referral_settings', 'ReferralSettingsController@index');
 		Route::post('update_referral_settings', 'ReferralSettingsController@update');
+    });
+    
+    // Manage Subscriptions Settings
+	Route::group(['middleware' =>  'admin_can:manage_referral_settings'], function() {
+		Route::get('subscriptions_settings', 'ReferralSettingsController@index');
+		Route::post('drivers_subscriptions', 'ReferralSettingsController@update');
 	});
 
 	// SiteSetting

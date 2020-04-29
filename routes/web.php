@@ -102,6 +102,7 @@ Route::group(['middleware' => ['locale','rider_guest']], function () {
 });
 
 Route::get('driver/new_login', 'DriverDashboardController@driver_new_login');
+Route::get('driver/new_signup', 'DriverDashboardController@driver_new_signup');
 
 // Driver Routes..
 Route::group(['middleware' => ['locale','driver_guest']], function () {
@@ -151,11 +152,25 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 	Route::get('driver/membership', 'SubscriptionController@index');
 	Route::get('driver/bank_details', 'UserController@payoutPreferences')->name('driver_payout_preference');
 	Route::get('driver/referral', 'DashboardController@driver_referral')->name('driver_referral');
-	Route::get('driver/help', 'DriverDashboardController@show_help');
+    Route::get('driver/help', 'DriverDashboardController@show_help');
+    Route::match(array('GET', 'POST'), 'driver/signin_driver', 'UserController@signin_driver');
+    Route::get('driver/driver_profile', 'DriverDashboardController@driver_profile');
 
 });
 
 Route::get('sign_out', function () {
+	$user_type = @Auth::user()->user_type;
+	Auth::logout();
+	if (@$user_type == 'Rider') {
+		return redirect('signin_rider');
+	} else {
+		return redirect('signin_driver');
+	}
+
+});
+
+
+Route::get('driver/sign_out', function () {
 	$user_type = @Auth::user()->user_type;
 	Auth::logout();
 	if (@$user_type == 'Rider') {

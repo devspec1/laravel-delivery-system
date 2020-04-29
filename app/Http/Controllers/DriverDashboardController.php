@@ -55,8 +55,11 @@ class DriverDashboardController extends Controller
     }
       public function driver_new_login()
     {
-        $data['result'] = User::find(@Auth::user()->id);
-        return view('driver_dashboard.new_login',$data);
+        return view('driver_dashboard.new_login');
+    }
+     public function driver_new_signup()
+    {
+        return view('driver_dashboard.new_signup');
     }
     /**
      * Driver Download invoice Page
