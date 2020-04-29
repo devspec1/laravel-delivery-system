@@ -241,7 +241,8 @@ class HomeDeliveryController extends Controller
             $date = new DateTime($order->created_at);
             $date_create = \Carbon\Carbon::create($date->format('Y-m-d h:i:s'));
             $date_estimate = $date_create->addMinutes((int)$order->estimate_time);
-            $date_diff = $date_now->diffInMinutes($date_estimate , false);
+            $date_diff = $date_estimate->diffInMinutes($date_now, false);
+
             if ($date_diff < 0 ){
                 $order->status = 'expired';
                 $order->save();
