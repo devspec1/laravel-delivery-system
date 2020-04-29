@@ -236,12 +236,9 @@ class HomeDeliveryController extends Controller
         foreach ($orders as $order){
             $temp_details = array();
 
-            $timezone = date_default_timezone_get();
-            $date_now = \Carbon\Carbon::now()->setTimezone($timezone);
-            $date = new DateTime($order->created_at);
-            $date_create = \Carbon\Carbon::create($date->format('Y-m-d h:i:s'));
-            $date_estimate = $date_create->addMinutes((int)$order->estimate_time);
-            $date_diff = $date_estimate->diffInMinutes($date_now, false);
+            $date_now = \Illuminate\Support\Carbon::now();
+            $date_estimate = $order->created_at->addMinutes($order->estimate_time);
+            $date_diff = $date_now->diffInMinutes($date_estimate, false);
 
             if ($date_diff < 0 ){
                 $order->status = 'expired';
