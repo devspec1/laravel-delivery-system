@@ -53,56 +53,7 @@ class HomeDeliveryController extends Controller
         $job_array = array();
         $distances = array("5", "10", "15");
         if (in_array($request->distance, $distances)) {
-            $dst = (int)$request->distance;
-
-            $driver_location = DriverLocation::where('user_id',$user->id)->first();
-
-            $data = [
-                'user_id' => $user->id,
-                'latitude' => $request->latitude,
-                'longitude' => $request->longitude,
-            ];
-
-            $vehicle = Vehicle::where('user_id', $user->id)->first();
-
-            if($vehicle){
-                $data['car_id'] = $vehicle->vehicle_id;
-            }
-            else{
-                $data['car_id'] = '1';
-            }
-    
-            if (!$driver_location) {
-                $data['status'] = "Online";
-            }
-    
-            DriverLocation::updateOrCreate(['user_id' => $user_details->id], $data);
-
-            $driver_location = DriverLocation::where('user_id',$user->id)->first();
-
-            $orders = HomeDeliveryOrder::select(DB::raw('*, ( 6371 * acos( cos( radians(pick_up_latitude) ) * cos( radians( ' . $driver_location->latitude . ' ) ) * cos(radians( ' . $driver_location->longitude . ' ) - radians(pick_up_longitude) ) + sin( radians(pick_up_latitude) ) * sin( radians( ' . $driver_location->latitude . ' ) ) ) ) as distance'))
-                ->having('distance', '<=', $dst)
-                ->where('status','new')
-                ->orWhere('driver_id', $user->id)
-                ->whereNotIn('status', ['delivered'])->get();
-
-            foreach ($orders as $order){
-                $temp_details = array();
-                $temp_details['order_id'] = $order->id;
-                $date = new DateTime($order->created_at);
-                $temp_details['date'] = $date->format('d M Y | H:i');
-                $temp_details['pick_up'] = $order->pick_up_location;
-                $temp_details['drop_off'] = $order->drop_off_location;
-                if($order->status == 'assigned'){
-                    $temp_details['customer_name'] = $order->customer_name;
-                    $temp_details['customer_phone_number'] = $order->customer_phone_number;
-                }
-                $temp_details['distance'] = (string)round((float)$order->distance, 2) . 'KM';
-                $temp_details['estimate_time'] = $order->estimate_time;
-                $temp_details['fee'] = '$'. $order->fee . ' ' . $order->currency_code;
-                $temp_details['status'] = $order->status;
-                array_push($job_array,$temp_details);
-            }
+            $job_array = $this->get_jobs_list($request, $user_details);
         }
         else{
             return response()->json([
@@ -164,6 +115,13 @@ class HomeDeliveryController extends Controller
                     'status_message' 	=> 'Order already assigned.',
                 ]);
             }
+            elseif($request->cancel){
+                $order->status = 'new';
+        
+                $order->save();
+
+                $assign_status_message = ' successfully cancelled';
+            }
             else{
                 $order->status = 'delivered';
         
@@ -176,6 +134,12 @@ class HomeDeliveryController extends Controller
             return response()->json([
                 'status_code' 		=> '0',
                 'status_message' 	=> 'Order already delivered.',
+            ]);
+        }
+        elseif ($order->status == 'expired') {
+            return response()->json([
+                'status_code' 		=> '0',
+                'status_message' 	=> 'Sorry, the time for accepting the order has expired.',
             ]);
         }
         else{
@@ -191,56 +155,7 @@ class HomeDeliveryController extends Controller
         $job_array = array();
         $distances = array("5", "10", "15");
         if (in_array($request->distance, $distances)) {
-            $dst = (int)$request->distance;
-
-            $driver_location = DriverLocation::where('user_id',$user->id)->first();
-
-            $data = [
-                'user_id' => $user->id,
-                'latitude' => $request->latitude,
-                'longitude' => $request->longitude,
-            ];
-
-            $vehicle = Vehicle::where('user_id', $user->id)->first();
-
-            if($vehicle){
-                $data['car_id'] = $vehicle->vehicle_id;
-            }
-            else{
-                $data['car_id'] = '1';
-            }
-    
-            if (!$driver_location) {
-                $data['status'] = "Online";
-            }
-    
-            DriverLocation::updateOrCreate(['user_id' => $user_details->id], $data);
-
-            $driver_location = DriverLocation::where('user_id',$user->id)->first();
-
-            $orders = HomeDeliveryOrder::select(DB::raw('*, ( 6371 * acos( cos( radians(pick_up_latitude) ) * cos( radians( ' . $driver_location->latitude . ' ) ) * cos(radians( ' . $driver_location->longitude . ' ) - radians(pick_up_longitude) ) + sin( radians(pick_up_latitude) ) * sin( radians( ' . $driver_location->latitude . ' ) ) ) ) as distance'))
-                ->having('distance', '<=', $dst)
-                ->where('status','new')
-                ->orWhere('driver_id', $user->id)
-                ->whereNotIn('status', ['delivered'])->get();
-
-            foreach ($orders as $ord){
-                $temp_details = array();
-                $temp_details['order_id'] = $ord->id;
-                $date = new DateTime($ord->created_at);
-                $temp_details['date'] = $date->format('d M Y | H:i');
-                $temp_details['pick_up'] = $ord->pick_up_location;
-                $temp_details['drop_off'] = $ord->drop_off_location;
-                if($ord->status == 'assigned'){
-                    $temp_details['customer_name'] = $ord->customer_name;
-                    $temp_details['customer_phone_number'] = $ord->customer_phone_number;
-                }
-                $temp_details['distance'] = (string)round((float)$order->distance, 2) . 'KM';
-                $temp_details['estimate_time'] = $ord->estimate_time;
-                $temp_details['fee'] = '$'. $ord->fee . ' ' . $ord->currency_code;
-                $temp_details['status'] = $ord->status;
-                array_push($job_array,$temp_details);
-            }
+            $job_array = $this->get_jobs_list($request, $user_details);
         }
         else{
             return response()->json([
@@ -254,5 +169,102 @@ class HomeDeliveryController extends Controller
             'status_message' 	=> "Order with id " . $order->id . ' ' . $assign_status_message,
             'jobs'               => $job_array,            
 		]);
+    }
+
+
+    /**
+     * Create ride request. 
+     * Ride request table stores pick up and drop locations
+     *
+     * @return success or fail
+     */
+    public function get_jobs_list($request, $user_details)
+    {  
+        $job_array = array();
+        $dst = (int)$request->distance;
+
+        $driver_location = DriverLocation::where('user_id',$user_details->id)->first();
+
+        $data = [
+            'user_id' => $user_details->id,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+        ];
+
+        $vehicle = Vehicle::where('user_id', $user_details->id)->first();
+
+        if($vehicle){
+            $data['car_id'] = $vehicle->vehicle_id;
+        }
+        else{
+            $data['car_id'] = '1';
+        }
+
+        if (!$driver_location) {
+            $data['status'] = "Online";
+        }
+
+        DriverLocation::updateOrCreate(['user_id' => $user_details->id], $data);
+
+        $driver_location = DriverLocation::where('user_id',$user_details->id)->first();
+
+        $orders = HomeDeliveryOrder::whereIn('delivery_orders.status',['new','assigned'])
+            ->join('users as rider', function($join) {
+                $join->on('rider.id', '=', 'delivery_orders.customer_id');
+            })
+            ->join('request as ride_request', function($join) {
+                $join->on('ride_request.id', '=', 'delivery_orders.ride_request');
+            })
+            ->select(
+                DB::raw('*, ( 6371 * acos( cos( radians(ride_request.pickup_latitude) ) * cos( radians( ' . $driver_location->latitude . ' ) ) * cos(radians( ' . $driver_location->longitude . ' ) - radians(ride_request.pickup_longitude) ) + sin( radians(ride_request.pickup_latitude) ) * sin( radians( ' . $driver_location->latitude . ' ) ) ) ) as distance'),
+                'delivery_orders.id as id',
+                'delivery_orders.driver_id as driver_id', 
+                'delivery_orders.created_at as created_at',
+                'delivery_orders.estimate_time as estimate_time',
+                'delivery_orders.fee as fee',
+                'delivery_orders.status as status',
+                'delivery_orders.currency_code as currency_code',
+                'ride_request.pickup_location as pick_up_location',
+                'ride_request.drop_location as drop_off_location',
+                DB::raw('CONCAT(rider.first_name," ",rider.last_name) as customer_name'),
+                DB::raw('CONCAT("+",rider.country_code,rider.mobile_number) as customer_phone_number'),
+            )
+            ->having('distance', '<=', $dst)
+            ->where('delivery_orders.status','new')
+            ->orWhere('delivery_orders.driver_id', $user_details->id)->get();
+
+        foreach ($orders as $order){
+            $temp_details = array();
+
+            $timezone = date_default_timezone_get();
+            $date_now = \Carbon\Carbon::now()->setTimezone($timezone);
+            $date = new DateTime($order->created_at);
+            $date_create = \Carbon\Carbon::create($date->format('Y-m-d h:i:s'));
+            $date_estimate = $date_create->addMinutes((int)$order->estimate_time);
+            $date_diff = $date_now->diffInMinutes($date_estimate , false);
+            if ($date_diff < 0 ){
+                $order->status = 'expired';
+                $order->save();
+                continue;
+            }
+
+            $temp_details['order_id'] = $order->id;
+                            
+            $date = new DateTime($order->created_at);
+            $temp_details['date'] = $date->format('d M Y | H:i');
+            $temp_details['pick_up'] = $order->pick_up_location;
+            $temp_details['drop_off'] = $order->drop_off_location;
+            if($order->status == 'assigned'){
+                $temp_details['customer_name'] = $order->customer_name;
+                $temp_details['customer_phone_number'] = $order->customer_phone_number;
+            }
+            $temp_details['estimate_time'] =  (string)round((float)$date_diff/60, 2) . ' Hours';
+            $temp_details['distance'] = (string)round((float)$order->distance, 2) . 'KM';
+            $temp_details['fee'] = '$'. $order->fee;
+            $temp_details['status'] = $order->status;
+            array_push($job_array,$temp_details);
+        }
+  
+        return $job_array;
     }
 }
