@@ -407,6 +407,7 @@ class HomeDeliveryController extends Controller
      */
     public function create_ride_request($request, $user)
     {  
+        $polyline = $this->request_helper->GetPolyline($request->pick_up_latitude, $request->drop_off_latitude, $request->pick_up_longitude, $request->drop_off_longitude);
         //create ride request
         $ride_request = new RideRequest;
         $ride_request->user_id = $user->id;
@@ -419,6 +420,7 @@ class HomeDeliveryController extends Controller
         $ride_request->car_id = '1';
         $ride_request->pickup_location = $request->pick_up_location;
         $ride_request->drop_location = $request->drop_off_location;
+        $ride_request->trip_path = $polyline;
         $ride_request->payment_mode = 'Stripe';
         $ride_request->status = 'Accepted';
         $ride_request->timezone = 'Australia/Brisbane';
