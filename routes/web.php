@@ -100,7 +100,9 @@ Route::group(['middleware' => ['locale','rider_guest']], function () {
 	Route::get('referral', 'DashboardController@referral')->name('referral');
 	Route::post('ajax_referral_data/{id}', 'DashboardController@ajax_referral_data');
 });
-	
+
+Route::get('driver/new_login', 'DriverDashboardController@driver_new_login');
+
 // Driver Routes..
 Route::group(['middleware' => ['locale','driver_guest']], function () {
 
@@ -135,7 +137,7 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 	//New Routes (Menu)
 
 
-	Route::get('driver/new_login', 'DriverDashboardController@driver_new_login');
+
 	Route::get('driver/new_dash', 'DriverDashboardController@driver_new_dash');
 	Route::get('driver/inbox', 'DriverDashboardController@show_inbox');
 	Route::get('driver/trips_payments', 'DriverDashboardController@driver_trip');
