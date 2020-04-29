@@ -8,6 +8,9 @@ use App\Models\HomeDeliveryOrder;
 use App\Models\DriverLocation;
 use App\Models\User;
 use App\Models\Vehicle;
+use App\Models\Request as RideRequest;
+use App\Models\DriversSubscriptions;
+use App\Models\Trips;
 
 use Validator;
 use JWTAuth;
@@ -115,19 +118,68 @@ class HomeDeliveryController extends Controller
                     'status_message' 	=> 'Order already assigned.',
                 ]);
             }
-            elseif($request->cancel){
+            elseif($request->cancel == "True"){
                 $order->status = 'new';
         
                 $order->save();
 
                 $assign_status_message = ' successfully cancelled';
             }
-            else{
+            else{     
+
+                $rider = User::where('id', $order->customer_id)->first();
+                $ride_request = RideRequest::where('id',$order->ride_request)->first();
+
+                $subscription = DriversSubscriptions::where('user_id',$user->id)
+                    ->whereNotIn('status', ['canceled'])
+                    ->first();
+
+                //Insert record in Trips table
+                $trip = new Trips;
+                $trip->user_id = $rider->id;
+                $trip->otp = mt_rand(1000, 9999);
+                $trip->pickup_latitude = $ride_request->pickup_latitude;
+                $trip->pickup_longitude = $ride_request->pickup_longitude;
+                $trip->drop_latitude = $ride_request->drop_latitude;
+                $trip->drop_longitude = $ride_request->drop_longitude;
+                $trip->driver_id = $user->id;
+                $trip->car_id = $ride_request->car_id;
+                $trip->pickup_location = $ride_request->pickup_location;
+                $trip->drop_location = $ride_request->drop_location;
+                $trip->request_id = $ride_request->id;
+                $trip->trip_path = $ride_request->trip_path;
+                $trip->payment_mode = 'Stripe';
+                $trip->status = 'Completed';
+                $trip->payment_status = 'Completed';
+                $trip->currency_code = $rider->currency_code;
+                $trip->peak_fare = $ride_request->peak_fare;
+                $trip->subtotal_fare = $order->fee;
+                $trip->subtotal_fare = $order->fee;
+                $trip->arrive_time = $order->created_at;
+                $trip->begin_trip = $order->updated_at;
+
+                if($subscription->plan == 2){
+                    $trip->driver_or_company_commission = 0.00;
+                    $trip->driver_payout = $order->fee;
+                }
+                else{
+                    $commission = $order->fee * 0.1; //10% from non-members
+                    $trip->driver_or_company_commission = $commission;
+                    $trip->driver_payout = $order->fee - $commission;
+                }
+
                 $order->status = 'delivered';
-        
+
                 $order->save();
 
                 $assign_status_message = ' successfully delivered';
+
+                $order = HomeDeliveryOrder::where('id',$request->order_id)->first();
+                
+                $trip->end_trip = $order->updated_at;
+
+                $trip->save();
+               
             }
         }
         elseif ($order->status == 'delivered') {
@@ -233,6 +285,7 @@ class HomeDeliveryController extends Controller
             ->having('distance', '<=', $dst)
             ->where('delivery_orders.status','new')
             ->orWhere('delivery_orders.driver_id', $user_details->id)
+            ->whereNotIn('delivery_orders.status',['delivered','expired'])
             ->orderBy('time_to_dead','desc')->get();
 
         foreach ($orders as $order){
@@ -249,7 +302,7 @@ class HomeDeliveryController extends Controller
             }
 
             $temp_details['order_id'] = $order->id;
-                            
+
             $date = new DateTime($order->created_at);
             $temp_details['date'] = $date->format('d M Y | H:i');
             $temp_details['pick_up'] = $order->pick_up_location;

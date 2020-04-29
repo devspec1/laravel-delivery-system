@@ -45,7 +45,7 @@ class HomeDeliveryOrderDataTable extends DataTable
      */
     public function query(HomeDeliveryOrder $model)
     {
-        return $model->whereIn('delivery_orders.status',['new','assigned','delivered'])
+        return $model->whereIn('delivery_orders.status',['new','assigned','delivered','expired'])
             ->join('users as rider', function($join) {
                 $join->on('rider.id', '=', 'delivery_orders.customer_id');
             })
@@ -63,7 +63,6 @@ class HomeDeliveryOrderDataTable extends DataTable
                 'ride_request.drop_location as drop_off_location',
                 DB::raw('CONCAT(rider.first_name," ",rider.last_name) as customer_name'),
                 DB::raw('CONCAT("+",rider.country_code,rider.mobile_number) as mobile_number'),
-
             ]);
     }
 
