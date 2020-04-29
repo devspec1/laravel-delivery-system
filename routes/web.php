@@ -15,7 +15,9 @@ Route::get('driver_invoice', 'DriverDashboardController@driver_invoice');
 Route::match(array('GET', 'POST'),'apple_callback', 'UserController@apple_callback');
 Route::get('app/{type}', 'HomeController@redirect_to_app')->name('redirect_to_app');
 
+
 Route::get('referral_api', 'DashboardController@referral_api');
+
 
 Route::group(['middleware' =>'canInstall'], function () {
 	Route::group(['middleware' =>'locale'], function () {
@@ -24,6 +26,12 @@ Route::group(['middleware' =>'canInstall'], function () {
 });
 
 Route::group(['middleware' =>'locale'], function () {
+
+	Route::get('subscription','SubscriptionController@index')->name('driver_subscription_index');
+	Route::get('subscriptionPlan/{plan}', 'SubscriptionController@getSubscriptionPlan');
+	Route::post("create-customer", "SubscriptionController@createCustomer");
+	Route::get("cancel-subscription", "SubscriptionController@cancelSubscription");
+	Route::get("switch-subscription", "SubscriptionController@switchSubscription");
 
 	Route::get('help', 'HomeController@help');
 	Route::get('help/topic/{id}/{category}', 'HomeController@help');
@@ -58,6 +66,7 @@ Route::group(['middleware' =>'locale'], function () {
 	Route::get('ride', 'RideController@ride');
 	Route::get('how_it_works', 'RideController@how_it_works');
 
+
 	Route::get('drive', 'DriveController@drive');
 	Route::get('requirements', 'DriveController@requirements');
 	Route::get('driver_app', 'DriveController@driver_app');
@@ -91,9 +100,11 @@ Route::group(['middleware' => ['locale','rider_guest']], function () {
 	Route::get('referral', 'DashboardController@referral')->name('referral');
 	Route::post('ajax_referral_data/{id}', 'DashboardController@ajax_referral_data');
 });
-
+	
 // Driver Routes..
 Route::group(['middleware' => ['locale','driver_guest']], function () {
+
+	
 	Route::get('driver_profile', 'DriverDashboardController@driver_profile');
 	Route::get('documents/{id}', 'DriverDashboardController@documents');
 	Route::post('document_upload/{id}', 'DriverDashboardController@document_upload');
@@ -122,6 +133,10 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 	Route::get('payout_default/{id}', 'UserController@payoutDefault')->where('id', '[0-9]+')->name('payout_default');
 
 	//New Routes (Menu)
+
+
+	Route::get('driver/new_login', 'DriverDashboardController@driver_new_login');
+	Route::get('driver/new_dash', 'DriverDashboardController@driver_new_dash');
 	Route::get('driver/inbox', 'DriverDashboardController@show_inbox');
 	Route::get('driver/trips_payments', 'DriverDashboardController@driver_trip');
 	Route::get('driver/trips_payments_detail/{id}', 'DriverDashboardController@driver_trip_detail');
@@ -131,7 +146,7 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 	Route::get('driver/edit_profile', 'DriverDashboardController@driver_profile');
 	Route::get('driver/vehicle_view', 'DriverDashboardController@vehicle_view');
 	Route::get('driver/documents', 'DriverDashboardController@documents');
-	Route::get('driver/membership', 'DriverDashboardController@membership');
+	Route::get('driver/membership', 'SubscriptionController@index');
 	Route::get('driver/bank_details', 'UserController@payoutPreferences')->name('driver_payout_preference');
 	Route::get('driver/referral', 'DashboardController@driver_referral')->name('driver_referral');
 	Route::get('driver/help', 'DriverDashboardController@show_help');

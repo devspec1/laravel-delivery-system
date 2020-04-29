@@ -1,50 +1,34 @@
 <header style="height:66px;">
 
-  <div class="container-fluid fixed-header" style="line-height: 35px;     display: flex;">
+  <div class="container-fluid fixed-header" style="line-height: 35px;">
   <button type="button" class="navbar-toggle nav-click" data-toggle="collapse" data-target="#menu-collapse">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a href="{{ url('/') }}"  class="pull-left logo-link"><img style="width: 109px;background-color: white;    margin-top: 15px;     margin-top: 20px;" src="{{ $logo_url }}"></a>
-        {{-- <ul  class="header-left-link">
+        <a href="{{ url('/') }}"  class="pull-left logo-link"><img style="width: 109px;background-color: white;    margin-top: 15px;height: 50px !important;" src="{{ $logo_url }}"></a>
+        <ul  class="header-left-link">
         <li><a href="{{ url('ride') }}">{{trans('messages.footer.ride')}}</a></li>
         <li ><a href="{{ url('drive') }}">{{trans('messages.footer.drive')}}</a></li>
         
-        </ul> --}}
+        </ul>
         <div class="pull-right">
         
         <ul class="header-right-link">
        
         @if(!Auth::user())
-        {{-- <li ><a href="{{ url('signin') }}">{{trans('messages.header.signin')}}</a></li>
-        <li ><a href="{{ url('signup') }}">{{trans('messages.home.siginup')}}</a></li> --}}
+        <li ><a href="{{ url('signin') }}">{{trans('messages.header.signin')}}</a></li>
+        <li ><a href="{{ url('signup') }}">{{trans('messages.home.siginup')}}</a></li>
         @else
         <li><a href="{{ @Auth::user()->user_type == 'Rider' ? url('profile') : url('driver_profile') }}">{{ @Auth::user()->first_name }} {{ @Auth::user()->last_name }}</li>
         <li ><a href="{{ url('sign_out') }}">{{trans('messages.header.logout')}}</a></li>
         @endif
-        {{-- <li ><a href="{{ url('/') }}/help">{{trans('messages.header.help')}}</a></li> --}}
-            <div class="home__drive-form-sidebar home-sidebar home-sidebar-head" style="width: 320px !important;    margin-right: 50px !important;     margin-top: 25px; ">
-                <!--  {{ Form::open(array('url' => 'driver_register','class' => 'layout layout--flush section-drive-hero soft portable-soft-large')) }} -->
-                <div class="layout layout--flush section-drive-hero soft portable-soft-large padd-32" style="padding-bottom: 10px !important; padding-top: 10px !important; background: black;border-radius: 25px;color: white;">
-                    <div class="layout__item one-whole align-center">
-                        <div class="home__preview-rider-image float--left " style="    background-size: 60px 60px;"></div>
-                        <div class="float--left ride-header">
-                            <h4 class="flush hard"> {{trans('messages.user.ride_with')}}</h4> <!-- {{$site_name}} -->
-                            <!-- <a class="btn btn--link hard--bottom rider-signup text--uppercase primary-font--bold  borderless--left"
-                                href="{{ url('signup_rider') }}">
-                                react-text: 6995 {{trans('messages.home.siginup')}}
-                                /react-text 
-                                <i class="icon icon_right-arrow push-tiny--left"></i></a>-->
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <li ><a href="{{ url('/') }}/help">{{trans('messages.header.help')}}</a></li>
         </ul>
         
         <div class="pull-right">
         @if(!Auth::user())
-        {{-- <div class="become-driver"><a href="{{ url('signup_driver') }}" class="btn btn--primary" ><!-- react-text: 52 -->{{trans('messages.footer.driver')}}<!-- /react-text --></a> --}}
+        <div class="become-driver"><a href="{{ url('signup_driver') }}" class="btn btn--primary" ><!-- react-text: 52 -->{{trans('messages.footer.driver')}}<!-- /react-text --></a>
         @endif
       </div>
       

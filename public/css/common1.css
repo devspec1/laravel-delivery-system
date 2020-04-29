@@ -51,12 +51,6 @@ header.funnel .bit.text--center a {
     padding:30px 0px 40px !important;
 }
 
-.dash-head-logo {
-    width: 109px;
-    padding: 0px 0px;
-    height: 50px;
-    object-fit: contain;
-}
 
 img.footer-logo {
     width: 109px;
@@ -106,7 +100,7 @@ img.footer-logo {
 }
 
 .height--full.separated--sides.pull-left.full-width {
-  box-shadow: 0px 0 10px 1px rgba(0,0,0,.15);
+
 }
 
 .site-nav {

@@ -48,6 +48,16 @@ class DriverDashboardController extends Controller
         return view('driver_dashboard.profile',$data);
     }
 
+        public function driver_new_dash()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.new_dash',$data);
+    }
+      public function driver_new_login()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.new_login',$data);
+    }
     /**
      * Driver Download invoice Page
      */
