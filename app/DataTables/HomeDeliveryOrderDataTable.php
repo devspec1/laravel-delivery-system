@@ -45,7 +45,26 @@ class HomeDeliveryOrderDataTable extends DataTable
      */
     public function query(HomeDeliveryOrder $model)
     {
-        return $model->all();
+        return $model->whereIn('delivery_orders.status',['new','assigned','delivered'])
+            ->join('users as rider', function($join) {
+                $join->on('rider.id', '=', 'delivery_orders.customer_id');
+            })
+            ->join('request as ride_request', function($join) {
+                $join->on('ride_request.id', '=', 'delivery_orders.ride_request');
+            })
+            ->select([
+                'delivery_orders.id as id',
+                'delivery_orders.driver_id as driver_id', 
+                'delivery_orders.created_at as created_at',
+                DB::raw('CONCAT(delivery_orders.estimate_time," mins") as estimate_time'),
+                'delivery_orders.fee as fee',
+                'delivery_orders.status as status',
+                'ride_request.pickup_location as pick_up_location',
+                'ride_request.drop_location as drop_off_location',
+                DB::raw('CONCAT(rider.first_name," ",rider.last_name) as customer_name'),
+                DB::raw('CONCAT("+",rider.country_code,rider.mobile_number) as mobile_number'),
+
+            ]);
     }
 
     /**
@@ -77,12 +96,12 @@ class HomeDeliveryOrderDataTable extends DataTable
             ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Created At'],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status'],
             ['data' => 'driver_id', 'name' => 'driver_id', 'title' => 'Assigned Driver'],
-            ['data' => 'estimate_time', 'name' => 'orders.estimate_time', 'title' => 'Estimate time'],
+            ['data' => 'estimate_time', 'name' => 'estimate_time', 'title' => 'Estimate time'],
             ['data' => 'fee', 'name' => 'fee', 'title' => 'Fee'],
             ['data' => 'pick_up_location', 'name' => 'pick_up_location', 'title' => 'Pick Up'],
             ['data' => 'drop_off_location', 'name' => 'drop_off_location', 'title' => 'Drop Off'],
             ['data' => 'customer_name', 'name' => 'customer_name', 'title' => 'Customer Name'],
-            ['data' => 'customer_phone_number', 'name' => 'customer_phone_number', 'title' => 'Customer Phone'],
+            ['data' => 'mobile_number', 'name' => 'mobile_number', 'title' => 'Customer Phone'],
             ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false],
         ];
     }
