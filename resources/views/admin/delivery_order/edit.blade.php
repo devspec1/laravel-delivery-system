@@ -41,7 +41,7 @@
         <h4>Edit delivery order</h4>
         <h5>Customer data</h5>
 		<div class="row">
-			<div class="col-md-3" ng-init="country_code={{($country_code_option[12]->phone_code)}}">
+			<div class="col-md-3" ng-init="country_code={{($country_code)}}">
 				<select class ='form-control selectpicker' data-live-search="true" id="input_country_code" name='country_code' ng-model="country_code">
 					@foreach($country_code_option as $country_code)
 					<option value="{{@$country_code->phone_code}}">{{$country_code->long_name}}</option>
