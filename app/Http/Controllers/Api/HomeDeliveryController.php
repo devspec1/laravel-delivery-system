@@ -228,10 +228,12 @@ class HomeDeliveryController extends Controller
                 'ride_request.drop_location as drop_off_location',
                 DB::raw('CONCAT(rider.first_name," ",rider.last_name) as customer_name'),
                 DB::raw('CONCAT("+",rider.country_code,rider.mobile_number) as customer_phone_number'),
+                DB::raw('TIMEDIFF(NOW(),(date_add(delivery_orders.created_at,interval delivery_orders.estimate_time minute))) as time_to_dead'),
             )
             ->having('distance', '<=', $dst)
             ->where('delivery_orders.status','new')
-            ->orWhere('delivery_orders.driver_id', $user_details->id)->get();
+            ->orWhere('delivery_orders.driver_id', $user_details->id)
+            ->orderBy('time_to_dead','desc')->get();
 
         foreach ($orders as $order){
             $temp_details = array();
