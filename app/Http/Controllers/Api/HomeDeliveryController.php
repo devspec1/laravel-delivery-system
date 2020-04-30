@@ -313,10 +313,14 @@ class HomeDeliveryController extends Controller
             $date_now = \Illuminate\Support\Carbon::now();
             $date_estimate = $order->created_at->addMinutes($order->estimate_time);
             $date_diff = $date_now->diffInMinutes($date_estimate, false);
+            $time1 = (int)($date_diff/60);
+            $time2 = $date_diff%60;
+            $temp_details['estimate_time'] =  $time1 . '.' . $time2 . ' Hours';
 
             if ($date_diff < 0 ){
                 $order->status = 'expired';
                 $order->save();
+                $temp_details['estimate_time'] = 'Expired';
             }
 
             $temp_details['order_id'] = $order->id;
@@ -329,12 +333,7 @@ class HomeDeliveryController extends Controller
                 $temp_details['customer_name'] = $order->customer_name;
                 $temp_details['customer_phone_number'] = $order->customer_phone_number;
             }
-            $time1 = (int)($date_diff/60);
-            $time2 = $date_diff%60;
-            $temp_details['estimate_time'] =  $time1 . '.' . $time2 . ' Hours';
-            if ($order->status = 'expired'){
-                $temp_details['estimate_time'] = 'Expired';
-            }
+
             $temp_details['distance'] = (string)round((float)$order->distance, 2) . 'KM';
             $temp_details['fee'] = '$'. $order->fee;
             $temp_details['status'] = $order->status;
