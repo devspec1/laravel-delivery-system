@@ -157,15 +157,22 @@ class HomeDeliveryController extends Controller
                 $trip->subtotal_fare = $order->fee;
                 $trip->arrive_time = $order->created_at;
                 $trip->begin_trip = $order->updated_at;
-
-                if($subscription->plan == 2){
-                    $trip->driver_or_company_commission = 0.00;
-                    $trip->driver_payout = $order->fee;
+                if(!$subscription->plan){
+                    return response()->json([
+                        'status_code' 		=> '0',
+                        'status_message' 	=> 'Sorry, you have no subscription for this action.',
+                    ]);
                 }
                 else{
-                    $commission = $order->fee * 0.1; //10% from non-members
-                    $trip->driver_or_company_commission = $commission;
-                    $trip->driver_payout = $order->fee - $commission;
+                    if($subscription->plan == 2){
+                        $trip->driver_or_company_commission = 0.00;
+                        $trip->driver_payout = $order->fee;
+                    }
+                    else{
+                        $commission = $order->fee * 0.1; //10% from non-members
+                        $trip->driver_or_company_commission = $commission;
+                        $trip->driver_payout = $order->fee - $commission;
+                    }
                 }
 
                 $order->status = 'delivered';
@@ -195,13 +202,25 @@ class HomeDeliveryController extends Controller
             ]);
         }
         else{
-            $order->status = 'assigned';
+            $subscription = DriversSubscriptions::where('user_id',$user->id)
+                    ->whereNotIn('status', ['canceled'])
+                    ->first();
 
-            $order->driver_id = $user->id;
-    
-            $order->save();
+            if(!$subscription->plan){
+                return response()->json([
+                    'status_code' 		=> '0',
+                    'status_message' 	=> 'Sorry, you have no subscription for this action.',
+                ]);
+            }
+            else{
+                $order->status = 'assigned';
 
-            $assign_status_message = ' successfully assigned';
+                $order->driver_id = $user->id;
+        
+                $order->save();
+
+                $assign_status_message = ' successfully assigned';
+            }
         }
 
         $job_array = array();
