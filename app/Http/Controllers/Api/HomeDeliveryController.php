@@ -279,7 +279,7 @@ class HomeDeliveryController extends Controller
 
         $driver_location = DriverLocation::where('user_id',$user_details->id)->first();
 
-        $orders = HomeDeliveryOrder::whereIn('delivery_orders.status',['new','assigned'])
+        $orders = HomeDeliveryOrder::whereIn('delivery_orders.status',['new','assigned','expired'])
             ->join('users as rider', function($join) {
                 $join->on('rider.id', '=', 'delivery_orders.customer_id');
             })
@@ -304,7 +304,7 @@ class HomeDeliveryController extends Controller
             ->having('distance', '<=', $dst)
             ->where('delivery_orders.status','new')
             ->orWhere('delivery_orders.driver_id', $user_details->id)
-            ->whereNotIn('delivery_orders.status',['delivered','expired'])
+            ->whereNotIn('delivery_orders.status',['delivered'])
             ->orderBy('time_to_dead','desc')->get();
 
         foreach ($orders as $order){
@@ -317,7 +317,6 @@ class HomeDeliveryController extends Controller
             if ($date_diff < 0 ){
                 $order->status = 'expired';
                 $order->save();
-                continue;
             }
 
             $temp_details['order_id'] = $order->id;
@@ -333,6 +332,9 @@ class HomeDeliveryController extends Controller
             $time1 = (int)($date_diff/60);
             $time2 = $date_diff%60;
             $temp_details['estimate_time'] =  $time1 . '.' . $time2 . ' Hours';
+            if ($order->status = 'expired'){
+                $temp_details['estimate_time'] = 'Expired';
+            }
             $temp_details['distance'] = (string)round((float)$order->distance, 2) . 'KM';
             $temp_details['fee'] = '$'. $order->fee;
             $temp_details['status'] = $order->status;
