@@ -157,7 +157,7 @@ class HomeDeliveryController extends Controller
                 $trip->subtotal_fare = $order->fee;
                 $trip->arrive_time = $order->created_at;
                 $trip->begin_trip = $order->updated_at;
-                if(!$subscription->plan){
+                if(!$subscription){
                     return response()->json([
                         'status_code' 		=> '0',
                         'status_message' 	=> 'Sorry, you have no subscription for this action.',
@@ -206,7 +206,7 @@ class HomeDeliveryController extends Controller
                     ->whereNotIn('status', ['canceled'])
                     ->first();
 
-            if(!$subscription->plan){
+            if(!$subscription){
                 return response()->json([
                     'status_code' 		=> '0',
                     'status_message' 	=> 'Sorry, you have no subscription for this action.',
