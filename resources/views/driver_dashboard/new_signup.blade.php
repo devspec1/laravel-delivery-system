@@ -2,7 +2,7 @@
 @section('main')
 <style> body, html { height: 100%; }</style>
 <div id="newSignupWrp" style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center">
-    <div class="newSignupWrp1" style="height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; display: none; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg">
+    <div class="newSignupWrp1 current" style="height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; display: flex; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg">
 
         <img src="{{ asset('images/logos/logo.png') }}" style="height: 8em">
         <img src="{{ asset('images/car_image/car4.png') }}" style="height: 15em">
@@ -14,7 +14,7 @@
             <span style="opacity: 0.5; font-family: 'MontserratReg'">Vehicle number / eg: WNF 382</span>
             <input style="border: none; background: transparent; font-size: 115%; font-weight: bold" type="text" placeholder="0123po"> </div>
         </div>
-        <span class="spanB1" style="background-color: #3B5998;">Continue <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 5em;  height: 1.2em; width: 1.2em"></span>
+        <span class="spanB1 spanNext" style="background-color: #3B5998;">Continue <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 5em;  height: 1.2em; width: 1.2em"></span>
 
         
 
@@ -52,7 +52,7 @@
 
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%"> 
      
-        <span class="spanB1" style="background-color: #3B5998;">Next <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
+        <span class="spanB1 spanNext" style="background-color: #3B5998;">Next <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
 
         
         <span class="spanB1" style="background-color: #4B4B4B;r">Already have an account ?</span>
@@ -86,7 +86,7 @@
 
         <div style="display: flex; flex-direction: column; align-items: center; margin-top: 0.7em; width: 100%"> 
      
-        <span class="spanB1" style="background-color: #3B5998;">Next <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
+        <span class="spanB1 spanNext" style="background-color: #3B5998;">Next <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
 
         
         <span class="spanB1" style="background-color: #4B4B4B;r">Already have an account ?</span>
@@ -132,7 +132,7 @@
 
         <div style="display: flex; flex-direction: column; align-items: center; margin-top: 0.7em; width: 100%"> 
      
-        <span class="spanB1" style="background-color: #3B5998;">Next <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
+        <span class="spanB1 spanNext" style="background-color: #3B5998;">Next <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
 
         
         <span class="spanB1" style="background-color: #4B4B4B;r">Already have an account ?</span>
@@ -140,7 +140,7 @@
 
     </div>
 
-      <div class="newSignupWrp2" style="height: 87%; width: 30%; padding: 1em; padding-top: 1em; padding-bottom: 4em; display: flex; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg">
+      <div class="newSignupWrp2" style="height: 87%; width: 30%; padding: 1em; padding-top: 1em; padding-bottom: 4em; display: none; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg">
 
         <img src="{{ asset('images/logos/logo.png') }}" style="height: 8em">
 
@@ -180,11 +180,22 @@
 
         <div style="display: flex; flex-direction: column; align-items: center; margin-top: 0.7em; width: 100%"> 
      
-        <span class="spanB1" style="background-color: #3B5998;">Finish<img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
+        <span class="spanB1 spanNext" style="background-color: #3B5998;">Finish<img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
         <span style="width: 75%; opacity: 0.9; font-size: 90%; margin-top: 1em">By proceeding, I agree that RideOn Australia or its representatives may contact me by email, phone, or SMS (including by automated means) at the email address or number I provide, including for marketing purposes.</span>
       </div>
 
     </div>
 </div>
 </main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+
+<script>
+
+    $(".spanNext").click(function() {
+        var d = $(this).parents(".current").next("div");
+        $(this).parents(".current").removeClass("current").hide();
+        d.addClass("current").css("display", "flex").show();
+    })
+</script>
 @stop
