@@ -101,8 +101,13 @@ Route::group(['middleware' => ['locale','rider_guest']], function () {
 	Route::post('ajax_referral_data/{id}', 'DashboardController@ajax_referral_data');
 });
 
+Route::get('driver/new_login', 'DriverDashboardController@driver_new_login');
+Route::get('driver/new_signup', 'DriverDashboardController@driver_new_signup');
+
 // Driver Routes..
 Route::group(['middleware' => ['locale','driver_guest']], function () {
+
+	
 	Route::get('driver_profile', 'DriverDashboardController@driver_profile');
 	Route::get('documents/{id}', 'DriverDashboardController@documents');
 	Route::post('document_upload/{id}', 'DriverDashboardController@document_upload');
@@ -131,6 +136,10 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 	Route::get('payout_default/{id}', 'UserController@payoutDefault')->where('id', '[0-9]+')->name('payout_default');
 
 	//New Routes (Menu)
+
+
+
+	Route::get('driver/new_dash', 'DriverDashboardController@driver_new_dash');
 	Route::get('driver/inbox', 'DriverDashboardController@show_inbox');
 	Route::get('driver/trips_payments', 'DriverDashboardController@driver_trip');
 	Route::get('driver/trips_payments_detail/{id}', 'DriverDashboardController@driver_trip_detail');

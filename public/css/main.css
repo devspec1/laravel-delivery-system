@@ -4556,9 +4556,6 @@ ul.driver-nav > li:hover > a {
     color: #fff;
     font-weight: bold;
 }
-li.driver-dashboard-treeview {
-    padding: 0 !important;
-}
 
 ul.driver-dashboard-treeview-menu {
  
@@ -4590,12 +4587,43 @@ ul.driver-dashboard-treeview-menu > li.active a {
 .user-list {
     list-style: none;
     padding: 0px;
+    margin-left: 5em;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    font-family: 'MontserratReg';
 }
 .user-list li {
     padding: 20px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 .user-list li > span {
     padding: 5px;
+}
+.user-profile-image {
+    margin-right: 0.6em;
+}
+.user-list > li:first-child {
+    background: rgba(0, 0, 0, 0.07);
+    font-size: 110%;
+}
+.user-list > li:not(.user-list-header) {
+    font-weight: bold;
+}
+.user-list-active {
+    color: #149c1f;
+}
+.user-list-inactive {
+    opacity: 0.5;
+}
+.page-lead-custom {
+    margin-left: 5em;
+    margin-top: 2em;
+    margin-bottom: 1.1em;
+    font-family: "MontserratReg";
+    color: #1B187F;
+    font-weight: bold;
 }
 
 @media (max-width: 767px) {
