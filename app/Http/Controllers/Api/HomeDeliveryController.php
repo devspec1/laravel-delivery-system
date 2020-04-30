@@ -118,7 +118,7 @@ class HomeDeliveryController extends Controller
                     'status_message' 	=> 'Order already assigned.',
                 ]);
             }
-            elseif($request->cancel == "True"){
+            elseif($request->cancel == "True" || $request->cancel == true){
                 $order->status = 'new';
         
                 $order->save();
