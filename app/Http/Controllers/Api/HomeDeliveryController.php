@@ -330,7 +330,9 @@ class HomeDeliveryController extends Controller
                 $temp_details['customer_name'] = $order->customer_name;
                 $temp_details['customer_phone_number'] = $order->customer_phone_number;
             }
-            $temp_details['estimate_time'] =  (string)round((float)$date_diff/60, 2) . ' Hours';
+            $time1 = (int)($date_diff/60);
+            $time2 = $date_diff%60;
+            $temp_details['estimate_time'] =  $time1 . '.' . $time2 . ' Hours';
             $temp_details['distance'] = (string)round((float)$order->distance, 2) . 'KM';
             $temp_details['fee'] = '$'. $order->fee;
             $temp_details['status'] = $order->status;
