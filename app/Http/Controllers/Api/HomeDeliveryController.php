@@ -321,6 +321,7 @@ class HomeDeliveryController extends Controller
                 $order->status = 'expired';
                 $order->save();
                 $temp_details['estimate_time'] = 'Expired';
+                continue;
             }
 
             $temp_details['order_id'] = $order->id;
