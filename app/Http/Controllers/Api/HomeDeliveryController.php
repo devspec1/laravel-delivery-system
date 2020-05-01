@@ -195,12 +195,12 @@ class HomeDeliveryController extends Controller
                 'status_message' 	=> 'Order already delivered.',
             ]);
         }
-        // elseif ($order->status == 'expired') {
-        //     return response()->json([
-        //         'status_code' 		=> '0',
-        //         'status_message' 	=> 'Sorry, the time for accepting the order has expired.',
-        //     ]);
-        // }
+        elseif ($order->status == 'expired') {
+            return response()->json([
+                'status_code' 		=> '0',
+                'status_message' 	=> 'Sorry, the time for accepting the order has expired.',
+            ]);
+        }
         else{
             $subscription = DriversSubscriptions::where('user_id',$user->id)
                     ->whereNotIn('status', ['canceled'])
@@ -279,7 +279,7 @@ class HomeDeliveryController extends Controller
 
         $driver_location = DriverLocation::where('user_id',$user_details->id)->first();
 
-        $orders = HomeDeliveryOrder::whereIn('delivery_orders.status',['new','assigned','expired'])
+        $orders = HomeDeliveryOrder::whereIn('delivery_orders.status',['new','assigned'])
             ->join('users as rider', function($join) {
                 $join->on('rider.id', '=', 'delivery_orders.customer_id');
             })
@@ -304,7 +304,7 @@ class HomeDeliveryController extends Controller
             ->having('distance', '<=', $dst)
             ->where('delivery_orders.status','new')
             ->orWhere('delivery_orders.driver_id', $user_details->id)
-            ->whereNotIn('delivery_orders.status',['delivered'])
+            ->whereNotIn('delivery_orders.status',['delivered','expired'])
             ->orderBy('time_to_dead','desc')->get();
 
         foreach ($orders as $order){
