@@ -195,12 +195,12 @@ class HomeDeliveryController extends Controller
                 'status_message' 	=> 'Order already delivered.',
             ]);
         }
-        elseif ($order->status == 'expired') {
-            return response()->json([
-                'status_code' 		=> '0',
-                'status_message' 	=> 'Sorry, the time for accepting the order has expired.',
-            ]);
-        }
+        // elseif ($order->status == 'expired') {
+        //     return response()->json([
+        //         'status_code' 		=> '0',
+        //         'status_message' 	=> 'Sorry, the time for accepting the order has expired.',
+        //     ]);
+        // }
         else{
             $subscription = DriversSubscriptions::where('user_id',$user->id)
                     ->whereNotIn('status', ['canceled'])
