@@ -115,8 +115,8 @@
 
             <div style="display: flex; flex-direction: column; padding: 1.6em; border: 2px dotted #3B5998; align-items: center; width: 100%" id="dragDiv">
                 <img src="{{ asset('images/icon/cloud_up.png')}}" style="height: 2.5em; width: 2.5em">
-                <span style="font-size: 140%; font-weight: bold; margin-top: 0.3em; font-family: 'MontserratReg'; opacity: 0.35"> Drag and drop file here </span>
-                <span style="font-size: 80%; font-weight: bold; font-family: 'MontserratReg'; opacity: 0.35"> Max size 10MB</span>
+                <span style="font-size: 120%; font-weight: bold; margin-top: 0.3em; font-family: 'MontserratReg'; opacity: 0.35"> Drag and drop file here </span>
+                <span style="font-size: 75%; font-weight: bold; font-family: 'MontserratReg'; opacity: 0.35"> Max size 10MB</span>
             </div>
 
             <div class="inputWrp dropSample" style="display: none; justify-content: space-between; padding: 0.7em;padding-left: 2em;padding-right: 2em; border-radius: 7px; margin-top: 0.7em; width: 100%">

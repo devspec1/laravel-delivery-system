@@ -2978,14 +2978,14 @@ i.google-ride {
 }
 .newSignupWrp1 .spanB1 {
     cursor: pointer;
-    width: 75%; border-radius: 6px; padding: 0.4em; font-size: 155%; color: white;
+    width: 75%; border-radius: 6px; padding: 0.4em; font-size: 140%; color: white;
       font-weight: bold; font-family: 'MontserratReg'; text-align: center;
 }
 .newSignupWrp2 .spanB1 {
     cursor: pointer;
     margin-top :0.5em;
     text-transform: uppercase;
-    width: 75%; border-radius: 6px; padding: 1.1em; font-size: 110%; color: white;
+    width: 75%; border-radius: 6px; padding: 1.1em; font-size: 95%; color: white;
       font-weight: bold; font-family: 'MontserratReg'; text-align: center
 
 }
@@ -3022,7 +3022,7 @@ i.google-ride {
 }
 .newSignupWrp2 .inputWrp input {
     width: 100%;
-    border: none; background: transparent; font-size: 90%; font-weight: bold; opacity: 0.8;
+    border: none; background: transparent; font-size: 80%; font-weight: bold; opacity: 0.8;
 }
 
 #deliveryMainWrp {
@@ -3096,4 +3096,7 @@ i.google-ride {
 .site-nav>li>a {
     font-size: 13px!important;
 
+}
+.inputWrp > span {
+    font-size: 85%;
 }
