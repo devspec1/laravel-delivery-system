@@ -16,7 +16,7 @@
             <span style="opacity: 0.5; font-family: 'MontserratReg'">Vehicle number / eg: WNF 382</span>
             <input style="border: none; background: transparent; font-size: 95%; font-weight: bold" type="text" placeholder=""> </div>
         </div>
-        <span class="spanB1 spanNext" style="background-color: #3B5998;">Continue <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 4em;  height: 1.2em; width: 1.2em"></span>
+        <span class="spanB1 spanNext" style="background-color: #3B5998;">Continue <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 5em;  height: 1.2em; width: 1.2em"></span>
 
         
 
@@ -120,7 +120,7 @@
             </div>
 
             <div class="inputWrp dropSample" style="display: none; justify-content: space-between; padding: 0.7em;padding-left: 2em;padding-right: 2em; border-radius: 7px; margin-top: 0.7em; width: 100%">
-                <div style="display: flex; flex-direction: column;font-size: 88%">
+                <div style="display: flex; flex-direction: column;font-size: 95%">
                     <span style="font-weight: bold"></span>
                     <span style="font-size: 80%; opacity: 0.5"></span>
                 </div>
@@ -146,7 +146,7 @@
 
     </div>
 
-      <div class="newSignupWrp2" style="height: 87%; width: 30%; padding: 1em; padding-top: 1em; padding-bottom: 4em; display: none; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg">
+      <div class="newSignupWrp2" style="height: 91%; width: 30%; padding: 1em; padding-top: 1em; padding-bottom: 4em; display: none; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg">
 
         <img src="{{ asset('images/logos/logo.png') }}" style="height: 8em">
 
@@ -159,7 +159,7 @@
                
               </div>
             </div>
-        <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 140%; width: 75%;margin-bottom: 0.7em; text-align:left">Vehicle Type</h1>
+        <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 140%; width: 75%;margin-bottom: 0.7em; margin-top: 2em; text-align:left">Vehicle Type</h1>
          
          <div style="display: flex; flex-direction: column; align-items: center; width: 75%; margin-top: 1.5em; " id="newSignupCheckboxWrp">
             <input type="hidden" id="bluecheckSrc" value="{{ asset('images/icon/blue_check.png')}}">  <input type="hidden" id="graycheckSrc" value="{{ asset('images/icon/gray_check.png')}}">
