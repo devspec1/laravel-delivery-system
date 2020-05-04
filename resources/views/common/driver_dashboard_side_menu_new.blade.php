@@ -22,8 +22,8 @@
 
              
                     <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 2em">
-                        <span style="font-size: 190%; opacity: 0.9; font-family: 'MontserratReg';font-weight: bold">{{ @Auth::user()->first_name}} {{ @Auth::user()->last_name}}</span>
-                         <span style="font-size: 110%; opacity: 0.8; font-weight: bold; font-family: 'MontserratReg';">Community Leader</span>
+                        <span style="font-size: 170%; opacity: 0.9; font-family: 'MontserratReg';font-weight: bold">{{ @Auth::user()->first_name}} {{ @Auth::user()->last_name}}</span>
+                         <span style="font-size: 95%; opacity: 0.8; font-weight: bold; font-family: 'MontserratReg';">Community Leader</span>
                         </div>
                  
                     <li style="padding-top: 0.9em; padding-bottom: 0.9em; border-bottom: 1px solid rgba(0, 0, 0, 0.10); border-top: 1px solid rgba(0, 0, 0, 0.10)" class="{{ (Route::current()->uri() == 'driver/passengers') ? 'active' : '' }}">

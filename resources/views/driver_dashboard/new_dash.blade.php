@@ -76,7 +76,7 @@
         <div class="newDashCardWrp">
           <span style="font-size: 110%; font-weight: bold">Deliveries</span>
           <div style="display: flex; flex-direction: column; align-items: center">
-            <b style="font-size: 400%; opacity: 0.65; font-family: 'MontserratBold'">3</b>
+            <b style="font-size: 350%; opacity: 0.65; font-family: 'MontserratBold'">3</b>
             <span style="font-size: 90%; opacity: 0.8">+1 this week</span>
           </div>
           <span class="link1">Details</span>
@@ -86,7 +86,7 @@
          <div class="newDashCardWrp">
           <span style="font-size: 110%; font-weight: bold">Drive Team</span>
           <div style="display: flex; flex-direction: column; align-items: center">
-            <b style="font-size: 400%;opacity: 0.65;  font-family: 'MontserratBold';">8</b>
+            <b style="font-size: 350%;opacity: 0.65;  font-family: 'MontserratBold';">8</b>
             <span style="font-size: 90%; opacity: 0.8">+1 this week</span>
           </div>
           <span class="link1">Details</span>
@@ -128,7 +128,7 @@
         <div class="newDashCardWrp">
           <span style="font-size: 110%; font-weight: bold">Merchants</span>
           <div style="display: flex; flex-direction: column; align-items: center">
-            <b style="font-size: 400%;opacity: 0.65;  font-family: 'MontserratBold'">8</b>
+            <b style="font-size: 350%;opacity: 0.65;  font-family: 'MontserratBold'">8</b>
             <span style="font-size: 90%; opacity: 0.8">+1 this week</span>
           </div>
           <span class="link1">Details</span>

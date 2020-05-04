@@ -4,7 +4,7 @@
 }
 @font-face {
     font-family: MontserratBold;
-    src: url('../font/montserrat-bold.otf');
+    src: url('../font/MONTSERRAT-BOLD.OTF');
 }
 @font-face {
     font-family: MontserratReg;
@@ -2995,7 +2995,7 @@ i.google-ride {
 }
 
 .newDashSubItemRow {
-    display: flex; justify-content: flex-start; align-items: center;  width: 100%; padding-left: 1.5em;padding-right: 1.5em; padding-top: 0.85em; padding-bottom: 0.85em; border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    display: flex; justify-content: flex-start; align-items: center; font-size: 91%;  width: 100%; padding-left: 1.5em;padding-right: 1.5em; padding-top: 0.85em; padding-bottom: 0.85em; border-bottom: 1px solid rgba(0, 0, 0, 0.10);
 }
 #newDashMainWrp {
 
@@ -3028,7 +3028,7 @@ i.google-ride {
 #deliveryMainWrp {
     display:  flex;
     flex-direction: column;
-    width: 100%;
+    width: 88%;
     margin: 2em;
     margin-left: 5em;
     margin-top: 10em;
@@ -3051,7 +3051,7 @@ i.google-ride {
 #deliverySubWrp > div > span {
     font-family: 'MontserratReg';
     opacity: 0.85;
-   font-size: 110%;
+   font-size: 93%;
     width: 15em;
 }
 #deliverySubWrp .acceptBtn1 {
@@ -3077,7 +3077,7 @@ i.google-ride {
     padding-left: 1.6em;
     padding-right: 1.6em;
     color: black;
-    font-size: 115%;
+    font-size: 95%;
     font-weight: bold;
     border: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -3091,4 +3091,8 @@ i.google-ride {
 }
 #dragDiv.is-dragover {
     background: white;
+}
+.site-nav>li>a {
+    font-size: 13px!important;
+
 }
