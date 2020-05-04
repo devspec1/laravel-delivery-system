@@ -325,7 +325,7 @@ class HomeDeliveryController extends Controller
                 
             }
 
-            if ($order->status = 'expired'){
+            if ($order->status == 'expired'){
                 $temp_details['status'] = 'new';
             }
 
