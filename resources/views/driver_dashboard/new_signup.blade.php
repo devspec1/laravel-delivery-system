@@ -35,7 +35,7 @@
    
   </div>
 </div>
-        <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 160%; width: 75%;margin-bottom: 0.7em; text-align:left">Create a New Account</h1>
+        <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 140%; width: 75%;margin-bottom: 0.7em; text-align:left">Create a New Account</h1>
          <div style="display: flex; flex-direction: column; align-items: center; width: 100%"> <div style="display: flex; justify-content: space-between;width:75%">
 
             <div class="inputWrp" style="display: flex; align-items: center; margin-top: 0.4em;margin-bottom: 0.3em;padding: 0.9em; width: 47%; background: rgba(0, 0, 0, 0.02); border:1px solid rgba(0, 0, 0, 0.12)"><input  type="text" placeholder="First Name"> </div>
@@ -52,7 +52,7 @@
             <div class="inputWrp"><input  type="text" placeholder="Referral Code"> </div>
         </div>
 
-        <div style="display: flex; flex-direction: column; align-items: center; width: 100%"> 
+        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2em; width: 100%"> 
      
         <span class="spanB1 spanNext" style="background-color: #3B5998;">Next <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
 
@@ -75,7 +75,7 @@
    
   </div>
 </div>
-        <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 160%; width: 75%;margin-bottom: 0.7em; text-align:left">Address</h1>
+        <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 140%; width: 75%;margin-bottom: 0.7em; text-align:left">Address</h1>
          
          <div class="inputWrp"><input  type="text" placeholder=""><img src="{{ asset('images/icon/gps.png')}}" style=" width: 1.4em"> </div>
          <div class="inputWrp"><input  type="text" placeholder="Street Address Line 1"> </div>
@@ -86,7 +86,7 @@
         
           
 
-        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 0.7em; width: 100%"> 
+        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2em;  width: 100%"> 
      
         <span class="spanB1 spanNext" style="background-color: #3B5998;">Next <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
 
@@ -109,7 +109,7 @@
                
               </div>
             </div>
-        <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 160%; width: 75%;margin-bottom: 0.7em; text-align:left">Upload Your Profile Photo</h1>
+        <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 140%; width: 75%;margin-bottom: 0.7em; text-align:left">Upload Your Profile Photo</h1>
          
          <div style="display: flex; flex-direction: column; align-items: center; width: 75%; margin-top: 1.5em; height: 70%">
 
@@ -120,7 +120,7 @@
             </div>
 
             <div class="inputWrp dropSample" style="display: none; justify-content: space-between; padding: 0.7em;padding-left: 2em;padding-right: 2em; border-radius: 7px; margin-top: 0.7em; width: 100%">
-                <div style="display: flex; flex-direction: column;">
+                <div style="display: flex; flex-direction: column;font-size: 88%">
                     <span style="font-weight: bold"></span>
                     <span style="font-size: 80%; opacity: 0.5"></span>
                 </div>
@@ -136,7 +136,7 @@
         
           
 
-        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 0.7em; width: 100%"> 
+        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2em;  width: 100%"> 
      
         <span class="spanB1 spanNext" style="background-color: #3B5998;">Next <img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
 
@@ -159,7 +159,7 @@
                
               </div>
             </div>
-        <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 160%; width: 75%;margin-bottom: 0.7em; text-align:left">Vehicle Type</h1>
+        <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 140%; width: 75%;margin-bottom: 0.7em; text-align:left">Vehicle Type</h1>
          
          <div style="display: flex; flex-direction: column; align-items: center; width: 75%; margin-top: 1.5em; " id="newSignupCheckboxWrp">
             <input type="hidden" id="bluecheckSrc" value="{{ asset('images/icon/blue_check.png')}}">  <input type="hidden" id="graycheckSrc" value="{{ asset('images/icon/gray_check.png')}}">
@@ -183,10 +183,10 @@
         
 
         </div>
-         <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 160%; width: 75%;margin-bottom: 0.6em; text-align:left">Your ABN</h1>
+         <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 140%; width: 75%;margin-bottom: 0.6em; text-align:left">Your ABN</h1>
           <div class="inputWrp"><input type="text"></div>
 
-        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 0.7em; width: 100%"> 
+        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2em;  width: 100%"> 
      
         <span class="spanB1 spanNext" style="background-color: #3B5998;">Finish<img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
         <span style="width: 75%; opacity: 0.9; font-size: 90%; margin-top: 1em">By proceeding, I agree that RideOn Australia or its representatives may contact me by email, phone, or SMS (including by automated means) at the email address or number I provide, including for marketing purposes.</span>

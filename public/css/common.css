@@ -2986,7 +2986,7 @@ i.google-ride {
     margin-top :0.5em;
     text-transform: uppercase;
     width: 75%; border-radius: 6px; padding: 1.1em; font-size: 95%; color: white;
-      font-weight: bold; font-family: 'MontserratReg'; text-align: center
+      font-weight: bold; font-family: 'MontserratReg'; text-align: center;
 
 }
 #newLoginWrp .span1, #newSignupWrp .span1 {
@@ -3097,6 +3097,6 @@ i.google-ride {
     font-size: 13px!important;
 
 }
-.inputWrp > span {
+.inputWrp span {
     font-size: 85%;
 }
