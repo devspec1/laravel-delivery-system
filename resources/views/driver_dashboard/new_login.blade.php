@@ -30,6 +30,33 @@
 <script>
 
     $(function() {
+
+        $("#newLoginForm input").keyup(function(e) {
+            if(e.keyCode == 13) {
+
+                 var b = 1;
+                 $("#newLoginForm input").each(function() {
+                     $(this).parent().css("box-shadow", "none");
+                     $(this).parent().css("border", "1px solid rgba(0, 0, 0, 0.12)");
+                    if(!($(this).val())) {
+                    
+                        b = 0;
+                        $(this).parent().css("box-shadow", "0px 0px 1px #9c432f");
+                        $(this).parent().css("border", "1px solid #eb6044");
+                        $(this).keyup(function() {
+                            if($(this).val().length > 0) {
+                                $(this).parent().css("box-shadow", "none");
+                                $(this).parent().css("border", "1px solid rgba(0, 0, 0, 0.12)");
+                                $(this).unbind("keyup");
+                            }
+                        })
+                    }
+            })
+            if(b)
+                $("#newLoginForm")[0].submit();
+            }
+        })
+
         $("#loginBtn").click(function() {
                  var b = 1;
             $("#newLoginForm input").each(function() {

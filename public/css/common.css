@@ -1327,18 +1327,18 @@ select {
 }
 
 ._style_3vhmZK {
-    background-color: transparent !important;
+
     box-sizing: border-box !important;
-    color: #000 !important;
+    
     flex-grow: 1 !important;
-    font-family: ff-clan-web-pro, "Helvetica Neue", Helvetica, sans-serif !important;
+    font-family: 'MontserratReg';
     font-size: 13px !important;
     font-weight: 500 !important;
     line-height: 24px !important;
     margin-bottom: 0 !important;
     max-width: 100% !important;
     outline: 0 none !important;
-    padding: 6px 10px !important;
+    padding: 3px 5px !important;
     transition: all 0.4s ease 0s !important;
 }
 
@@ -3103,4 +3103,32 @@ i.google-ride {
 }
 .inputWrp span {
     font-size: 85%;
+}
+
+.dash-panel {
+    width: 94%;
+    display: flex;
+}
+.page-content {
+    width: 80%;
+}
+#profileWrp input:read-only, #profileWrp select:disabled {
+    background: rgba(0, 0, 0, 0.05);
+}
+#profileWrp {
+    width: 74%;
+    margin-left: 6em;
+    border-left: none;
+    box-shadow: none;
+    margin-top: 3em;
+}
+
+#profileWrp #addrInfo > div {
+    margin-right: 2em;
+    width: 23%;
+}
+a.side-nav-a[aria-selected="true"] {
+    font-weight: 600;
+    font-family: 'MontserratBold';
+    color: #3B5998;
 }

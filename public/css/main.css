@@ -2915,9 +2915,8 @@ button:focus {
 
 .site-nav>li>.trip-filter__origin-link.collapsed:hover,
 .site-nav>li>a:hover {
-    background: #1fbad6;
-    border-color: #1fbad6;
-    color: #fff;
+    border-color: #3B5998;
+   
     text-decoration: none;
 }
 
@@ -3192,8 +3191,8 @@ button:focus {
 }
 
 .btn.btn--primary.btn-blue {
-    background: #1fbad6 !important;
-    border-color: #1fbad6 !important;
+    background: #3B5998 !important;
+    border-color: #3B5998!important;
     color: #fff !important;
     font-size: 16px !important;
     font-weight: normal;
@@ -4526,7 +4525,8 @@ a.driver-dashboard-side-menu_link {
 }
 
 .active > a {
-    background: #1fbad6;
+    font-family: 'MontserratBold';
+    color: #3B5998;
 }
 .active .driver-dashboard-treeview-menu {
     display: block !important;

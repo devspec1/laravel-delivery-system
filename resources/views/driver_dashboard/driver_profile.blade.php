@@ -1,6 +1,6 @@
-@extends('template_driver_dashboard') 
+@extends('template_driver_dashboard_new') 
 @section('main')
-<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content" style="padding:0px;" ng-controller="facebook_account_kit">
+<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content" style="padding:0px; margin-left: 7em; border-left: none" ng-controller="facebook_account_kit">
   <div class="page-lead separated--bottom  text--center text--uppercase">
     <h1 class="flush-h1 flush">{{trans('messages.header.profil')}}</h1>
   </div>
@@ -42,7 +42,7 @@
   <a href="{{ url('documents/'.@Auth::user()->id) }}" style="    padding: 0px 30px !important;
   font-size: 14px !important;" type="submit" class="btn btn--primary btn-blue">{{trans('messages.driver_dashboard.manage_documents')}}</a>
 </div>
-<div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="    padding: 25px 0px 15px;">
+<div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" >
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-6" style="padding:6px 0px;">
       {{trans('messages.profile.email')}} <em class="text-danger">*</em>
@@ -53,7 +53,7 @@
     </div>
   </div>
 </div>
-<div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 25px 0px 15px;">
+<div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" >
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding:6px 0px;">{{trans('messages.profile.phone')}}<em class="text-danger">*</em></label>
     <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2" style="padding:6px 0px;margin: 0px 2px">
@@ -69,7 +69,7 @@
     </div>
   </div>
 </div>
-<div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 25px 0px 15px;">
+<div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" >
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-6" style="padding:6px 0px;">{{trans('messages.profile.addr')}}</label>
     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" style="padding:6px 0px;">
@@ -87,7 +87,7 @@
     <span class="text-danger">{{ $errors->first('address_line1') }}</span>
   </div>
 </div>
-<div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="    padding: 25px 0px 15px;">
+<div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" >
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-6" style="padding:6px 0px;"> 
       {{trans('messages.profile.profile_city')}}
@@ -105,7 +105,7 @@
     <span class="text-danger">{{ $errors->first('city') }}</span>
   </div>
 </div>
-<div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 25px 0px 15px;">
+<div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" >
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-6" style="padding:6px 0px;"> {{trans('messages.profile.country')}} </label>
     <select class="payment-select col-lg-4 col-md-4 col-sm-4 col-xs-12" name="country_code" tabindex="-1" title="" disabled="">
