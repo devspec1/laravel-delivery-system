@@ -2973,7 +2973,7 @@ i.google-ride {
 
 #newLoginWrp .spanB1 {
     cursor: pointer;
-    width: 65%; border-radius: 6px; padding: 1.2em; font-size: 155%; color: white;
+    width: 65%; border-radius: 6px; padding: 0.8em; font-size: 110%; color: white;
       font-weight: bold; font-family: 'MontserratReg'; text-align: center
 }
 .newSignupWrp1 .spanB1 {
@@ -2989,7 +2989,11 @@ i.google-ride {
       font-weight: bold; font-family: 'MontserratReg'; text-align: center;
 
 }
-#newLoginWrp .span1, #newSignupWrp .span1 {
+#newLoginWrp .span1 {
+    font-size: 95%;margin-top: 0.9em; margin-bottom: 0.9em; 
+    opacity: 0.7; font-family: 'MontserratReg'; font-weight: bold;
+}
+#newSignupWrp .span1 {
     font-size: 120%;margin-top: 0.9em; margin-bottom: 0.9em; 
     opacity: 0.7; font-family: 'MontserratReg'; font-weight: bold;
 }

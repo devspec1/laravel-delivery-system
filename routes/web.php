@@ -167,9 +167,9 @@ Route::get('sign_out', function () {
 	$user_type = @Auth::user()->user_type;
 	Auth::logout();
 	if (@$user_type == 'Rider') {
-		return redirect('signin_rider');
+		return redirect('login');
 	} else {
-		return redirect('signin_driver');
+		return redirect('driver/new_login');
 	}
 
 });
@@ -181,7 +181,7 @@ Route::get('driver/sign_out', function () {
 	if (@$user_type == 'Rider') {
 		return redirect('signin_rider');
 	} else {
-		return redirect('signin_driver');
+		return redirect('driver/new_login');
 	}
 
 });
