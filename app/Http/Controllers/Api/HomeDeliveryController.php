@@ -352,8 +352,6 @@ class HomeDeliveryController extends Controller
             $temp_details['status'] = $order->status;
 
             if ($date_diff < 0 &&  $order->status != 'assigned'){
-                $order->status = 'expired';
-                $order->save();
                 $temp_details['estimate_time'] = 'Expired';
                 
             }
