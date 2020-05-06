@@ -335,7 +335,7 @@ class HomeDeliveryController extends Controller
                 DB::raw('TIMEDIFF(NOW(),(date_add(delivery_orders.created_at,interval delivery_orders.estimate_time minute))) as time_to_dead'),
             )
             ->having('distance', '<=', $dst)
-            ->where('delivery_orders.status','new')
+            ->whereIn('delivery_orders.status',['new','expired'])
             ->orWhere('delivery_orders.driver_id', $user_details->id)
             ->whereNotIn('delivery_orders.status',['delivered','assigned','picked_up'])
             ->orderBy('time_to_dead','desc')->get();
