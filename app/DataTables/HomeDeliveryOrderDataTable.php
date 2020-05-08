@@ -6,9 +6,9 @@
  * @package     Rideon Driver
  * @subpackage  DataTable
  * @category    HomeDelivery
- * @author      pardusurbanus@gmail.com
+ * @author      pardusurbanus@protonmail.com
  * @version     2.2
- * @link        http://trioangle.com
+ * @link        https://rideon.co
  */
 
 namespace App\DataTables;
