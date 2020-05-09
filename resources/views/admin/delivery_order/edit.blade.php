@@ -101,9 +101,15 @@
                 <div class="row clearfix">
 					<div class="col-md-12">
 						{!! Form::text('fee', @$result->fee, ['class' => 'form-control', 'id' => 'input_fee', 'placeholder' => 'Fee, AUD', 'autocomplete' => 'off']) !!}
-				<span class="text-danger error_msg">{{ $errors->first('fee') }}</span>
+				        <span class="text-danger error_msg">{{ $errors->first('fee') }}</span>
 					</div>
-				</div>
+                </div>
+                <div class="row clearfix">
+					<div class="col-md-12">
+						{!! Form::textArea('order_description', @$result->order_description, ['class' => 'form-control change_field', 'id' => 'input_order_description', 'placeholder' => 'Order description']) !!}
+						<span class="text-danger error_msg"></span>
+					</div>
+                </div>
 			</div>
 			<div class="col-md-8 map-wrap">
 				<div class="map-route-option">
