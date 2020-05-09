@@ -395,9 +395,10 @@ class HomeDeliveryController extends Controller
             $date_now = \Illuminate\Support\Carbon::now();
             $date_estimate = $order->created_at->addMinutes($order->estimate_time);
             $date_diff = $date_now->diffInMinutes($date_estimate, false);
-            $time1 = (int)($date_diff/60);
-            $time2 = $date_diff%60;
-            $temp_details['estimate_time'] =  $time1 . '.' . $time2 . ' Hours';
+            // $time1 = (int)($date_diff/60);
+            // $time2 = $date_diff%60;
+            // $temp_details['estimate_time'] =  $time1 . '.' . $time2 . ' Hours';
+            $temp_details['estimate_time'] = $date_diff . ' Min';
             $temp_details['status'] = $order->status;
 
             if ($date_diff < 0 &&  $order->status != 'assigned'){
@@ -468,9 +469,10 @@ class HomeDeliveryController extends Controller
             $date_now = \Illuminate\Support\Carbon::now();
             $date_estimate = $order->created_at->addMinutes($order->estimate_time);
             $date_diff = $date_now->diffInMinutes($date_estimate, false);
-            $time1 = (int)($date_diff/60);
-            $time2 = $date_diff%60;
-            $temp_details['estimate_time'] =  $time1 . '.' . $time2 . ' Hours';
+            // $time1 = (int)($date_diff/60);
+            // $time2 = $date_diff%60;
+            // $temp_details['estimate_time'] =  $time1 . '.' . $time2 . ' Hours';
+            $temp_details['estimate_time'] = $date_diff . ' Min';
             $temp_details['status'] = $order->status;
 
             if ($date_diff < 0){
