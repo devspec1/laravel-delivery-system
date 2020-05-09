@@ -137,9 +137,9 @@ Route::group(['middleware' => 'jwt.verify'], function () {
 	Route::get('weekly_statement', 'PayoutDetailController@weekly_statement');
     Route::get('daily_statement', 'PayoutDetailController@daily_statement');
     
-
     //Home Delivery Routes
     Route::get('delivery_orders', 'HomeDeliveryController@getOrders');
-    Route::post('accept_order', 'HomeDeliveryController@acceptOrder');
     Route::get('my_delivery_orders', 'HomeDeliveryController@getDriverOrders');
+    Route::post('accept_order', 'HomeDeliveryController@acceptOrder');
+    Route::post('proceed_order', 'HomeDeliveryController@proceedOrder');
 });
