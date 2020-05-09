@@ -28,17 +28,31 @@
 		<ul class="sidebar-menu">
 			<li class="header">MAIN NAVIGATION</li>
             <li class="{{ (Route::current()->uri() == $first_segment.'/dashboard') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/dashboard') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
+
             @if(@$user->can('manage_admin'))
-			<li class="treeview {{ (Route::current()->uri() == 'admin/admin_users') ? 'active' : ''  }}">
+			<li class="treeview {{ (Route::current()->uri() == 'admin/home_delivery' || Route::current()->uri() == 'admin/merchants') ? 'active' : ''  }}">
 				<a href="#">
-					<i class="fa fa-gift"></i> <span>Manage Delivery Orders</span> <i class="fa fa-angle-left pull-right"></i>
+                    <i class="fa fa-gift"></i>
+                    <span>Manage Delivery Orders</span>
+                    <i class="fa fa-angle-left pull-right"></i>
 				</a>
 				<ul class="treeview-menu">
-					<li class="{{ (Route::current()->uri() == 'admin/home_delivery') ? 'active' : ''  }}"><a href="{{ url('admin/home_delivery') }}"><i class="fa fa-circle-o"></i><span>Orders</span></a></li>
-					{{-- <li class="{{ (Route::current()->uri() == 'admin/roles') ? 'active' : ''  }}"><a href="{{ url('admin/roles') }}"><i class="fa fa-circle-o"></i><span>Merchants</span></a></li> --}}
+                    <li class="{{ (Route::current()->uri() == 'admin/home_delivery') ? 'active' : ''  }}">
+                        <a href="{{ url('admin/home_delivery') }}">
+                            <i class="fa fa-circle-o"></i>
+                            <span>Orders</span>
+                        </a>
+                    </li>
+                    <li class="{{ (Route::current()->uri() == 'admin/merchants') ? 'active' : ''  }}">
+                        <a href="{{ url('admin/merchants') }}">
+                            <i class="fa fa-circle-o"></i>
+                            <span>Merchants</span>
+                        </a>
+                    </li>
 				</ul>
 			</li>
-			@endif
+            @endif
+
 			@if(@$user->can('manage_admin'))
 			<li class="treeview {{ (Route::current()->uri() == 'admin/admin_users') ? 'active' : ''  }}">
 				<a href="#">
@@ -49,7 +63,7 @@
 					<li class="{{ (Route::current()->uri() == 'admin/roles') ? 'active' : ''  }}"><a href="{{ url('admin/roles') }}"><i class="fa fa-circle-o"></i><span>Roles & Permissions</span></a></li>
 				</ul>
 			</li>
-			@endif
+            @endif
 			@if($company_user && $user->id != 1)
 			<li class="{{ (Route::current()->uri() == $first_segment.'/payout_preferences') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/payout_preferences') }}"><i class="fa fa-paypal"></i><span>Payout Preferences</span></a></li>
 			@endif

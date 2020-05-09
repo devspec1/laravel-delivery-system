@@ -79,6 +79,12 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
     Route::match(array('GET', 'POST'),'add_home_delivery', 'HomeDeliveryController@add');
     Route::match(array('GET', 'POST'),'edit_home_delivery/{id}', 'HomeDeliveryController@update');
     Route::match(array('GET', 'POST'),'delete_home_delivery/{id}', 'HomeDeliveryController@delete');
+
+    //Manage Merchants
+    Route::get('merchants', 'MerchantsController@index');
+    Route::match(array('GET', 'POST'),'add_merchant', 'MerchantsController@add');
+    Route::match(array('GET', 'POST'),'edit_merchant/{id}', 'MerchantsController@update');
+    Route::match(array('GET', 'POST'),'delete_merchant/{id}', 'MerchantsController@delete');
 	
 	//Import Driver
 	Route::match(array('GET', 'POST'), 'import_drivers', 'DriverController@import_drivers');
