@@ -113,6 +113,84 @@ class HomeDeliveryController extends Controller
         $user_details = JWTAuth::parseToken()->authenticate();
 
 		$rules = array(
+            'order_id'  => 'required',
+            'latitude'  => 'required',
+            'longitude' => 'required',
+            'distance'  => 'required|in:5,10,15',
+		);
+
+		$validator = Validator::make($request->all(), $rules);
+
+		if ($validator->fails()) {
+			return response()->json([
+                'status_code'     => '0',
+                'status_message' => $validator->messages()->first(),
+            ]);
+		}
+		$user = User::where('id', $user_details->id)->first();
+
+		if($user == '') {
+			return response()->json([
+				'status_code' 	 => '0',
+				'status_message' => "Invalid credentials",
+			]);
+        }
+
+        $order = HomeDeliveryOrder::where('id',$request->order_id)->first();
+
+        $assign_status_message = '';
+
+        $order_status = $order->status;
+
+        if($order_status == 'new'){
+            $subscription = DriversSubscriptions::where('user_id',$user->id)
+            ->whereNotIn('status', ['canceled'])
+            ->first();
+
+            if(!$subscription){
+                return response()->json([
+                    'status_code' 		=> '0',
+                    'status_message' 	=> 'Sorry, you have no subscription for this action.',
+                ]);
+            }
+            else{
+                $order->status = 'assigned';
+
+                $order->driver_id = $user->id;
+
+                $order->save();
+
+                $assign_status_message = 'successfully assigned';
+            }
+
+            $job_array = $this->get_jobs_list($request, $user_details);
+
+            return response()->json([
+                'status_code' 		=> '1',
+                'status_message' 	=> "Order with id " . $order->id . " " . $assign_status_message,
+                'jobs'               => $job_array,            
+            ]);
+        }
+        else{
+            return response()->json([
+                'status_code' 		=> '0',
+                'status_message' 	=> 'Order already assigned.',
+            ]);
+        }
+    }
+
+    /**
+     * Proceed orders 
+     * 
+     * @param  Get method request inputs
+     *
+     * @return Response Json 
+     */
+    public function proceedOrder(Request $request)
+    {
+        $user_details = JWTAuth::parseToken()->authenticate();
+
+		$rules = array(
             'order_id' => 'required',
             'latitude' => 'required',
             'longitude' => 'required',
@@ -141,98 +219,91 @@ class HomeDeliveryController extends Controller
 
         $order_status = $order->status;
 
-        if($order_status == 'assigned'){
+
+        if(($request->cancel == "True" || $request->cancel == true) && $order_status != 'new' && $order_status != 'delivered'){
+            $order->status = $order_status = 'new';
+
+            $order->save();
+
+            $assign_status_message = 'successfully cancelled';
+        }
+        elseif($order_status == 'assigned'){
+            #assigned -> picked_up
             if($order->driver_id != $user->id){
                 return response()->json([
                     'status_code' 		=> '0',
                     'status_message' 	=> 'Order already assigned.',
                 ]);
             }
-            elseif($request->cancel == "True" || $request->cancel == true){
-                $order->status = $order_status = 'new';
-        
-                $order->save();
 
-                $assign_status_message = ' successfully cancelled';
-            }
-            else{
-                $order->status = $order_status = 'picked_up';
-        
-                $order->save();
+            $order->status = $order_status = 'picked_up';
 
-                $assign_status_message = ' successfully picked';
-            }
+            $order->save();
+
+            $assign_status_message = 'successfully picked up';
         }
-        elseif ($order_status == 'picked_up') { 
-            if($request->cancel == "True" || $request->cancel == true){
-                $order->status = $order_status = 'new';
-        
-                $order->save();
+        elseif ($order_status == 'picked_up') {
+            #picked_up -> delivered
+            $rider = User::where('id', $order->customer_id)->first();
+            $ride_request = RideRequest::where('id',$order->ride_request)->first();
 
-                $assign_status_message = ' successfully cancelled';
+            $subscription = DriversSubscriptions::where('user_id',$user->id)
+                ->whereNotIn('status', ['canceled'])
+                ->first();
+
+            //Insert record in Trips table
+            $trip = new Trips;
+            $trip->user_id = $rider->id;
+            $trip->otp = mt_rand(1000, 9999);
+            $trip->pickup_latitude = $ride_request->pickup_latitude;
+            $trip->pickup_longitude = $ride_request->pickup_longitude;
+            $trip->drop_latitude = $ride_request->drop_latitude;
+            $trip->drop_longitude = $ride_request->drop_longitude;
+            $trip->driver_id = $user->id;
+            $trip->car_id = $ride_request->car_id;
+            $trip->pickup_location = $ride_request->pickup_location;
+            $trip->drop_location = $ride_request->drop_location;
+            $trip->request_id = $ride_request->id;
+            $trip->trip_path = $ride_request->trip_path;
+            $trip->payment_mode = 'Stripe';
+            $trip->status = 'Completed';
+            $trip->payment_status = 'Completed';
+            $trip->currency_code = $rider->currency_code;
+            $trip->peak_fare = $ride_request->peak_fare;
+            $trip->subtotal_fare = $order->fee;
+            $trip->subtotal_fare = $order->fee;
+            $trip->arrive_time = $order->created_at;
+            $trip->begin_trip = $order->updated_at;
+
+            if(!$subscription){
+                return response()->json([
+                    'status_code' 		=> '0',
+                    'status_message' 	=> 'Sorry, you have no subscription for this action.',
+                ]);
             }
             else{
-                $rider = User::where('id', $order->customer_id)->first();
-                $ride_request = RideRequest::where('id',$order->ride_request)->first();
-
-                $subscription = DriversSubscriptions::where('user_id',$user->id)
-                    ->whereNotIn('status', ['canceled'])
-                    ->first();
-
-                //Insert record in Trips table
-                $trip = new Trips;
-                $trip->user_id = $rider->id;
-                $trip->otp = mt_rand(1000, 9999);
-                $trip->pickup_latitude = $ride_request->pickup_latitude;
-                $trip->pickup_longitude = $ride_request->pickup_longitude;
-                $trip->drop_latitude = $ride_request->drop_latitude;
-                $trip->drop_longitude = $ride_request->drop_longitude;
-                $trip->driver_id = $user->id;
-                $trip->car_id = $ride_request->car_id;
-                $trip->pickup_location = $ride_request->pickup_location;
-                $trip->drop_location = $ride_request->drop_location;
-                $trip->request_id = $ride_request->id;
-                $trip->trip_path = $ride_request->trip_path;
-                $trip->payment_mode = 'Stripe';
-                $trip->status = 'Completed';
-                $trip->payment_status = 'Completed';
-                $trip->currency_code = $rider->currency_code;
-                $trip->peak_fare = $ride_request->peak_fare;
-                $trip->subtotal_fare = $order->fee;
-                $trip->subtotal_fare = $order->fee;
-                $trip->arrive_time = $order->created_at;
-                $trip->begin_trip = $order->updated_at;
-
-                if(!$subscription){
-                    return response()->json([
-                        'status_code' 		=> '0',
-                        'status_message' 	=> 'Sorry, you have no subscription for this action.',
-                    ]);
+                if($subscription->plan == 2){
+                    $trip->driver_or_company_commission = 0.00;
+                    $trip->driver_payout = $order->fee;
                 }
                 else{
-                    if($subscription->plan == 2){
-                        $trip->driver_or_company_commission = 0.00;
-                        $trip->driver_payout = $order->fee;
-                    }
-                    else{
-                        $commission = $order->fee * 0.1; //10% from non-members
-                        $trip->driver_or_company_commission = $commission;
-                        $trip->driver_payout = $order->fee - $commission;
-                    }
+                    $commission = $order->fee * 0.1; //10% from non-members
+                    $trip->driver_or_company_commission = $commission;
+                    $trip->driver_payout = $order->fee - $commission;
                 }
-
-                $order->status = $order_status = 'delivered';
-
-                $order->save();
-
-                $assign_status_message = ' successfully delivered';
-
-                //$order = HomeDeliveryOrder::where('id',$request->order_id)->first();
-                
-                $trip->end_trip = $order->updated_at;
-
-                $trip->save();
             }
+
+            $order->status = $order_status = 'delivered';
+
+            $order->save();
+
+            $assign_status_message = 'successfully delivered';
+
+            //$order = HomeDeliveryOrder::where('id',$request->order_id)->first();
+            
+            $trip->end_trip = $order->updated_at;
+
+            $trip->save();
            
         }
         elseif ($order_status == 'delivered') {
@@ -242,53 +313,17 @@ class HomeDeliveryController extends Controller
             ]);
         }
         else{
-            $subscription = DriversSubscriptions::where('user_id',$user->id)
-                    ->whereNotIn('status', ['canceled'])
-                    ->first();
-
-            if(!$subscription){
-                return response()->json([
-                    'status_code' 		=> '0',
-                    'status_message' 	=> 'Sorry, you have no subscription for this action.',
-                ]);
-            }
-            else{
-                $order->status = $order_status = 'assigned';
-
-                $order->driver_id = $user->id;
-        
-                $order->save();
-
-                $assign_status_message = ' successfully assigned';
-            }
-        }
-
-        if ($order_status == 'picked_up' || $order_status == 'new' || $order_status == 'delivered'){
             return response()->json([
-                'status_code' 		=> '1',
-                'status_message' 	=> "Order with id " . $order->id . ' ' . $assign_status_message,
-                'job_status'        => $order_status, 
+                'status_code' 		=> '0',
+                'status_message' 	=> 'Wrong order transition.',
             ]);
         }
-        else{
-            $job_array = array();
-            $distances = array("5", "10", "15");
-            if (in_array($request->distance, $distances)) {
-                $job_array = $this->get_jobs_list($request, $user_details);
-            }
-            else{
-                return response()->json([
-                    'status_code' 	 => '0',
-                    'status_message' => "Wrong distance",
-                ]);
-            }
-        }
 
-		return response()->json([
-			'status_code' 		=> '1',
+        return response()->json([
+            'status_code' 		=> '1',
             'status_message' 	=> "Order with id " . $order->id . ' ' . $assign_status_message,
-            'jobs'               => $job_array,            
-		]);
+            'job_status'        => $order_status, 
+        ]);
     }
 
 
