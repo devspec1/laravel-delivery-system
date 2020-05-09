@@ -129,6 +129,7 @@ class HomeDeliveryController extends Controller
             $order->fee                     = $request->fee;
             $order->customer_id             = $user->id;
             $order->ride_request            = $ride_request->id;
+            $order->order_description       = $request->order_description;
             
             $order->save();
           
@@ -254,6 +255,7 @@ class HomeDeliveryController extends Controller
 
             $order->estimate_time               = $request->estimate_time;
             $order->fee                         = $request->fee;
+            $order->order_description           = $request->order_description;
             $ride_request->pickup_location      = $request->pick_up_location;
             $ride_request->drop_location        = $request->drop_off_location;
             $order->customer_id                 = $user->id;

@@ -450,6 +450,7 @@ class HomeDeliveryController extends Controller
                 'delivery_orders.driver_id as driver_id', 
                 'delivery_orders.created_at as created_at',
                 'delivery_orders.estimate_time as estimate_time',
+                'delivery_orders.order_description as order_description',
                 'delivery_orders.fee as fee',
                 'delivery_orders.status as status',
                 'delivery_orders.currency_code as currency_code',
@@ -489,7 +490,7 @@ class HomeDeliveryController extends Controller
             $temp_details['drop_off'] = $order->drop_off_location;
             $temp_details['customer_name'] = $order->customer_name;
             $temp_details['customer_phone_number'] = $order->customer_phone_number;
-            $temp_details['order_description'] = 'Test description'; //$order->order_description;
+            $temp_details['order_description'] = $order->order_description ? $order->order_description : 'No description provided';
             $temp_details['fee'] = '$'. $order->fee;
             
             array_push($job_array,$temp_details);

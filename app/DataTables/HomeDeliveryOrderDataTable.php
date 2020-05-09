@@ -56,6 +56,7 @@ class HomeDeliveryOrderDataTable extends DataTable
                 'delivery_orders.id as id',
                 'delivery_orders.driver_id as driver_id', 
                 'delivery_orders.created_at as created_at',
+                'delivery_orders.order_description as order_description',
                 DB::raw('CONCAT(delivery_orders.estimate_time," mins") as estimate_time'),
                 'delivery_orders.fee as fee',
                 'delivery_orders.status as status',
@@ -101,6 +102,7 @@ class HomeDeliveryOrderDataTable extends DataTable
             ['data' => 'drop_off_location', 'name' => 'drop_off_location', 'title' => 'Drop Off'],
             ['data' => 'customer_name', 'name' => 'customer_name', 'title' => 'Customer Name'],
             ['data' => 'mobile_number', 'name' => 'mobile_number', 'title' => 'Customer Phone'],
+            ['data' => 'order_description', 'name' => 'order_description', 'title' => 'Order Description'],
             ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false],
         ];
     }
