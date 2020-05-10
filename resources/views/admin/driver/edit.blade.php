@@ -69,6 +69,18 @@
 	                 		</div>	
 	                  	</div>
 						<div class="form-group">
+							<label for="input_status" class="col-sm-3 control-label">Plan Name<em class="text-danger">*</em></label>
+							<div class="col-sm-6">
+								<select class ='form-control' id = 'input_plan' name='plan_id'>
+									<option value="" disabled=""> Select </option>
+									@foreach($all_plans as $plan)
+									<option value="{{@$plan->id}}" @if(isset($current_plan)) {{ ($plan->id == $current_plan->id) ? 'Selected' : ''}} @endif>{{$plan->plan_name}}</option>
+									@endforeach
+								</select>
+								<span class="text-danger">{{ $errors->first('plan_id') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
 							<label for="input_email" class="col-sm-3 control-label">Email<em class="text-danger">*</em></label>
 							<div class="col-sm-6">
 								{!! Form::text('email', $result->email, ['class' => 'form-control', 'id' => 'input_email', 'placeholder' => 'Email']) !!}

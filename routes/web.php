@@ -10,13 +10,6 @@
 |
  */
 
-/**
- * Git Test 
- */
-
-Route::get('git_test',function(){
-	echo 'Git Test';
-});
 Route::get('oweAmount', 'Api\RatingController@oweAmount');
 Route::get('driver_invoice', 'DriverDashboardController@driver_invoice');
 Route::match(array('GET', 'POST'),'apple_callback', 'UserController@apple_callback');

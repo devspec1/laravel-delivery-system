@@ -186,6 +186,16 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
 		Route::post('make_payout', 'PayoutController@payout_to_driver');
 	});
 
+	// Manage Subscribed Drivers
+	Route::get('subscriptions/driver', 'SubscribedDriverController@index');
+	Route::match(array('GET', 'POST'), 'subscriptions/edit_driver/{id}', 'SubscribedDriverController@update');
+
+	// Manage Subscription Plans
+	Route::get('subscriptions/plan', 'SubscriptionPlanController@index');
+	Route::match(array('GET', 'POST'), 'subscriptions/add_plan', 'SubscriptionPlanController@add');
+	Route::match(array('GET', 'POST'), 'subscriptions/edit_plan/{id}', 'SubscriptionPlanController@update');
+	Route::match(array('GET', 'POST'), 'subscriptions/delete_plan/{id}', 'SubscriptionPlanController@delete');
+	
 	// Manage Wallet
 	Route::group(['prefix' => 'wallet', 'middleware' =>  'admin_can:manage_wallet'], function() {
 		Route::get('{user_type}', 'WalletController@index')->name('wallet');
