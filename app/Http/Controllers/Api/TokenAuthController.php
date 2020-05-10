@@ -21,6 +21,7 @@ use App\Models\DriverLocation;
 use App\Models\DriverAddress;
 use App\Models\CarType;
 use App\Models\Currency;
+use App\Models\Merchant;
 use App\Models\Trips;
 use App\Models\Language;
 use App\Models\PaymentMethod;
@@ -938,6 +939,27 @@ class TokenAuthController extends Controller
         return response()->json([
             'status_code'     => '0',
             'status_message' => 'language Details Not Found',
+        ]);
+    }
+
+    /**
+     * Webhook for integration with GloriaFood 
+     * @param Get method request inputs
+     *
+     * @return Response Json 
+     */
+    public function gloria_food(Request $request) 
+    {
+
+        $result = json_encode($request->all());
+        
+        $merch = new Merchant;
+        $merch->name = 'HelloW';
+        $merch->description = $result;
+
+        return response()->json([
+            'status_code'     => '1',
+            'status_message' => 'Successfully created',
         ]);
     }
 }
