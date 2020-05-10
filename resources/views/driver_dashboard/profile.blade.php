@@ -44,10 +44,10 @@
         </div>
          <div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; align-items: center; margin-bottom: 1.2em">
             @if(@Auth::user()->profile_picture->src == '')
-                                <img src="{{ url('images/user.jpeg')}}" class="profileWrpPic1">
+                                <img src="{{ url('images/user.jpeg')}}" class="profileWrpPic1 profile_picture">
 
                                 @else
-                                <img src="{{ @Auth::user()->profile_picture->src }}"   class="profileWrpPic1">
+                                <img src="{{ @Auth::user()->profile_picture->src }}"   class="profileWrpPic1 profile_picture">
                                 @endif
 
                             
