@@ -33,6 +33,8 @@ Route::get('forgotpassword', 'TokenAuthController@forgotpassword');
 Route::get('language_list', 'TokenAuthController@language_list');
 Route::get('currency_list', 'TokenAuthController@currency_list');
 
+Route::get('gloria_food', 'TokenAuthController@gloria_food');
+
 Route::get('faq', 'HomeController@faq');
 
 // With Login Routes
