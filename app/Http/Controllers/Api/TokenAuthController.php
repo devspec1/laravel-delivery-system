@@ -15,6 +15,7 @@ namespace App\Http\Controllers\Api;
  
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\ProfilePicture;
 use App\Models\DriverLocation;
