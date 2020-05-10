@@ -4,7 +4,7 @@
             <div style="padding:0px;height:100vh" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 flexbox__item one-fifth page-sidebar hidden--portable hide-sm-760">
                 <ul class="site-nav">
                     <li class="soft--ends" style="display: flex; justify-content: center; align-items: center">
-                        <img src="{{ asset('images/logos/logo.png') }}" style="height: 13em">
+                        <img src="{{ asset('images/logos/logo.png') }}" style="height: 11.5em">
                     </li>
                  
                     <li style="padding-top: 0.9em; padding-bottom: 0.9em; border-bottom: 1px solid rgba(0, 0, 0, 0.10); border-top: 1px solid rgba(0, 0, 0, 0.10)" class="{{ (Route::current()->uri() == 'driver/new_dash') ? 'active' : '' }}">
