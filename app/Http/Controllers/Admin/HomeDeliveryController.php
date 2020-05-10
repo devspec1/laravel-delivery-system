@@ -93,6 +93,7 @@ class HomeDeliveryController extends Controller
                 'pick_up_longitude'     => 'required',
                 'drop_off_latitude'      => 'required',
                 'drop_off_longitude'     => 'required',
+                'merchant_id'            => 'required',
             );
             
             // Add Driver Validation Custom Names
@@ -107,6 +108,7 @@ class HomeDeliveryController extends Controller
                 'pick_up_longitude'     => 'Pick Up Longitude',
                 'drop_off_latitude'      => 'Drop Off Latitude',
                 'drop_off_longitude'     => 'Drop Off Longitude',
+                'merchant_id'            => 'Merchant',
             );
                 // Edit Rider Validation Custom Fields message
             $messages = array(
@@ -130,6 +132,7 @@ class HomeDeliveryController extends Controller
             $order->customer_id             = $user->id;
             $order->ride_request            = $ride_request->id;
             $order->order_description       = $request->order_description;
+            $order->merchant_id             = $request->merchant_id;
             
             $order->save();
           

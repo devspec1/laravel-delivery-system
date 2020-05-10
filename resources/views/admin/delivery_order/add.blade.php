@@ -37,7 +37,8 @@
 		</ol>
 	</section>
 	{!! Form::open(['method'=>'POST','url' => LOGIN_USER_TYPE.'/add_home_delivery', 'class' => 'form-horizontal delivery_adding','id'=>'delivery_order','name'=>'deliveryAddForm']) !!}
-	<section class="content">
+
+    <section class="content">
         <h4>Add delivery order</h4>
         <h5>Customer data</h5>
 		<div class="row">
@@ -76,6 +77,12 @@
         <h5>Delivery data</h5>
 		<div class="clearfix">
 			<div class="col-md-4 location-form">
+                <div class="row pick-location clearfix">
+					<div class="col-md-12">
+                        <input type="text" id="input-merchant-id" name="merchant_id" placeholder="Merchant" value="" />
+						<span class="text-danger error_msg error_merchant_id">{{ $errors->first('merchant_id') }}</span>
+					</div>
+                </div>
 				<div class="row pick-location clearfix">
 					<div class="col-md-12" ng-init='pick_up_latitude = ""'>
 						{!! Form::hidden('pick_up_latitude', '', ['id' => 'pick_up_latitude']) !!}
@@ -154,5 +161,44 @@
 	var REQUEST_URL = "{{url('/'.LOGIN_USER_TYPE)}}"; 
 	var old_edit_date = "{{''}}"
 	var page = "{{'new'}}"
+</script>
+<script src="{{ url('js/selectize.js') }}"></script>
+<script>
+	$(function() {
+		$('#input-merchant-id').selectize({
+		    plugins: ['remove_button'],
+		    maxItems: 1
+    		
+		});
+		init_user();
+	})
+	function init_user()
+{
+  var usertype= 'all';
+    var select = $("#input-merchant-id").selectize();
+    var selectize = select[0].selectize;
+    selectize.disable();
+    
+    $.ajax({
+      type: 'GET',
+      url: APP_URL+'/{{LOGIN_USER_TYPE}}/get_send_merchants',
+      dataType: "json",
+      success: function(resultData) {
+        console.log(resultData);
+        var select = $("#input-merchant-id").selectize();
+        var selectize = select[0].selectize;
+        selectize.clear();
+        selectize.clearOptions();
+        $.each(resultData, function (key, value) {
+          selectize.addOption({value:value.id,text:value.id + ' - ' +  value.name});
+        });
+        selectize.enable();
+
+        selectize.setValue(1, false);
+
+      }
+    });
+  }
+
 </script>
 @endpush
