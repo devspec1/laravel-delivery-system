@@ -1,4 +1,4 @@
-<div style="margin-top: 1.2em; display: flex; width: 100%; justify-content: flex-end; margin-bottom: 0.6em;">
+<div style="margin-top: 3.9em; display: flex; width: 100%; justify-content: flex-end; margin-bottom: 2em;">
     <div style="display: flex; align-items: center">
       <div class="img--circle img--bordered img--shadow fixed-ratio fixed-ratio--1-1">
 

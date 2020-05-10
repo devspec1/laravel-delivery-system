@@ -3121,7 +3121,7 @@ i.google-ride {
     
     border-left: none;
     box-shadow: none;
-    margin-top: 3em;
+   
 }
 
 #profileWrp #addrInfo > div {
@@ -3251,4 +3251,9 @@ a.side-nav-a[aria-selected="true"] {
     height: 6em;
     width: 6em;
     margin-right: 2em;
+    object-fit: cover;
+}
+
+.mainWrp1 {
+    margin-top: 0;
 }

@@ -2818,8 +2818,8 @@ button:focus {
 .img--bordered {
     border: 1px solid #c2c2c2;
     border-radius: 100% !important;
-    height: 60px;
-    width: 60px;
+    height: 78px;
+    width: 78px;
 }
 
 .head_profile {
@@ -2900,6 +2900,7 @@ button:focus {
 .site-nav>li>a {
     padding: 10px;
     border-bottom: 1px solid #efefef; 
+    padding-left: 3.8em;
 }
 
 .block-list>li>.trip-filter__origin-link.collapsed,

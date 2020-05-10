@@ -3,7 +3,7 @@
         <div class="height--full pull-left separated--sides full-width">
             <div style="padding:0px;height:100vh" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 flexbox__item one-fifth page-sidebar hidden--portable hide-sm-760">
                 <ul class="site-nav">
-                    <li class="soft--ends" style="display: flex; justify-content: center; align-items: center">
+                    <li class="soft--ends" style="display: flex;">
                         <img src="{{ asset('images/logos/logo.png') }}" style="height: 11.5em">
                     </li>
                  

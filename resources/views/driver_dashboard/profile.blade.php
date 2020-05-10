@@ -3,7 +3,7 @@
 @section('main')
 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content" style="padding:0px !important;" ng-controller="facebook_account_kit">
   @include('common.driver_dashboard_header_new')
-  <div style="height: 100%; width: 100%; display: flex" id="profileWrp">
+  <div style="height: 100%; width: 100%; display: flex" id="profileWrp" class="mainWrp1">
 
   <div style="display: flex; flex-direction: column" id="profileLeftWrp">
       <span data-tab="profile" class="current">Profile</span>
@@ -43,7 +43,12 @@
           </div>
         </div>
          <div class="parter-info separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; align-items: center; margin-bottom: 1.2em">
-            <img src="{{ url('images/user.jpeg')}}" class="profileWrpPic1">
+            @if(@Auth::user()->profile_picture->src == '')
+                                <img src="{{ url('images/user.jpeg')}}" class="profileWrpPic1">
+
+                                @else
+                                <img src="{{ @Auth::user()->profile_picture->src }}"   class="profileWrpPic1">
+                                @endif
 
                             
               <div style="display: flex; flex-direction: column; align-items: center">
