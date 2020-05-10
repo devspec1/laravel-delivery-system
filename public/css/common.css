@@ -1338,7 +1338,9 @@ select {
     margin-bottom: 0 !important;
     max-width: 100% !important;
     outline: 0 none !important;
-    padding: 3px 5px !important;
+    border-radius: 7px;
+        background: rgba(0, 0, 0, 0.05);
+        padding: 1em;
     transition: all 0.4s ease 0s !important;
 }
 
@@ -3032,10 +3034,9 @@ i.google-ride {
 #deliveryMainWrp {
     display:  flex;
     flex-direction: column;
-    width: 88%;
-    margin: 2em;
-    margin-left: 5em;
-    margin-top: 10em;
+    width: 100%;
+    padding-left: 5em;
+    margin-top: 7em;
 }
 #deliverySubWrp {
     margin-top: 3em;
@@ -3071,6 +3072,7 @@ i.google-ride {
 .site-nav {
     border-right: 1px solid rgba(0 , 0, 0, 0.15);
     font-family: 'MontserratReg';
+    height: 100%;
 }
 .site-nav > li > a {
     padding: 1.3em;
@@ -3106,7 +3108,7 @@ i.google-ride {
 }
 
 .dash-panel {
-    width: 94%;
+    width: 74%;
     display: flex;
 }
 .page-content {
@@ -3117,7 +3119,7 @@ i.google-ride {
 }
 #profileWrp {
     width: 74%;
-    margin-left: 6em;
+    
     border-left: none;
     box-shadow: none;
     margin-top: 3em;
@@ -3129,6 +3131,125 @@ i.google-ride {
 }
 a.side-nav-a[aria-selected="true"] {
     font-weight: 600;
-    font-family: 'MontserratBold';
+    font-family: 'MontserratReg';
     color: #3B5998;
+}
+#helpLeftWrp > span, #profileLeftWrp > span {
+    padding: 1.6em;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    width: 16em;
+    font-family: 'MontserratReg';
+    font-size: 100%;
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
+}
+#helpLeftWrp, #profileLeftWrp {
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+#helpWrp, #profileWrp {
+    font-family: 'MontserratReg';
+    height: 45em;
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+#helpLeftWrp > span.current, #profileLeftWrp > span.current {
+    color: #3B5998;
+    font-family: 'MontserratBold';
+}
+#helpLeftWrp .callBtn {
+    background: #5cb85c; padding: 0.5em; color: white; cursor: pointer;font-family: 'MontserratReg'; border-radius: 9px;
+    font-size: 75%;
+    margin-left: 0.7em;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+#helpFaqWrp {
+    padding: 2em;
+    padding-right: 8em;
+}
+#helpFaqWrp > div {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    margin-bottom: 0.7em;
+
+    padding: 1.3em;
+    padding-left: 2em;
+    font-family: 'MontserratReg';
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+#helpFaqWrp > div.current {
+    margin-bottom:1.4em;
+    margin-top: 1.4em;
+}
+#helpFaqWrp > div.current > span:first-child {
+       margin-bottom: 1.2em;
+}
+#helpFaqWrp > div:not(.current) > span:nth-child(2) {
+    display: none;
+}
+#helpFaqWrp > div > span:first-child {
+    opacity: 0.75;
+    font-size: 110%;
+    font-weight: bold;
+ 
+}
+#helpFaqWrp > div > span {
+    opacity: 0.75;
+    font-size: 100%;
+}
+
+#helpRightWrp > div.current, #profileRightWrp > div.current {
+    display: flex;
+}
+#helpRightWrp > div, #profileRightWrp > div {
+    display: none;
+}
+#paymentMethodWrp > div {
+    padding: 1.3em;
+    padding-top: 1.9em;
+    padding-bottom: 1.9em;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+    display: flex;
+    padding-left: 2.5em;
+    align-items: center;
+}
+#paymentMethodWrp > div:last-child {
+    padding-top: 1.8em;
+    padding-bottom: none;
+    border-bottom: none;
+    padding-left: 3em;
+    opacity: 0.8;
+
+}
+#paymentMethodWrp > div:last-child span {
+    font-size: 105%;
+
+}
+#paymentMethodWrp > div > div{
+
+    display: flex;
+    align-items: center;
+}
+#paymentMethodWrp > div > div > img:first-child {
+    width: 5em;
+    padding: 0.9em;
+    height: auto;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+}
+#paymentMethodWrp > div > div > span {
+    margin-left: 1em;
+    font-family: 'MontserratReg';
+}
+#paymentMethodWrp img {
+    height: 2em;
+    width: 2em;
+}
+.profileWrpPic1 {
+    height: 8em;
+    width: 8em;
+    margin-right: 2em;
 }

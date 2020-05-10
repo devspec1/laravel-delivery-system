@@ -2,6 +2,7 @@
 @extends('template_driver_dashboard_new') 
 @section('main')
 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content" style="padding:0px !important;" ng-controller="facebook_account_kit">
+  @include('common.driver_dashboard_header_new')
   <div id="deliveryMainWrp">
            <div style="display: flex; justify-content: space-between;width: 100%">
               <span style="font-size: 200%; color: #1B187F; font-weight: normal; font-family:'MontserratBold'">Delivery Orders</span>

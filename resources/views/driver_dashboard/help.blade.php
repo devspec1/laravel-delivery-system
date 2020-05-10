@@ -1,21 +1,59 @@
 <title>Help</title>
-@extends('template_driver_dashboard') 
+@extends('template_driver_dashboard_new') 
 @section('main')
 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content" style="padding:0px;" ng-controller="facebook_account_kit">
-  <div class="page-lead separated--bottom  text--center text--uppercase">
-    <h1 class="flush-h1 flush">{{trans('messages.header.help')}}</h1>
-  </div>
+  @include('common.driver_dashboard_header_new')
+ 
 
-  <ul class="help-list">
-    @foreach ($faq_array as $faq)
-      <li>
-        <div class="faq">
-          <div class="question" onClick="toggleItem(this)"><div><span>{{ $faq["question"] }}</span></div><div>></div></div>
-          <div class="answer"><span>{{ $faq["answer"] }}</span></div>
-        <div>
-      </li>
-    @endforeach
-  </ul>
+  <div style="display: flex; width: 100%" id="helpWrp">
+    <div style="display: flex; flex-direction: column" id="helpLeftWrp">
+      <span data-tab="livechat" style="border-top: 1px solid rgba(0, 0, 0, 0.15)">Live chat support</span>
+      <span data-tab="faq" class="current">FAQ's</span>
+      <span data-tab="callsupp">Call support <span class="callBtn">Call</span></span>
+    </div>
+    <div style="display: flex; width: 100%;" id="helpRightWrp">
+       <div  style=" width: 100%; flex-direction: column" id="helpFaqWrp" data-tab="livechat">
+        <h3 style="font-size: 130%; color: #3B5998; margin-bottom: 1.5em; font-family: 'MontserratBold'"> Live chat support</h3>
+        
+      </div>
+      <div class="current" style=" width: 100%; flex-direction: column" id="helpFaqWrp" data-tab="faq">
+        <h3 style="font-size: 130%; color: #3B5998; margin-bottom: 1.5em; font-family: 'MontserratBold'"> FAQ's</h3>
+        <div class="current">
+          <span>Lorem ipsum</span>
+          <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non. Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
+          </span>
+
+
+        </div>
+         <div>
+          <span>Lorem ipsum</span>
+           <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non. Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
+          </span>
+        </div>
+         <div>
+          <span>Lorem ipsum</span>
+            <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non. Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
+          </span>
+        </div>
+         <div>
+          <span>Lorem ipsum</span>
+            <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non. Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
+          </span>
+        </div>
+         <div>
+          <span>Lorem ipsum</span>
+            <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non. Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
+          </span>
+        </div>
+      </div>
+      <div  style=" width: 100%; flex-direction: column" id="helpFaqWrp" data-tab="callsupp">
+        <h3 style="font-size: 130%; color: #3B5998; margin-bottom: 1.5em; font-family: 'MontserratBold'"> Call support</h3>
+        
+      </div>
+    </div>
+
+  
+</div>
 
 </div>
 </div>
@@ -24,8 +62,28 @@
 </div>
 </div>
 </main>
-@stop
 
+
+@stop
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+<script>
+  $(function() {
+    $("#helpLeftWrp span").click(function() {
+       $("#helpRightWrp > div.current").removeClass("current");
+       $("#helpRightWrp > div[data-tab='" + $(this).data("tab") + "']").addClass("current");
+      $("#helpLeftWrp span.current").removeClass("current");
+      $(this).addClass("current");
+
+    })
+
+    $("#helpFaqWrp > div").click(function() {
+    
+      $("#helpFaqWrp > div.current").removeClass("current");
+      $(this).addClass("current");
+      $(this).find("span").eq(1).show();
+    })
+  })
+</script>
 <style>
   li > div > div.question {
     display: flex; 

@@ -2,12 +2,8 @@
 @extends('template_driver_dashboard_new') 
 @section('main')
 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 flexbox__item four-fifths page-content" style="padding:0px !important;" ng-controller="facebook_account_kit">
-  <div style="margin-top: 3em; display: flex; width: 100%; justify-content: flex-end; margin-bottom: 2em;">
-    <div style="display: flex; flex-direction: column; align-items: flex-end">
-      <span style="color: #17609c; font-size: 100%; font-family: 'MontserratReg'; font-weight: bold">My Status</span>
-      <span style="margin-top: 0.5em; font-family: 'MontserratReg'; font-weight: bold; width: 14em; text-align:right ">Lorem ipsum sample dummy text</span>
-    </div>
-  </div>
+  @include('common.driver_dashboard_header_new')
+  
  
   <div id="newDashMainWrp">
       <div> 

@@ -17,12 +17,12 @@ class RedirectIfDriverAuthenticated
     public function handle($request, Closure $next)
     {
         if (Auth::guard('web')->guest()) {
-            return redirect('signin_driver');
+            return redirect('driver/new_login');
         }
 
         if (Auth::user()->status == 'Inactive') {
             Auth::logout();
-            return redirect('signin_driver');
+            return redirect('driver/new_login');
         }
         
         if(Auth::user()->user_type == 'Driver')

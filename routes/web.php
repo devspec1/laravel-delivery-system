@@ -106,7 +106,7 @@ Route::group(['middleware' => ['locale','rider_guest']], function () {
 
 Route::get('driver/new_login', 'DriverDashboardController@driver_new_login');
 Route::get('driver/new_signup', 'DriverDashboardController@driver_new_signup');
-Route::get('driver/delivery_orders', 'DriverDashboardController@driver_delivery_orders');
+
 
 // Driver Routes..
 Route::group(['middleware' => ['locale','driver_guest']], function () {
@@ -143,7 +143,10 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 
 
 
-
+	Route::get('driver/delivery_orders', 'DriverDashboardController@driver_delivery_orders');
+	Route::get('driver/driver_team', 'DriverDashboardController@driver_delivery_orders');
+	Route::get('driver/merchants', 'DriverDashboardController@driver_delivery_orders');
+	Route::get('driver/leaderboard', 'DriverDashboardController@driver_new_dash');
 	Route::get('driver/new_dash', 'DriverDashboardController@driver_new_dash');
 	Route::get('driver/inbox', 'DriverDashboardController@show_inbox');
 	Route::get('driver/trips_payments', 'DriverDashboardController@driver_trip');
