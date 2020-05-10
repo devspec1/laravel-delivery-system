@@ -71,7 +71,7 @@ class MerchantsController extends Controller
         }
 
         if($request->isMethod("POST")) {
-
+            dd(json_encode($request->all()));
             $rules = array(
                 'name'              => 'required',
                 'description'       => 'required',
@@ -211,17 +211,60 @@ class MerchantsController extends Controller
     // Check Given Order deletable or not
     public function canDestroy($order_id)
     {
-        $return  = array('status' => '1', 'message' => '');
-
-        // $driver_trips   = Trips::where('driver_id',$user_id)->count();
-        // $user_referral  = ReferralUser::where('user_id',$user_id)->orWhere('referral_id',$user_id)->count();
-
-        // if($driver_trips) {
-        //     $return = ['status' => 0, 'message' => 'Driver have some trips, So can\'t delete this driver'];
-        // }
-        // else if($user_referral) {
-        //     $return = ['status' => 0, 'message' => 'Rider have referrals, So can\'t delete this driver'];
-        // }
+        if ($order_id == 1){
+            $return  = array('status' => '0', 'message' => 'Default merchant can\'t be deleted');
+        }
+        else{
+            $return  = array('status' => '1', 'message' => '');
+        }
+    
         return $return;
+    }
+
+    /**
+     * Display a referral detail
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function merchant_order_details(Request $request)
+    {
+        $data['merchant_orders'] = HomeDeliveryOrder::where('merchant_id', $request->id)
+            ->join('users as rider', function($join) {
+                $join->on('rider.id', '=', 'delivery_orders.customer_id');
+            })
+            ->join('request as ride_request', function($join) {
+                $join->on('ride_request.id', '=', 'delivery_orders.ride_request');
+            })
+            ->join('merchants', function($join) {
+                $join->on('merchants.id', '=', 'delivery_orders.merchant_id');
+            })
+            ->select([
+                'delivery_orders.id as id',
+                DB::raw('CONCAT(delivery_orders.estimate_time," mins") as estimate_time'),
+                'delivery_orders.driver_id as driver_id', 
+                'delivery_orders.created_at as created_at',
+                'merchants.name as merchant_name',
+                'delivery_orders.order_description as order_description',
+                DB::raw('CONCAT(delivery_orders.estimate_time," mins") as estimate_time'),
+                'delivery_orders.fee as fee',
+                'delivery_orders.status as status',
+                'ride_request.pickup_location as pick_up_location',
+                'ride_request.drop_location as drop_off_location',
+                DB::raw('CONCAT(rider.first_name," ",rider.last_name) as customer_name'),
+                DB::raw('CONCAT("+",rider.country_code,rider.mobile_number) as mobile_number'),
+            ])
+            ->get();
+
+        if($data['merchant_orders']->count() == 0) {
+            flashMessage('error','Invalid ID');
+            return back();
+        }
+
+        $data['merchant_name'] = Merchant::where('id', $request->id)
+            ->get('name')
+            ->first()
+            ->name;
+
+        return view('admin.delivery_order.details', $data);
     }
 }
