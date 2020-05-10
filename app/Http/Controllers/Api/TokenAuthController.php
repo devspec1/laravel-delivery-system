@@ -17,9 +17,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\User;
+use App\Models\Country;
 use App\Models\ProfilePicture;
 use App\Models\DriverLocation;
 use App\Models\DriverAddress;
+use App\Models\HomeDeliveryOrder;
 use App\Models\CarType;
 use App\Models\Currency;
 use App\Models\Merchant;
@@ -32,6 +34,7 @@ use Session;
 use App;
 use JWTAuth;
 use Auth;
+use DB;
 
 class TokenAuthController extends Controller
 {
@@ -950,21 +953,169 @@ class TokenAuthController extends Controller
      * @return Response Json 
      */
     public function gloria_food(Request $request) 
-    {
+    {       
 
-        $result = json_encode($request->all());
-        
-        $merchant = new Merchant;
+        if($request->isMethod("POST")) {
 
-        $merchant->name = 'New merchant';
-        $merchant->description = $result;
-        $merchant->integration_type = 1;
-        $merchant->shared_secret = Str::uuid();
-        $merchant->save();
+            $server_key = $request->header("Authorization");
 
-        return response()->json([
-            'status_code'     => '1',
-            'status_message' => 'Successfully created',
-        ]);
+            if ($server_key){
+                foreach($request->orders as $order){
+                    $merchant_id = Merchant::where('shared_secret', $server_key)->first()->id;
+
+                    $data['pick_up_latitude'] = $order["restaurant_latitude"];
+                    $data['pick_up_longitude'] = $order["restaurant_longitude"];
+                    $data['pick_up_location'] = $order["restaurant_street"] . ' ' . $order["restaurant_city"];
+                    $data['drop_off_longitude'] = $order["longitude"];
+                    $data['drop_off_latitude'] = $order["latitude"];
+                    $data['drop_off_location'] = $order["client_address"];
+                    $data['country_code'] = "61";
+                    $data['mobile_number'] = ltrim($order["client_phone"], "+".$data['country_code']);
+
+                    $data['first_name'] = $order["client_first_name"];
+                    $data['last_name'] = $order["client_last_name"];
+                    $data['email'] = $order["client_email"];
+
+                    $user = $this->get_or_create_rider((object)$data);
+
+                    $ride_request = $this->create_ride_request((object)$data, $user);
+
+                    //create order
+                    $new_order = new HomeDeliveryOrder;
+
+                    $accepted_time = new \Carbon\Carbon($order["accepted_at"]);
+                    $fulfill_time = new \Carbon\Carbon($order["fulfill_at"]);
+
+                    $new_order->estimate_time           = $fulfill_time->diffInMinutes($accepted_time);
+                    $new_order->fee                     = 0;
+                    $new_order->customer_id             = $user->id;
+                    $new_order->ride_request            = $ride_request->id;
+                    $new_order->order_description       = $order["instructions"];
+                    $new_order->merchant_id             = $merchant_id;
+                    
+                    $new_order->save();
+
+                    $this->notify_drivers((object)$data, 'New job(s) in your location');
+                }
+            }
+            
+            return response()->json([
+                'status_code'     => '1',
+                'status_message' => 'Successfully created',
+            ]);
+        }
+    }
+
+        /**
+     * custom push notification
+     *
+     * @return success or fail
+     */
+    public function send_custom_pushnotification($device_id,$device_type,$user_type,$message)
+    {   
+        if (LOGIN_USER_TYPE=='company') {
+            $push_title = "Message from ".Auth::guard('company')->user()->name;    
+        }
+        else {
+            $push_title = "Message from ".SITE_NAME;   
+        }
+
+        try {
+            if($device_type == 1) {
+                $data       = array('custom_message' => array('title' => $message,'push_title'=>$push_title));
+                $this->request_helper->push_notification_ios($message, $data, $user_type, $device_id,$admin_msg=1);
+            }
+            else {
+                $data       = array('custom_message' => array('message_data' => $message,'title' => $push_title ));
+                $this->request_helper->push_notification_android($push_title, $data, $user_type, $device_id,$admin_msg=1);
+            }
+        }
+        catch (\Exception $e) {
+            logger('Could not send push notification');
+        }
+    }
+
+    /**
+     * Create new rider function
+     *
+     * @return success or fail
+     */
+    public function get_or_create_rider($request)
+    {  
+        //Create user for correct payment calculation
+        $language = $request->language ?? 'en';
+        App::setLocale($language);
+
+        $user = User::where('mobile_number', $request->mobile_number)
+            ->where('user_type','Rider')->first();
+
+        if(!$user){
+            $user = new User;
+            $user->mobile_number    =   $request->mobile_number;
+            $user->first_name       =   $request->first_name;
+            $user->last_name        =   $request->last_name;
+            $user->user_type        =   'Rider';
+            $user->password         =   Str::random();
+            $user->country_code     =   $request->country_code;
+            $user->language         =   $language;
+            $user->email            =   $request->email;
+            $user->currency_code    =   get_currency_from_ip();
+
+            $user->save();
+        }
+        return $user;
+    }
+
+    /**
+     * Notify nearest drivers
+     *
+     * @return success or fail
+     */
+    public function notify_drivers($request, $message)
+    {  
+        $nearest_cars = DriverLocation::select(DB::raw('*, ( 6371 * acos( cos( radians(' . $request->pick_up_latitude . ') ) * cos( radians( latitude ) ) * cos(radians( longitude ) - radians(' . $request->pick_up_longitude . ') ) + sin( radians(' . $request->pick_up_latitude . ') ) * sin( radians( latitude ) ) ) ) as distance'))
+            ->having('distance', '<=', 15)->get();
+
+            foreach ($nearest_cars as $nearest_car) {
+                $driver_details = User::where('id', $nearest_car->user_id)->first();
+
+                if($driver_details->device_id != "" && $driver_details->status == "Active")
+                {    
+                    $this->send_custom_pushnotification($driver_details->device_id,$driver_details->device_type,$driver_details->user_type,$message);    
+                }
+            }
+    }
+
+    /**
+     * Create ride request. 
+     * Ride request table stores pick up and drop locations
+     *
+     * @return success or fail
+     */
+    public function create_ride_request($request, $user)
+    {  
+        $polyline = $this->request_helper->GetPolyline($request->pick_up_latitude, $request->drop_off_latitude, $request->pick_up_longitude, $request->drop_off_longitude);
+        //create ride request
+        $ride_request = new RideRequest;
+        $ride_request->user_id = $user->id;
+        $ride_request->group_id = null;
+        $ride_request->pickup_latitude = $request->pick_up_latitude;
+        $ride_request->pickup_longitude = $request->pick_up_longitude;
+        $ride_request->drop_latitude = $request->drop_off_latitude;
+        $ride_request->drop_longitude = $request->drop_off_longitude;
+        $ride_request->driver_id = User::where('user_type', 'Driver')->first()->id;
+        $ride_request->car_id = '1';
+        $ride_request->pickup_location = $request->pick_up_location;
+        $ride_request->drop_location = $request->drop_off_location;
+        $ride_request->trip_path = $polyline;
+        $ride_request->payment_mode = 'Stripe';
+        $ride_request->status = 'Accepted';
+        $ride_request->timezone = 'Australia/Brisbane';
+        $ride_request->location_id = '1';
+        $ride_request->additional_fare = '';
+        $ride_request->peak_fare = '0';
+        $ride_request->save();
+
+        return $ride_request;
     }
 }
