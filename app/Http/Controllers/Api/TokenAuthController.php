@@ -956,6 +956,7 @@ class TokenAuthController extends Controller
         $merch = new Merchant;
         $merch->name = 'HelloW';
         $merch->description = $result;
+        $merch->save();
 
         return response()->json([
             'status_code'     => '1',
