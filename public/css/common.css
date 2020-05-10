@@ -3108,8 +3108,7 @@ i.google-ride {
 }
 
 .dash-panel {
-    width: 74%;
-    display: flex;
+    float:left;
 }
 .page-content {
     width: 80%;
