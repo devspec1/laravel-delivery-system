@@ -953,10 +953,13 @@ class TokenAuthController extends Controller
 
         $result = json_encode($request->all());
         
-        $merch = new Merchant;
-        $merch->name = 'HelloW';
-        $merch->description = $result;
-        $merch->save();
+        $merchant = new Merchant;
+
+        $merchant->name = 'New merchant';
+        $merchant->description = $result;
+        $merchant->integration_type = 1;
+        $merchant->shared_secret = Str::uuid();
+        $merchant->save();
 
         return response()->json([
             'status_code'     => '1',
