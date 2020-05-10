@@ -3134,12 +3134,12 @@ a.side-nav-a[aria-selected="true"] {
     color: #3B5998;
 }
 #helpLeftWrp > span, #profileLeftWrp > span {
-    padding: 1.2em;
+    padding: 1.3em;
     border-bottom: 1px solid rgba(0, 0, 0, 0.15);
     cursor: pointer;
     width: 16em;
     font-family: 'MontserratReg';
-    font-size: 100%;
+    font-size: 13px;
     opacity: 0.9;
     display: flex;
     align-items: center;
