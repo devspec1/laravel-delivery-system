@@ -71,7 +71,6 @@ class MerchantsController extends Controller
         }
 
         if($request->isMethod("POST")) {
-            dd(json_encode($request->all()));
             $rules = array(
                 'name'              => 'required',
                 'description'       => 'required',
