@@ -24,7 +24,7 @@
     </div>
     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-6">
       <label class="" style="    font-weight: normal;
-      font-size: 40px;">
+      font-size: 30px;">
       {{ @Auth::user()->first_name }} {{ @Auth::user()->last_name }}
     </label>
     @if(@Auth::user()->status == 'Active')

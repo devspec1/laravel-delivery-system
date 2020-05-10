@@ -1332,7 +1332,7 @@ select {
     
     flex-grow: 1 !important;
     font-family: 'MontserratReg';
-    font-size: 13px !important;
+    font-size: 11px !important;
     font-weight: 500 !important;
     line-height: 24px !important;
     margin-bottom: 0 !important;
@@ -3135,7 +3135,7 @@ a.side-nav-a[aria-selected="true"] {
     color: #3B5998;
 }
 #helpLeftWrp > span, #profileLeftWrp > span {
-    padding: 1.6em;
+    padding: 1.2em;
     border-bottom: 1px solid rgba(0, 0, 0, 0.15);
     cursor: pointer;
     width: 16em;
@@ -3249,7 +3249,7 @@ a.side-nav-a[aria-selected="true"] {
     width: 2em;
 }
 .profileWrpPic1 {
-    height: 8em;
-    width: 8em;
+    height: 6em;
+    width: 6em;
     margin-right: 2em;
 }

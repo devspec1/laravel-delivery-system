@@ -21,19 +21,19 @@
           <input type="hidden" name="code" id="code" />
           <input type="hidden" id="user_id" name="user_id" value="{{ $result->id }}">
           <input type="hidden" name="id" value="{{ @$result->id}}">
-          <div class="page-lead separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12 profile_update-loader" style="border-bottom:0px !important; margin-bottom: 2.5em">
-            <span style="font-size: 170%; color: #1B187F; font-weight: bold; font-family:'MontserratReg'">My Profile</span>
+          <div class="page-lead separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12 profile_update-loader" style="border-bottom:0px !important; margin-bottom: 1.25em">
+            <span style="font-size: 150%; color: #1B187F; font-weight: bold; font-family:'MontserratReg'">My Profile</span>
             <div  style="display: flex; align-items: center; width: 80%; margin-top: 3em; justify-content: space-between;">
               <div style="display: flex; flex-direction: column;">
                 <label class="" style=" font-weight: normal;
-              font-size: 25px;">
+              font-size: 22px;">
               {{ @Auth::user()->first_name }} {{ @Auth::user()->last_name }}
               </label>
                 <label> Community leader</label>
               </div>
             @if(@Auth::user()->status == 'Active')
               <div class="">
-                <span style="background: #5cb85c; color: #fff; border: 1px solid #5cb85c; border-radius: 9px; padding: 0.4em; padding-left: 1.7em; padding-right: 1.7em;" class="label-success"> {{ @Auth::user()->trans_status}} </span>
+                <span style="background: #5cb85c; color: #fff; border: 1px solid #5cb85c; border-radius: 9px; padding: 0.4em; padding-left: 1.7em; padding-right: 1.7em;font-size:90%" class="label-success"> {{ @Auth::user()->trans_status}} </span>
               </div>
             @else
               <div class="">
@@ -155,7 +155,7 @@
      
       </div>
        <div  style="width: 100%; flex-direction: column; padding-left: 1.5em; height: 53em" data-tab="payment">
-           <div class="page-lead separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12 profile_update-loader" style="border-bottom:0px !important; margin-bottom: 2.5em"><span style="font-size: 170%; color: #1B187F; font-weight: bold; font-family:'MontserratReg'">Payment Method</span>
+           <div class="page-lead separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12 profile_update-loader" style="border-bottom:0px !important; margin-bottom: 2.5em"><span style="font-size: 150%; color: #1B187F; font-weight: bold; font-family:'MontserratReg'">Payment Method</span>
            </div>
            <div id="paymentMethodWrp" style="display: flex; width: 45em; padding-bottom: 8em; flex-direction: column; border: 1px solid rgba(0, 0, 0, 0.15)">
               <div> 
