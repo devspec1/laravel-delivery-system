@@ -3017,6 +3017,22 @@ i.google-ride {
 .newDashCardWrp {
     display: flex; flex-direction: column; align-items: center; justify-content:space-between; height: 30%; border-radius: 9px; border: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); padding-top: 2em; padding-bottom: 2em;
 }
+
+#homeMainWrp  .newDashCardWrp:nth-child(2) {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+#homeMainWrp .newDashCardWrp {
+    display: flex; flex-direction: column; align-items: center;
+    background: #3B5998;
+    width: 100%;
+   
+     justify-content:space-between; height: 100%;
+     color: white;
+      border-radius: 9px; border: 1px solid rgba(0, 0, 0, 0.1);
+       box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); 
+       padding-top: 2em; padding-bottom: 2em;
+}
 #newDashMainWrp .link1 {
     color: #17609c; font-size: 90%; font-family: 'MontserratReg'; font-weight: bold;
 }
@@ -3031,7 +3047,7 @@ i.google-ride {
     border: none; background: transparent; font-size: 80%; font-weight: bold; opacity: 0.8;
 }
 
-#deliveryMainWrp, #leaderboardMainWrp, #driverteamWrp {
+#deliveryMainWrp, #leaderboardMainWrp, #driverteamWrp, #homeMainWrp {
     display:  flex;
     flex-direction: column;
     width: 100%;
@@ -3251,7 +3267,7 @@ a.side-nav-a[aria-selected="true"] {
 #helpLeftWrp, #profileLeftWrp {
     border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
-#helpWrp, #profileWrp, #deliveryMainWrp, #leaderboardMainWrp, #driverteamWrp {
+#helpWrp, #profileWrp, #deliveryMainWrp, #leaderboardMainWrp, #driverteamWrp, #homeMainWrp {
     font-family: 'MontserratReg';
     height: 45em;
     border-top: 1px solid rgba(0, 0, 0, 0.15);

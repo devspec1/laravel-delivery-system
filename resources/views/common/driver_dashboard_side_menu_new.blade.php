@@ -7,8 +7,8 @@
                         <img src="{{ asset('images/logos/logo.png') }}" style="height: 11.5em">
                     </li>
                  
-                    <li style="padding-top: 0.9em; padding-bottom: 0.9em; border-bottom: 1px solid rgba(0, 0, 0, 0.10); border-top: 1px solid rgba(0, 0, 0, 0.10)" class="{{ (Route::current()->uri() == 'driver/new_dash') ? 'active' : '' }}">
-                        <a href="{{ url('driver/new_dash') }}">Home</a>
+                    <li style="padding-top: 0.9em; padding-bottom: 0.9em; border-bottom: 1px solid rgba(0, 0, 0, 0.10); border-top: 1px solid rgba(0, 0, 0, 0.10)" class="{{ (Route::current()->uri() == 'driver/home') ? 'active' : '' }}">
+                        <a href="{{ url('driver/home') }}">Home</a>
                     </li>
                     <li style="display: none; padding-top: 0.9em; padding-bottom: 0.9em; border-bottom: 1px solid rgba(0, 0, 0, 0.10)" class="driver-dashboard-treeview {{ (Route::current()->uri() == 'driver/edit_profile' || Route::current()->uri() == 'driver/vehicle_view'  || Route::current()->uri() == 'driver/documents' || Route::current()->uri() == 'driver/membership' || Route::current()->uri() == 'driver/bank_details' || Route::current()->uri() == 'driver/referral') ? 'active' : ''  }}">
                         <a href="#">

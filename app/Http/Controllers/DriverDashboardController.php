@@ -48,6 +48,12 @@ class DriverDashboardController extends Controller
         return view('driver_dashboard.profile',$data);
     }
 
+    public function driver_home()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.home',$data);
+    }
+
         public function driver_new_dash()
     {
         $data['result'] = User::find(@Auth::user()->id);
