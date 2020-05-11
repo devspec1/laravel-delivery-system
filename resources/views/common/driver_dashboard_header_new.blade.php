@@ -15,6 +15,7 @@
                          <div style="display: flex; flex-direction: column; align-items: center; margin-left: 1em">
                         <span style="font-size: 140%; opacity: 0.9; font-family: 'MontserratReg';font-weight: bold">{{ @Auth::user()->first_name}} {{ @Auth::user()->last_name}}</span>
                          <span style="font-size: 85%; opacity: 0.8; font-weight: bold; font-family: 'MontserratReg';">Community Leader</span>
+                         <span style="font-size: 85%; opacity: 0.8; font-weight: bold; font-family: 'MontserratReg';"> {{ $result->driver_address->postal_code }} </span>
                         </div>
       
     </div>
