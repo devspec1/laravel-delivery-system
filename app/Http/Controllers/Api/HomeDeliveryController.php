@@ -491,6 +491,11 @@ class HomeDeliveryController extends Controller
             $temp_details['date'] = $date->format('d M Y | H:i');
             $temp_details['pick_up_time'] = $date_estimate->format('H:i A');
             $temp_details['pick_up'] = $order->pick_up_location;
+            $temp_details['pickup_latitude'] = $order->pickup_latitude;
+            $temp_details['pickup_longitude'] = $order->pickup_longitude;
+            $temp_details['drop_longitude'] = $order->drop_longitude;
+            $temp_details['drop_latitude'] = $order->drop_latitude;
+
             $temp_details['drop_off'] = $order->drop_off_location;
             $temp_details['customer_name'] = $order->customer_name;
             $temp_details['customer_phone_number'] = $order->customer_phone_number;
