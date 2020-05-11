@@ -213,7 +213,7 @@ class UserController extends Controller
 		}
 
 		if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password, 'user_type' => 'Driver'])) {
-			return redirect()->intended('driver/new_dash');
+			return redirect()->intended('driver/home');
 		}
 		return back()->withErrors(['password' => 'Invalid credentials'])->withInput();
 	}
