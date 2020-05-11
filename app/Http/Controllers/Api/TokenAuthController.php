@@ -24,6 +24,8 @@ use App\Models\Currency;
 use App\Models\Trips;
 use App\Models\Language;
 use App\Models\PaymentMethod;
+use App\Models\DriversSubscriptions;
+use App\Models\StripeSubscriptionsPlans;
 use App\Models\Request as RideRequest;
 use Validator;
 use Session;
@@ -240,6 +242,17 @@ class TokenAuthController extends Controller
             $driver_address->state             = '';
             $driver_address->postal_code       = '';
             $driver_address->save();
+
+            $plan = StripeSubscriptionsPlans::where('plan_name','Regular')->first();
+            $subscription_row = new DriversSubscriptions;
+            $subscription_row->user_id      = $user->id;
+            $subscription_row->stripe_id    = '';
+            $subscription_row->status       = 'subscribed';
+            $subscription_row->email        = $user->email;
+            $subscription_row->plan         = $plan->id;
+            $subscription_row->country      = '';
+            $subscription_row->card_name    = '';   
+            $subscription_row->save(); 
         }
 
         $profile               = new ProfilePicture;
