@@ -1,6 +1,6 @@
 <div style="margin-top: 3.9em; display: flex; width: 100%; justify-content: flex-end; margin-bottom: 2em;">
     <div style="display: flex; align-items: center">
-      <div class="img--circle img--bordered img--shadow fixed-ratio fixed-ratio--1-1">
+      <div class="img--bordered img--shadow fixed-ratio fixed-ratio--1-1">
 
                                  <a href="{{ url('driver_profile') }}">
                                    

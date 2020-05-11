@@ -2817,7 +2817,7 @@ button:focus {
 
 .img--bordered {
     border: 1px solid #c2c2c2;
-    border-radius: 100% !important;
+   
     height: 78px;
     width: 78px;
 }
