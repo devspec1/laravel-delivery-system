@@ -3060,17 +3060,26 @@ i.google-ride {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.91em;
+    padding: 1.31em;
     border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+#deliverySubWrp > div:first-child {
+    font-weight: bold;
+    font-family: 'MontserratBold';
+    width: 20%;
 }
 #deliverySubWrp > div:first-child > span {
     font-weight: bold;
     font-family: 'MontserratBold';
+    opacity: 0.75;
+   font-size: 93%;
 }
-#deliverySubWrp > div span {
+#deliverySubWrp > div > span {
     font-family: 'MontserratReg';
     opacity: 0.75;
    font-size: 93%;
+   width: 20%;
+   text-align: center;
 
 }
 #deliverySubWrp .acceptBtn1 {

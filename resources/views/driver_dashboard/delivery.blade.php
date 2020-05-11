@@ -5,7 +5,7 @@
   @include('common.driver_dashboard_header_new')
   <div id="deliveryMainWrp">
            <div style="display: flex;width: 100%">
-              <span style="font-size: 200%; color: #1B187F; font-weight: normal; font-family:'MontserratBold'">Delivery</span>
+              <span style="font-size: 200%; color: #1B187F;opacity: 0.8; font-weight: bold; font-family:'MontserratReg'">Deliveries</span>
               
             </div>
             <div style="display: flex; flex-direction: column; width: 100%" id="deliverySubWrp">
