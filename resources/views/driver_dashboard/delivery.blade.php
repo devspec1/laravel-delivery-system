@@ -80,27 +80,6 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-<script>
-  $(function() {
-    $.ajax({
-  url: 'https://randomuser.me/api?results=50&gender=male',
-  dataType: 'json',
-  success: function(data) {
-    data = data.results;
-    for(d in data) {
-      var item = data[d];
-      if($(".randomPic").length) {
-        var rp = $(".randomPic").eq(0);
-        rp.attr("src", item.picture.thumbnail).removeClass("randomPic");
 
-      }
-      else if($(".randomPicLarge").length) {
-        $(".randomPicLarge").eq(0).attr("src", item.picture.large).removeClass("randomPicLarge");
-      }
-    }
-  }
-});
-  })
-</script>
 </main>
 @stop

@@ -9,33 +9,47 @@
               
             </div>
             <div style="display: flex; flex-direction: column; width: 100%" id="leaderboardSubWrp">
-              <div class="leaderboardSubHeader">
-                <span>Driver Name</span>
-                <span>Address</span>   
+             <div class="leaderboardSubHeader">
+                <span style="width: 30%">Driver Name</span>
+                <span>Location</span>
+                <span>Since</span>
+                <span style="width: 7em">Status</span>   
               </div>
                <div>
                 <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
                 <span>The Ants Cafe, 2259 14A</span>
+                <span>Jan 2019</span>
+                <span class="statusActive1 status1">Active</span> 
                 </div>
-                 <div>
+                <div>
                 <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
                 <span>The Ants Cafe, 2259 14A</span>
+                <span>Jan 2019</span>
+                <span class="statusPending1 status1">Pending</span> 
                 </div>
-                 <div>
+                <div>
                 <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
                 <span>The Ants Cafe, 2259 14A</span>
+                <span>Jan 2019</span>
+                <span class="statusActive1 status1">Active</span> 
                 </div>
-                 <div>
+                <div>
                 <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
                 <span>The Ants Cafe, 2259 14A</span>
+                <span>Jan 2019</span>
+                <span class="statusActive1 status1">Active</span> 
                 </div>
-                 <div>
+                <div>
                 <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
                 <span>The Ants Cafe, 2259 14A</span>
+                <span>Jan 2019</span>
+                <span class="statusActive1 status1">Active</span> 
                 </div>
-                 <div>
+                <div>
                 <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
                 <span>The Ants Cafe, 2259 14A</span>
+                <span>Jan 2019</span>
+                <span class="statusActive1 status1">Active</span> 
                 </div>
               
             </div>
@@ -46,27 +60,6 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-<script>
-  $(function() {
-    $.ajax({
-  url: 'https://randomuser.me/api?results=50&gender=male',
-  dataType: 'json',
-  success: function(data) {
-    data = data.results;
-    for(d in data) {
-      var item = data[d];
-      if($(".randomPic").length) {
-        var rp = $(".randomPic").eq(0);
-        rp.attr("src", item.picture.thumbnail).removeClass("randomPic");
 
-      }
-      else if($(".randomPicLarge").length) {
-        $(".randomPicLarge").eq(0).attr("src", item.picture.large).removeClass("randomPicLarge");
-      }
-    }
-  }
-});
-  })
-</script>
 </main>
 @stop
