@@ -3036,11 +3036,25 @@ i.google-ride {
     flex-direction: column;
     width: 100%;
     padding-left: 5em;
-    margin-top: 7em;
+    padding-top: 2em;
+}
+#deliverySubWrp > div > div:first-child {
+    display: flex;
+    flex-direction: column;
+}
+#deliverySubWrp > div > span:last-child {
+    font-family: 'MontserratBold';
 }
 #deliverySubWrp {
     margin-top: 3em;
     border: 1px solid rgba(0, 0, 0, 0.25);
+}
+.deliverySubHeader {
+    background: rgba(0, 0, 0, 0.06);
+    opacity: 0.8;
+}
+.deliverySubHeader > span {
+    opacity: 0.8;
 }
 #deliverySubWrp > div {
     display: flex;
@@ -3053,11 +3067,11 @@ i.google-ride {
     font-weight: bold;
     font-family: 'MontserratBold';
 }
-#deliverySubWrp > div > span {
+#deliverySubWrp > div span {
     font-family: 'MontserratReg';
-    opacity: 0.85;
+    opacity: 0.75;
    font-size: 93%;
-    width: 15em;
+
 }
 #deliverySubWrp .acceptBtn1 {
     padding: 0.8em;
@@ -3147,7 +3161,7 @@ a.side-nav-a[aria-selected="true"] {
 #helpLeftWrp, #profileLeftWrp {
     border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
-#helpWrp, #profileWrp {
+#helpWrp, #profileWrp, #deliveryMainWrp {
     font-family: 'MontserratReg';
     height: 45em;
     border-top: 1px solid rgba(0, 0, 0, 0.15);
