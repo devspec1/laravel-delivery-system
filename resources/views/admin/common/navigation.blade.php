@@ -180,13 +180,13 @@
 			</li>
             @endif
             @if(@$user->can('manage_admin'))
-			<li class="treeview {{ (Route::current()->uri() == 'admin/admin_users') ? 'active' : ''  }}">
+			<li class="treeview {{ (Route::current()->uri() == 'admin/subscriptions/driver' || Route::current()->uri() == 'admin/subscriptions/plan') ? 'active' : ''  }}">
 				<a href="#">
 					<i class="fa fa-handshake-o"></i> <span>Manage Subscriptions</span> <i class="fa fa-angle-left pull-right"></i>
 				</a>
 				<ul class="treeview-menu">
-					{{-- <li class="{{ (Route::current()->uri() == 'admin/admin_user') ? 'active' : ''  }}"><a href="{{ url('admin/admin_user') }}"><i class="fa fa-circle-o"></i><span>Subscription plans</span></a></li> --}}
-					<li class="{{ (Route::current()->uri() == 'admin/roles') ? 'active' : ''  }}"><a href="{{ url('admin/roles') }}"><i class="fa fa-circle-o"></i><span>Subscribed drivers</span></a></li>
+					<li class="{{ (Route::current()->uri() == 'admin/subscriptions/driver') ? 'active' : ''  }}"><a href="{{ url('admin/subscriptions/driver') }}"><i class="fa fa-circle-o"></i><span>Subscribed drivers</span></a></li>
+					<li class="{{ (Route::current()->uri() == 'admin/subscriptions/plan') ? 'active' : ''  }}"><a href="{{ url('admin/subscriptions/plan') }}"><i class="fa fa-circle-o"></i><span>Subscription plans</span></a></li>
 				</ul>
 			</li>
 			@endif

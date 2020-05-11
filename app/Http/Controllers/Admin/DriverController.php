@@ -672,6 +672,9 @@ class DriverController extends Controller
                 $data['country_code_option']=Country::select('long_name','phone_code')->get();
                 $data['company']=Company::where('status','Active')->pluck('name','id');
                 $data['path']               = url('images/users/'.$request->id);
+                $data ['subscription'] = DriversSubscriptions::where('user_id', $request->id)->first();
+                $data['current_plan'] = StripeSubscriptionsPlans::find($data['subscription']->plan);
+                $data['all_plans'] = StripeSubscriptionsPlans::get();
 
                 $usedRef = User::where('referral_code', $data['result']->used_referral_code)->first();
                 if($usedRef){
@@ -701,6 +704,7 @@ class DriverController extends Controller
                 // 'mobile_number' => 'required|regex:/[0-9]{6}/',
                 'referral_code' => 'required',
                 //'used_referral_code' => 'nullable',
+                'plan_id'       => 'required',
                 'country_code'  => 'required',
                 'license_front' => 'mimes:jpg,jpeg,png,gif',
                 'license_back'  => 'mimes:jpg,jpeg,png,gif',
@@ -882,6 +886,10 @@ class DriverController extends Controller
             Vehicle::where('user_id',$user->id)->update(['company_id'=>$user->company_id]);
 
             $user->save();
+
+            $subscription = DriversSubscriptions::where('user_id', $user->id)->first();
+            $subscription->plan = $request->plan_id;
+            $subscription->save();
 
             $user_address = DriverAddress::where('user_id',  $user->id)->first();
             if($user_address == '') {

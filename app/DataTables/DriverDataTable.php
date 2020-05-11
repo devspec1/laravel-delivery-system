@@ -53,9 +53,13 @@ class DriverDataTable extends DataTable
                 $join->on('users.company_id', '=', 'companies.id');
             })->where('user_type','Driver')->groupBy('id');*/
 
-        $users = DB::Table('users')->select('users.id as id', 'users.first_name', 'users.last_name','users.email','users.country_code','users.mobile_number', 'users.status','companies.name as company_name','users.created_at',DB::raw('CONCAT("XXXXXX",Right(users.mobile_number,4)) AS hidden_mobile'))
+        $users = DB::Table('users')->select('users.id as id', 'users.first_name', 'users.last_name','users.email','users.country_code','users.mobile_number', 'users.status','companies.name as company_name', 'stripe_subscription_plans.plan_name', 'users.created_at',DB::raw('CONCAT("XXXXXX",Right(users.mobile_number,4)) AS hidden_mobile'))
             ->leftJoin('companies', function($join) {
                 $join->on('users.company_id', '=', 'companies.id');
+            })->leftJoin('stripe_subscriptions', function($join) {
+                $join->on('users.id', '=', 'stripe_subscriptions.user_id');
+            })->leftJoin('stripe_subscription_plans', function($join) {
+                $join->on('stripe_subscriptions.plan', '=', 'stripe_subscription_plans.id');
             })->where('user_type','Driver')->groupBy('id');
 
         //If login user is company then get that company drivers only
@@ -102,6 +106,7 @@ class DriverDataTable extends DataTable
             ['data' => 'email', 'name' => 'users.email', 'title' => 'Email'],
             ['data' => 'status', 'name' => 'users.status', 'title' => 'Status'],
             ['data' => $mobile_number_column, 'name' => 'users.mobile_number', 'title' => 'Mobile Number'],
+            ['data' => 'plan_name', 'name' => 'stripe_subscription_plans.plan_name', 'title' => 'Subscription Name'],
             ['data' => 'created_at', 'name' => 'users.created_at', 'title' => 'Created At'],
             ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false, 'exportable' => false],
         ];
