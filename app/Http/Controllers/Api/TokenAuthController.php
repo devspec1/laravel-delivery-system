@@ -1027,7 +1027,7 @@ class TokenAuthController extends Controller
                             $fee = $merchant->delivery_fee;
                         }
                     }
-                    $order->fee                     = round($fee, 2);
+                    $new_order->fee                     = round($fee, 2);
                     
                     $new_order->save();
 
