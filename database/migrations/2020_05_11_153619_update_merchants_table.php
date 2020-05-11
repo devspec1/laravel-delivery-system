@@ -15,6 +15,8 @@ class UpdateMerchantsTable extends Migration
     {
         Schema::table('merchants', function (Blueprint $table) {
             $table->decimal('delivery_fee', 11, 2)->nullable();
+            $table->decimal('delivery_fee_base_distance', 11, 2)->nullable();
+            $table->decimal('delivery_fee_per_km', 11, 2)->nullable();
         });
         
     }
