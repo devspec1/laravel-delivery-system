@@ -975,6 +975,15 @@ class TokenAuthController extends Controller
                     $data['first_name'] = $order["client_first_name"];
                     $data['last_name'] = $order["client_last_name"];
                     $data['email'] = $order["client_email"];
+                    
+                    $data['delivery_fee'] = null;
+                    try {
+                        if ($order["items"][0]["name"] == "DELIVERY_FEE"){
+                            $data['delivery_fee'] = (float)$order["items"][0]["total_item_price"];
+                        }
+                    } 	catch (\Exception $e) {
+                        logger('getting delivery fee error : '.$e->getMessage());
+                    }
 
                     $user = $this->get_or_create_rider((object)$data);
 
@@ -986,12 +995,39 @@ class TokenAuthController extends Controller
                     $accepted_time = new \Carbon\Carbon($order["accepted_at"]);
                     $fulfill_time = new \Carbon\Carbon($order["fulfill_at"]);
 
+                    $get_fare_estimation = $this->request_helper->GetDrivingDistance($request->pick_up_latitude, $request->drop_off_latitude,$request->pick_up_longitude, $request->drop_off_longitude);
+
+                    if ($get_fare_estimation['status'] == "success") {
+                        if ($get_fare_estimation['distance'] == '') {
+                            $get_fare_estimation['distance'] = 0;
+                        }
+                    }
+                    else{
+                        $get_fare_estimation['distance'] = 0;
+                    }
+        
+                    $new_order->distance                = $get_fare_estimation['distance'];
                     $new_order->estimate_time           = $fulfill_time->diffInMinutes($accepted_time);
                     $new_order->fee                     = 0;
                     $new_order->customer_id             = $user->id;
                     $new_order->ride_request            = $ride_request->id;
                     $new_order->order_description       = $order["instructions"];
                     $new_order->merchant_id             = $merchant_id;
+
+                    $merchant = Merchant::where('id', $request->merchant_id)->first();
+                    $fee = 0.0;
+                    if($data['delivery_fee']){
+                        $fee = $data['delivery_fee'];
+                    }
+                    else{
+                        if(($get_fare_estimation['distance']/1000) > $merchant->delivery_fee_base_distance){
+                            $fee = $merchant->delivery_fee + $merchant->delivery_fee_per_km * ($get_fare_estimation['distance']/1000 - $merchant->delivery_fee_base_distance);
+                        }
+                        else{
+                            $fee = $merchant->delivery_fee;
+                        }
+                    }
+                    $order->fee                     = round($fee, 2);
                     
                     $new_order->save();
 

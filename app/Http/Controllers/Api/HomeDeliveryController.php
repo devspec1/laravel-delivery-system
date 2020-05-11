@@ -375,6 +375,7 @@ class HomeDeliveryController extends Controller
                 'delivery_orders.created_at as created_at',
                 'delivery_orders.estimate_time as estimate_time',
                 'delivery_orders.fee as fee',
+                'delivery_orders.distance as delivery_distance',
                 'delivery_orders.status as status',
                 'delivery_orders.currency_code as currency_code',
                 'ride_request.pickup_location as pick_up_location',
@@ -421,7 +422,7 @@ class HomeDeliveryController extends Controller
                 $temp_details['customer_phone_number'] = $order->customer_phone_number;
             }
 
-            $temp_details['distance'] = (string)round((float)$order->distance, 2) . 'KM';
+            $temp_details['distance'] = (string)round((float)$order->delivery_distance/1000, 2) . 'KM';
             $temp_details['fee'] = '$'. $order->fee;
             
             array_push($job_array,$temp_details);
@@ -452,6 +453,7 @@ class HomeDeliveryController extends Controller
                 'delivery_orders.estimate_time as estimate_time',
                 'delivery_orders.order_description as order_description',
                 'delivery_orders.fee as fee',
+                'delivery_orders.distance as delivery_distance',
                 'delivery_orders.status as status',
                 'delivery_orders.currency_code as currency_code',
                 'ride_request.pickup_latitude as pickup_latitude',

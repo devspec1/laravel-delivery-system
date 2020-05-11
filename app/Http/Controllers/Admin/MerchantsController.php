@@ -75,6 +75,9 @@ class MerchantsController extends Controller
                 'name'              => 'required',
                 'description'       => 'required',
                 'integration_type'  => 'required',
+                'base_fee'          => 'required',
+                'base_distance'     => 'required',
+                'surchange_fee'     => 'required',
             );
             
             // Add Driver Validation Custom Names
@@ -82,6 +85,9 @@ class MerchantsController extends Controller
                 'name'              => 'Merchant Name',
                 'description'       => 'Description',
                 'integration_type'  => 'Integration Type',
+                'base_fee'          => 'Base fee',
+                'base_distance'     => 'Base distance',
+                'surchange_fee'     => 'Surchange fee',
             );
                 // Edit Rider Validation Custom Fields message
             $messages = array(
@@ -98,6 +104,9 @@ class MerchantsController extends Controller
             $merchant->name = $request->name;
             $merchant->description = $request->description;
             $merchant->integration_type = $request->integration_type;
+            $merchant->delivery_fee  = $request->base_fee;
+            $merchant->delivery_fee_per_km = $request->surchange_fee;
+            $merchant->delivery_fee_base_distance = $request->base_distance;
             $merchant->shared_secret = Str::uuid();
             $merchant->save();
 
@@ -130,6 +139,9 @@ class MerchantsController extends Controller
             if($data['result']) {
 
                 $data['integrations'] = MerchantIntegrationType::pluck('name', 'id');
+                $data['base_fee'] = $data['result']->delivery_fee;
+                $data['surchange_fee'] = $data['result']->delivery_fee_per_km;
+                $data['base_distance'] = $data['result']->delivery_fee_base_distance;
 
                 return view('admin.merchant.edit', $data);
             }
@@ -144,6 +156,9 @@ class MerchantsController extends Controller
                 'name'              => 'required',
                 'description'       => 'required',
                 'integration_type'  => 'required',
+                'base_fee'          => 'required',
+                'base_distance'     => 'required',
+                'surchange_fee'     => 'required',
             );
             
             // Add Driver Validation Custom Names
@@ -151,6 +166,9 @@ class MerchantsController extends Controller
                 'name'              => 'Name',
                 'description'       => 'Description',
                 'integration_type'  => 'Integration Type',
+                'base_fee'          => 'Base fee',
+                'base_distance'     => 'Base distance',
+                'surchange_fee'     => 'Surchange fee',
             );
             
             // Edit Rider Validation Custom Fields message
@@ -168,6 +186,9 @@ class MerchantsController extends Controller
             $merchant->name = $request->name;
             $merchant->description = $request->description;
             $merchant->integration_type = $request->integration_type;
+            $merchant->delivery_fee  = $request->base_fee;
+            $merchant->delivery_fee_per_km = $request->surchange_fee;
+            $merchant->delivery_fee_base_distance = $request->base_distance;
 
             $merchant->save();
            
@@ -242,6 +263,7 @@ class MerchantsController extends Controller
                 DB::raw('CONCAT(delivery_orders.estimate_time," mins") as estimate_time'),
                 'delivery_orders.driver_id as driver_id', 
                 'delivery_orders.created_at as created_at',
+                DB::raw('CONCAT(delivery_orders.distance/1000," KM") as distance'),
                 'merchants.name as merchant_name',
                 'delivery_orders.order_description as order_description',
                 DB::raw('CONCAT(delivery_orders.estimate_time," mins") as estimate_time'),
