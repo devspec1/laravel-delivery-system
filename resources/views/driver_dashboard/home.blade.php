@@ -33,7 +33,7 @@
         </div>
       </div>
       <iframe id="ytplayer" type="text/html" style="width: 100%; height: 140%; margin: auto; margin-top: 1em"
-    src="http://www.youtube.com/embed/aE5jrQs6P-0?autoplay=1&origin=http://example.com"
+    src="https://www.youtube.com/embed/aE5jrQs6P-0?autoplay=1&origin=http://example.com"
     frameborder="0"/>
       
     
