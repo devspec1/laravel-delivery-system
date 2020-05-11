@@ -107,7 +107,7 @@
                 </div>
                 <div class="row clearfix">
 					<div class="col-md-12">
-						{!! Form::text('fee', '', ['class' => 'form-control', 'id' => 'input_fee', 'placeholder' => 'Fee, AUD', 'autocomplete' => 'off']) !!}
+                        {!! Form::number('fee', '', ['class' => 'form-control', 'id' => 'input_fee', 'placeholder' => '0.00', 'autocomplete' => 'off',"step" => "0.01"]) !!}
 				<span class="text-danger error_msg">{{ $errors->first('fee') }}</span>
 					</div>
                 </div>

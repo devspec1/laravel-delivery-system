@@ -30,7 +30,8 @@
 									<th> Status </th>
 									<th> Driver Id </th>
 									<th> Estimate Time </th>
-									<th> Fee </th>
+                                    <th> Fee </th>
+                                    <th> Distance </th>
                                     <th> Order Description </th>
                                     <th> Pick Up </th>
                                     <th> Drop Off </th>
@@ -45,7 +46,8 @@
 									<td> {{ $order->status }} </td>
 									<td> {{ $order->driver_id }} </td>
 									<td> {{ $order->estimate_time }} </td>
-									<td> {{ $order->fee }} </td>
+                                    <td> {{ $order->fee }} </td>
+                                    <th> {{ $order->distance }} </th>
                                     <td> {{ $order->order_description }} </td>
                                     <td> {{ $order->pick_up_location }} </td>
                                     <td> {{ $order->drop_off_location }} </td>

@@ -37,6 +37,27 @@
 								<span class="text-danger">{{ $errors->first('description') }}</span>
 							</div>
                         </div>
+                        <div class="form-group">
+							<label for="input_base_fee" class="col-sm-3 control-label">Base fee<em class="text-danger">*</em></label>
+							<div class="col-sm-6">
+                                {!! Form::number('base_fee', $base_fee, ['class'=>'form-control', 'id' => 'input_base_fee', 'rows' => 2, 'cols' => 40, "step" => "0.01"]) !!}
+								<span class="text-danger">{{ $errors->first('base_fee') }}</span>
+							</div>
+                        </div>
+                        <div class="form-group">
+							<label for="input_base_distance" class="col-sm-3 control-label">Base distance, KM<em class="text-danger">*</em></label>
+							<div class="col-sm-6">
+                                {!! Form::number('base_distance', $base_distance, ['class'=>'form-control', 'id' => 'input_base_distance', 'rows' => 2, 'cols' => 40, "step" => "0.01"]) !!}
+								<span class="text-danger">{{ $errors->first('base_distance') }}</span>
+							</div>
+                        </div>
+                        <div class="form-group">
+							<label for="input_surchange_fee" class="col-sm-3 control-label">Surchange fee, per KM<em class="text-danger">*</em></label>
+							<div class="col-sm-6">
+                                {!! Form::number('surchange_fee', $surchange_fee, ['class'=>'form-control', 'id' => 'input_surchange_fee', 'rows' => 2, 'cols' => 40, "step" => "0.01"]) !!}
+								<span class="text-danger">{{ $errors->first('surchange_fee') }}</span>
+							</div>
+                        </div>
                         <div class="form-group" style="margin-bottom: 1em">
                             <label for="input_integration_type" class="col-sm-3 control-label">Integration Type</label>
                             <div class="col-sm-6">
