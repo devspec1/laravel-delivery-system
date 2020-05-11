@@ -19,7 +19,7 @@ use DateTime;
 
 class HomeDeliveryController extends Controller
 {
-    /**
+    /** 
      * Get orders data
      * 
      * @param  Get method request inputs
@@ -454,6 +454,10 @@ class HomeDeliveryController extends Controller
                 'delivery_orders.fee as fee',
                 'delivery_orders.status as status',
                 'delivery_orders.currency_code as currency_code',
+                'ride_request.pickup_latitude as pickup_latitude',
+                'ride_request.pickup_longitude as pickup_longitude',
+                'ride_request.drop_latitude as drop_latitude',
+                'ride_request.drop_longitude as drop_longitude',
                 'ride_request.pickup_location as pick_up_location',
                 'ride_request.drop_location as drop_off_location',
                 DB::raw('CONCAT(rider.first_name," ",rider.last_name) as customer_name'),
