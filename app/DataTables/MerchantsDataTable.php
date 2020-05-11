@@ -58,6 +58,9 @@ class MerchantsDataTable extends DataTable
             'integration.name as integration',
             'merchants.name as name', 
             'merchants.description as description',
+            'merchants.delivery_fee as base_fee',
+            'merchants.delivery_fee_base_distance as base_distance_km',
+            'merchants.delivery_fee_per_km as surcharge_fee',
             'merchants.shared_secret as shared_secret',
             'merchants.created_at as created_at',
         ]);
@@ -97,6 +100,9 @@ class MerchantsDataTable extends DataTable
             Column::make('name', 'Name'),
             Column::make('description', 'Description'),
             Column::make('integration', 'Integration Type'),
+            Column::make('base_fee', 'Base fee'),
+            Column::make('base_distance_km', 'Base distance'),
+            Column::make('surcharge_fee', 'Surchange fee per KM'),
             Column::make('shared_secret', 'Integration Secret'),
             Column::make('created_at', 'Created At'),
             Column::make('action', 'Action')
