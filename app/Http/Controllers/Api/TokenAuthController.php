@@ -995,7 +995,7 @@ class TokenAuthController extends Controller
                     $accepted_time = new \Carbon\Carbon($order["accepted_at"]);
                     $fulfill_time = new \Carbon\Carbon($order["fulfill_at"]);
 
-                    $get_fare_estimation = $this->request_helper->GetDrivingDistance($data['pick_up_latitude'], $request->drop_off_latitude,$data['pick_up_longitude'], $request->drop_off_longitude);
+                    $get_fare_estimation = $this->request_helper->GetDrivingDistance($data['pick_up_latitude'], $data['drop_off_latitude'] ,$data['pick_up_longitude'], $data['drop_off_longitude']);
 
                     if ($get_fare_estimation['status'] == "success") {
                         if ($get_fare_estimation['distance'] == '') {
