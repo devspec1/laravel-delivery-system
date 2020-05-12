@@ -6,43 +6,49 @@
  
 
   <div style="display: flex; width: 100%" id="helpWrp">
-    <div style="display: flex; flex-direction: column" id="helpLeftWrp">
-      <span data-tab="livechat" style="border-top: 1px solid rgba(0, 0, 0, 0.15)">Live chat support</span>
-      <span data-tab="faq" class="current">FAQ's</span>
-      <span data-tab="callsupp">Call support <span class="callBtn">Call</span></span>
+    <span style="font-size: 200%; color: #1B187F;opacity: 0.8; font-weight: bold; font-family:'MontserratReg'">Help</span>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;" id="helpTopWrp">
+   
+      <div style="display: flex; align-items: center;">
+        <span>Call support 1800 841 799</span> <img src="{{asset('images/icon/call.png') }}">
+      </div>
+      <div style="display: flex; align-items: center;">
+        <span>Live chat support</span> <img src="{{asset('images/icon/msgbubble.png') }}">
+      </div>
+
     </div>
     <div style="display: flex; width: 100%;" id="helpRightWrp">
        <div  style=" width: 100%; flex-direction: column" id="helpFaqWrp" data-tab="livechat">
-        <h3 style="font-size: 130%; color: #3B5998; margin-bottom: 1.5em; font-family: 'MontserratBold'"> Live chat support</h3>
+        <h3 style="font-size: 130%; color: #3B5998; margin: 0; font-family: 'MontserratBold'"> Live chat support</h3>
         
       </div>
-      <div class="current" style=" width: 100%; flex-direction: column" id="helpFaqWrp" data-tab="faq">
-        <h3 style="font-size: 130%; color: #3B5998; margin-bottom: 1.5em; font-family: 'MontserratBold'"> FAQ's</h3>
+      <div class="current" style=" width: 100%; flex-direction: column; height: 35em" id="helpFaqWrp" data-tab="faq">
+        <span style="font-size: 170%;  margin-bottom: 0.75em;margin-top: 0.75em; font-family: 'MontserratReg'; font-weight: bold"> FAQ's</span>
         <div class="current">
           <span>Lorem ipsum</span>
-          <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non. Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
+          <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. <br><br>Fusce commodo convallis lorem, eget laoreet nisl tempor non.Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
           </span>
 
 
         </div>
          <div>
           <span>Lorem ipsum</span>
-           <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non. Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
+           <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. <br><br>Fusce commodo convallis lorem, eget laoreet nisl tempor non.Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
           </span>
         </div>
          <div>
           <span>Lorem ipsum</span>
-            <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non. Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
+            <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. <br><br>Fusce commodo convallis lorem, eget laoreet nisl tempor non.Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
           </span>
         </div>
          <div>
           <span>Lorem ipsum</span>
-            <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non. Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
+            <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. <br><br>Fusce commodo convallis lorem, eget laoreet nisl tempor non.Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
           </span>
         </div>
          <div>
           <span>Lorem ipsum</span>
-            <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non. Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
+            <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. <br><br>Fusce commodo convallis lorem, eget laoreet nisl tempor non.Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
           </span>
         </div>
       </div>

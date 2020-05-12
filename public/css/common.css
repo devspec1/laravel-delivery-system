@@ -3279,7 +3279,7 @@ a.side-nav-a[aria-selected="true"] {
     font-family: 'MontserratReg';
     color: #3B5998;
 }
-#helpLeftWrp > span, #profileLeftWrp > span {
+#helpTopWrp > span, #profileLeftWrp > span {
     padding: 1.3em;
     border-bottom: 1px solid rgba(0, 0, 0, 0.15);
     cursor: pointer;
@@ -3290,7 +3290,7 @@ a.side-nav-a[aria-selected="true"] {
     display: flex;
     align-items: center;
 }
-#helpLeftWrp, #profileLeftWrp {
+ #profileLeftWrp {
     border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
 #helpWrp, #profileWrp, #deliveryMainWrp, #leaderboardMainWrp, #driverteamWrp, #homeMainWrp {
@@ -3298,28 +3298,54 @@ a.side-nav-a[aria-selected="true"] {
     height: 45em;
     border-top: 1px solid rgba(0, 0, 0, 0.15);
 }
-#helpLeftWrp > span.current, #profileLeftWrp > span.current {
+#helpWrp {
+    flex-direction: column;
+    padding-top: 2em;
+    padding-left: 5em;
+    width: 80%;
+}
+#profileLeftWrp > span.current {
     color: #3B5998;
     font-family: 'MontserratBold';
 }
-#helpLeftWrp .callBtn {
+#helpTopWrp .callBtn {
     background: #5cb85c; padding: 0.5em; color: white; cursor: pointer;font-family: 'MontserratReg'; border-radius: 9px;
     font-size: 75%;
     margin-left: 0.7em;
     padding-left: 1em;
     padding-right: 1em;
 }
-
+#helpTopWrp > div {
+    padding: 1.2em;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    padding-top: 1.6em;
+    padding-bottom: 1.6em;
+    border-radius: 5px;
+    width: 49%;
+    justify-content: space-between;;
+    font-size: 140%;
+    font-family: 'MontserratReg';
+    font-weight: bold;
+}
+#helpTopWrp {
+    margin-top: 2em;
+}
+#helpTopWrp > div > img {
+    height: 1.5em;
+    width: 1.5em;
+}
 #helpFaqWrp {
+    border: 1px solid rgba(0, 0, 0, 0.15);
     padding: 2em;
-    padding-right: 8em;
+    padding-left: 2em;
+    padding-top: 1.5em;
+    margin-top: 2em;
+    border-radius: 5px;
 }
 #helpFaqWrp > div {
-    border: 1px solid rgba(0, 0, 0, 0.15);
+
     margin-bottom: 0.7em;
 
-    padding: 1.3em;
-    padding-left: 2em;
     font-family: 'MontserratReg';
     display: flex;
     flex-direction: column;

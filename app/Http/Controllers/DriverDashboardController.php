@@ -704,6 +704,8 @@ class DriverDashboardController extends Controller
     */
     public function show_help()
     {
+        $data['result'] = User::find(@Auth::user()->id);
+        
         $faq_array_1 = array("question" => "What is the booking commission for drivers?" ,
         "answer" => "Zero. Zip. Nada. Drivers earn a combination of fares, profit bonuses and residual income for their membership fee of $9.95 per week." );
 
