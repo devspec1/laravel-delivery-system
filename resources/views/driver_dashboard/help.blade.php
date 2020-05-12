@@ -117,25 +117,11 @@
 </style>
 
 <script>
-  function toggleItem(obj) {
-    var answerDiv = obj.nextElementSibling;
-    var itemClass = answerDiv.className;
-    if (itemClass.indexOf(" active") >= 0)  {
-      itemClass = itemClass.replace(" active", "");
-    } else {
-      var answers = document.getElementsByClassName("answer");
-      for(var answer of answers) {
-        answer.className = answer.className.replace(" active", "");
-      }
-      itemClass = itemClass + " active";
-    }
-
-    answerDiv.className = itemClass;
-    // for (i = 0; i< question.length; i++) {
-    //   answer[i].className = 'answer close';
-    // }
-    // if (itemClass == 'answer close') {
-    //   this.parentNode.className = 'answer open';
-    // }
+  function initFreshChat() {
+    window.fcWidget.init({
+      token: "e749c074-1b71-45cd-bfc8-4ae1d8bd2b84",
+      host: "https://wchat.freshchat.com"
+    });
   }
+  function initialize(i,t){var e;i.getElementById(t)?initFreshChat():((e=i.createElement("script")).id=t,e.async=!0,e.src="https://wchat.freshchat.com/js/widget.js",e.onload=initFreshChat,i.head.appendChild(e))}function initiateCall(){initialize(document,"freshchat-js-sdk")}window.addEventListener?window.addEventListener("load",initiateCall,!1):window.attachEvent("load",initiateCall,!1);
 </script>
