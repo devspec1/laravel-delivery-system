@@ -123,7 +123,7 @@ class ProfileController extends Controller
 		$user_id = $user_details->id;
 
 		$rules = array(
-			'document_type' => 'required|in:license_front,license_back,insurance,rc,permit,au_right_to_work,abn_number',
+			'document_type' => 'required|in:license_front,license_back,insurance,rc,permit,right_to_work,abn_number',
 			'image' 		=> 'required|mimes:jpg,jpeg,png,gif',
 		);
 
