@@ -6,7 +6,7 @@
     var OneSignal = window.OneSignal || [];
     OneSignal.push(function() {
       OneSignal.init({
-        appId: "YOUR_APP_ID",
+        appId: "6efaf3e7-e8c8-45ee-b36a-359a2a0fb6de",
         notifyButton: {
           enable: true,
         },
