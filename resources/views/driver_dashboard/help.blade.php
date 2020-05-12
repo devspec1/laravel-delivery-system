@@ -116,12 +116,83 @@
   }
 </style>
 
+<script src="https://wchat.freshchat.com/js/widget.js"></script>
 <script>
-  function initFreshChat() {
-    window.fcWidget.init({
-      token: "e749c074-1b71-45cd-bfc8-4ae1d8bd2b84",
-      host: "https://wchat.freshchat.com"
-    });
-  }
-  function initialize(i,t){var e;i.getElementById(t)?initFreshChat():((e=i.createElement("script")).id=t,e.async=!0,e.src="https://wchat.freshchat.com/js/widget.js",e.onload=initFreshChat,i.head.appendChild(e))}function initiateCall(){initialize(document,"freshchat-js-sdk")}window.addEventListener?window.addEventListener("load",initiateCall,!1):window.attachEvent("load",initiateCall,!1);
+  window.fcWidget.init({
+    token: "e749c074-1b71-45cd-bfc8-4ae1d8bd2b",
+    host: "https://wchat.freshchat.com",
+    //Have the widget open on load by default by setting the below value to true
+    open: false,
+    config: {
+      //Disable Events Tracking
+      disableEvents: true,
+      cssNames: {
+        widget: 'fc_frame',
+        open: 'fc_open',
+        expanded: 'fc_expanded'
+      },
+      showFAQOnOpen: true,
+      hideFAQ: true,
+      agent: {
+        hideName: false,
+        hidePic: true,
+        hideBio: true,
+      },
+      headerProperty: {
+        backgroundColor: '#FFFF00',
+        foregroundColor: '#333333',
+        backgroundImage: 'https://wchat.freshchat.com/assets/images/texture_background_1-bdc7191884a15871ed640bcb0635e7e7.png',
+        //Hide the chat button on load
+        hideChatButton: false,
+        //Set Widget to be left to right.
+        direction: 'ltr'
+      },
+      content: {
+        placeholders: {
+          search_field: 'Search in my widget',
+          reply_field: 'Reply in my widget',
+          csat_reply: 'Reply for csat'
+        },
+        actions: {
+          csat_yes: 'Yes, Resolved',
+          csat_no: 'No, Resolved',
+          push_notify_yes: 'Notify',
+          push_notify_no: 'No Notify',
+          tab_faq: 'Knowledge',
+          tab_chat: 'Message',
+          csat_submit: 'Submit Review Comments'
+        },
+        headers: {
+          chat: 'Chat with us',
+          chat_help: 'Reach out to us if you have any questions',
+          faq: 'Knowledge Base',
+          faq_help: 'Browse our faqs',
+          faq_not_available: 'No FAQS',
+          faq_search_not_available: 'No FAQS available for ',
+          faq_useful: 'FAQS is useful',
+          faq_thankyou: 'Thanks for feedback',
+          faq_message_us: 'Message Us For FAQs',
+          push_notification: 'you want to not miss conversation',
+          csat_question: 'Did we address your question?',
+          csat_yes_question: 'Did we resolve the conversation?',
+          csat_no_question: 'Did we not resolve the conversation?',
+          csat_thankyou: 'Thanks for the response',
+          csat_rate_here: 'Give your rating here',
+          channel_response: {
+            offline: 'We are currently away',
+            online: {
+              minutes: {
+                one: "You will get a reply in a minute",
+                more: "You will get a reply in{time minutes"
+              },
+              hours: {
+                one: "You will get a reply in a hour",
+                more: "You will get a reply in{time hours",
+              }
+            }
+          }
+        }
+      }
+    }
+  });
 </script>
