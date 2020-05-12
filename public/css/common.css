@@ -3323,7 +3323,7 @@ a.side-nav-a[aria-selected="true"] {
     border-radius: 5px;
     width: 49%;
     justify-content: space-between;;
-    font-size: 140%;
+    font-size: 115%;
     font-family: 'MontserratReg';
     font-weight: bold;
 }
@@ -3339,6 +3339,7 @@ a.side-nav-a[aria-selected="true"] {
     padding: 2em;
     padding-left: 2em;
     padding-top: 1.5em;
+    font-size: 95%;
     margin-top: 2em;
     border-radius: 5px;
 }
