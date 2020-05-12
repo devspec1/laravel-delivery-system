@@ -234,7 +234,8 @@ class ProfileController extends Controller
 				DriverDocuments::updateOrCreate(['user_id' => $user_id], $data);
 			}
 
-			if ($driver_document_count == 2 && $vehicle_document_count==3) {
+			//if ($driver_document_count == 2 && $vehicle_document_count==3) {
+            if ($driver_document_count == 2) {
 				$status = isLiveEnv() ? "Active" : "Pending";
 				User::where('id', $user_id)->update(['status' => $status]);
 			}
