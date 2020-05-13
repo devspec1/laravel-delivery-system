@@ -1340,7 +1340,7 @@ select {
     outline: 0 none !important;
     border-radius: 7px;
       
-        padding: 1em;
+        padding: 0.6em;
     transition: all 0.4s ease 0s !important;
 }
 
@@ -3393,7 +3393,9 @@ a.side-nav-a[aria-selected="true"] {
     align-items: center;
 }
 
-
+#profileWrp label {
+    font-size: 95%;
+}
 .paymentMethodItme > div{
 
     display: flex;

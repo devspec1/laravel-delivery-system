@@ -22,7 +22,7 @@
           <input type="hidden" name="id" value="{{ @$result->id}}">
           <div class="page-lead separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12 profile_update-loader" style="display: flex; justify-content: space-between; align-items: center; border-bottom:0px !important; margin-bottom: 1.25em; padding-left: 0">
             <div style="display :flex">
-              <span style="font-size: 150%; color: #1B187F; font-weight: bold; font-family:'MontserratReg'">Profile Details</span>
+              <span style="font-size: 130%; color: #1B187F; font-weight: bold; font-family:'MontserratReg'">Profile Details</span>
              <div  style="display: flex; align-items: center;justify-content: space-between; margin-left: 2em">
               
             @if(@Auth::user()->status == 'Active')
@@ -177,7 +177,7 @@
       <div style="display: flex; width: 100%; justify-content: space-between;margin-top: 2em;">
 
       <div style="display: flex; flex-direction: column; width: 50%">
-       <span style="font-size: 150%; color: #1B187F; font-weight: bold;margin-bottom: 0.7em; font-family:'MontserratReg'">Password</span>
+       <span style="font-size: 130%; color: #1B187F; font-weight: bold;margin-bottom: 0.7em; font-family:'MontserratReg'">Password</span>
          <label style="padding:2px 0px;">Current password</label>
             <div  style="padding:2px 0px;">
               <input class="_style_3vhmZK" type="password" name="postal_code" value="{{ @$result->driver_address->postal_code}}" placeholder="{{trans('messages.profile.profile_postal_code')}}">
@@ -205,7 +205,7 @@
         </div>
       </div>
        <div style=" display: flex; flex-direction: column;padding: 15px 10px;margin-right: 2.5em">
-            <span style="font-size: 150%; color: #1B187F;font-weight: bold; margin-bottom: 0.4em; font-family:'MontserratReg'">Membership</span>
+            <span style="font-size: 130%; color: #1B187F;font-weight: bold; margin-bottom: 0.4em; font-family:'MontserratReg'">Membership</span>
               <div style="display: flex; flex-direction: row; align-items: center ">
                 <span style="font-size: 120%; font-weight: bold">Executive</span>
               <span style="font-size: 90%; margin-left: 1.5em; color: #8f2a06; font-weight: bold">Cancel</span>
