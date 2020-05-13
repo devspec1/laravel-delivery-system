@@ -79,6 +79,7 @@ class MerchantsController extends Controller
             $rules = array(
                 'name'              => 'required',
                 'description'       => 'required',
+                'cuisine_type'      => 'required',
                 'integration_type'  => 'required',
                 'first_name'    => 'required',
                 'last_name'     => 'required',
@@ -92,6 +93,7 @@ class MerchantsController extends Controller
             $attributes = array(
                 'name'              => 'Merchant Name',
                 'description'       => 'Description',
+                'cuisine_type'      => 'Type of Cuisine',
                 'integration_type'  => 'Integration Type',
                 'first_name'    => trans('messages.user.firstname'),
                 'last_name'     => trans('messages.user.lastname'),
@@ -159,6 +161,7 @@ class MerchantsController extends Controller
             $merchant->user_id = $user->id;
             $merchant->name = $request->name;
             $merchant->description = $request->description;
+            $merchant->cuisine_type = $request->cuisine_type;
             $merchant->integration_type = $request->integration_type;
             $merchant->shared_secret = Str::uuid();
             $merchant->save();
@@ -214,6 +217,7 @@ class MerchantsController extends Controller
             $rules = array(
                 'name'              => 'required',
                 'description'       => 'required',
+                'cuisine_type'      => 'required',
                 'integration_type'  => 'required',
                 'first_name'    => 'required',
                 'last_name'     => 'required',
@@ -227,6 +231,7 @@ class MerchantsController extends Controller
                 'name'              => 'Name',
                 'description'       => 'Description',
                 'integration_type'  => 'Integration Type',
+                'cuisine_type'      => 'Type of Cuisine',
                 'first_name'    => trans('messages.user.firstname'),
                 'last_name'     => trans('messages.user.lastname'),
                 'email'         => trans('messages.user.email'),
@@ -277,6 +282,7 @@ class MerchantsController extends Controller
 
             $merchant->name = $request->name;
             $merchant->description = $request->description;
+            $merchant->cuisine_type = $request->cuisine_type;
             $merchant->integration_type = $request->integration_type;
 
             $merchant->save();          

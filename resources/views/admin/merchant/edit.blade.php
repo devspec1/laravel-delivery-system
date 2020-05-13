@@ -42,6 +42,13 @@
 								<span class="text-danger">{{ $errors->first('description') }}</span>
 							</div>
                         </div>
+						<div class="form-group">
+							<label for="input_cuisine_type" class="col-sm-3 control-label">Type of Cuisine<em class="text-danger">*</em></label>
+							<div class="col-sm-6">
+								{!! Form::text('cuisine_type', $result->cuisine_type, ['class' => 'form-control', 'id' => 'input_cuisine_type', 'placeholder' => 'Type of Cuisine']) !!}
+								<span class="text-danger">{{ $errors->first('cuisine_type') }}</span>
+							</div>
+						</div>
                         <div class="form-group" style="margin-bottom: 1em">
                             <label for="input_integration_type" class="col-sm-3 control-label">Integration Type</label>
                             <div class="col-sm-6">
