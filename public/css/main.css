@@ -4561,18 +4561,21 @@ ul.driver-dashboard-treeview-menu {
  
     list-style:none;
     padding-left: 0px;
+    padding-top: 0.5em;
 }
 
 ul.driver-dashboard-treeview-menu > li > a {
     display: block;
-    padding: 8px 12px 8px 30px;
-    font-size: 16px;
+    padding: 0.8em;
+
+    font-size: 12px;
     font-weight: 200;
 }
-
+.site-nav > .driver-dashboard-treeview li>a {
+    border-bottom: none;
+}
 ul.driver-dashboard-treeview-menu > li:hover > a {
-    color: #fff;
-    background-color: #333;
+    
 }
 ul.driver-dashboard-treeview-menu > li.active a {
     background-color: #444;

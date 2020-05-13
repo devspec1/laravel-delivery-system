@@ -10,15 +10,28 @@
                     <li style="padding-top: 0.9em; padding-bottom: 0.9em; border-bottom: 1px solid rgba(0, 0, 0, 0.10); border-top: 1px solid rgba(0, 0, 0, 0.10)" class="{{ (Route::current()->uri() == 'driver/home') ? 'active' : '' }}">
                         <a href="{{ url('driver/home') }}">Home</a>
                     </li>
-                    <li style="display: none; padding-top: 0.9em; padding-bottom: 0.9em; border-bottom: 1px solid rgba(0, 0, 0, 0.10)" class="driver-dashboard-treeview {{ (Route::current()->uri() == 'driver/edit_profile' || Route::current()->uri() == 'driver/vehicle_view'  || Route::current()->uri() == 'driver/documents' || Route::current()->uri() == 'driver/membership' || Route::current()->uri() == 'driver/bank_details' || Route::current()->uri() == 'driver/referral') ? 'active' : ''  }}">
+                    <li style="display: none; padding-top: 0.9em; padding-bottom: 0.9em; border-bottom: 1px solid rgba(0, 0, 0, 0.10)" class="driver-dashboard-treeview {{ (Route::current()->uri() == 'driver_profile' || Route::current()->uri() == 'driver/vehicle_view'  || Route::current()->uri() == 'driver/documents' || Route::current()->uri() == 'driver/membership' || Route::current()->uri() == 'driver/bank_details' || Route::current()->uri() == 'driver/referral') ? 'active' : ''  }}">
                         <a href="#">
                             <span>{{trans('messages.header.account.root')}}</span>
                         </a>
 
                     </li>
-                    <li>
-                        <a href="{{ url('driver_profile') }}" aria-selected="{{ (Route::current()->uri() == 'driver_profile') ? 'true' : 'false' }}" class="side-nav-a">My Account</a>
+                     <li class="driver-dashboard-treeview {{ (Route::current()->uri() == 'driver/driver_payment' || Route::current()->uri() == 'driver_profile') ? 'active' : ''  }}">
+                        <a href="#" style="border-bottom: none">
+                            <span>{{trans('messages.header.account.root')}}</span><i class="fa fa-angle-right pull-right"></i>
+                        </a>
+                        <ul class="driver-dashboard-treeview-menu" >
+                            <li>
+                                 <a href="{{ url('driver_profile') }}" aria-selected="{{ (Route::current()->uri() == 'driver_profile') ? 'true' : 'false' }}" class="side-nav-a">Profile</a>
+                            </li>
+                            
+                            <li>
+                                <a href="{{ url('driver/driver_payment') }}" aria-selected="{{ (Route::current()->uri() == 'driver/driver_payment') ? 'true' : 'false' }}" class="side-nav-a">Payment</a>
+                            </li>
+                        </ul>
                     </li>
+
+                    
                     <li>
                         <a href="{{ url('driver/driver_team') }}" aria-selected="{{ (Route::current()->uri() == 'driver/driver_team') ? 'true' : 'false' }}" class="side-nav-a">Driver Team</a>
                     </li>
@@ -44,3 +57,10 @@
 
                 </ul>
             </div>
+
+            <script>
+                $(".driver-dashboard-treeview").click(function(e) {
+                    if(!$(e.target).is(".driver-dashboard-treeview-menu") && !$(e.target).parents(".driver-dashboard-treeview-menu").length)
+                        $(this).find(".driver-dashboard-treeview-menu").toggle(400);
+                })
+            </script>

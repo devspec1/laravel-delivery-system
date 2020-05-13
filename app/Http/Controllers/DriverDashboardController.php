@@ -75,6 +75,11 @@ class DriverDashboardController extends Controller
         $data['result'] = User::find(@Auth::user()->id);
         return view('driver_dashboard.driver_team',$data);
     }
+    public function driver_payment()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.driver_payment',$data);
+    }
      public function driver_delivery_orders()
     {
         $data['result'] = User::find(@Auth::user()->id);
@@ -416,7 +421,7 @@ class DriverDashboardController extends Controller
     /*
     * Driver payment page
     */
-    public function driver_payment()
+    /*public function driver_payment()
     {
         $data['total_earnings'] = Trips::where('driver_id',Auth::id())
                      ->where('status','Completed')
@@ -437,7 +442,7 @@ class DriverDashboardController extends Controller
         $data['all_trips'] = $data['all_trips']->paginate(4)->toJson();
         return view('driver_dashboard.payment',$data);
     }
-
+    */
     /*
     * Driver invoice page
     */

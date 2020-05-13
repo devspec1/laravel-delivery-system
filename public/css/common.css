@@ -1339,10 +1339,11 @@ select {
     max-width: 100% !important;
     outline: 0 none !important;
     border-radius: 7px;
-        background: rgba(0, 0, 0, 0.05);
+      
         padding: 1em;
     transition: all 0.4s ease 0s !important;
 }
+
 
 .join-page .push-tiny--bottom--legacy {
     margin-bottom: 12px !important;
@@ -3271,8 +3272,11 @@ i.google-ride {
 }
 
 #profileWrp #addrInfo > div {
-    margin-right: 2em;
-    width: 23%;
+   margin-left: 1.5em;
+    width: 24%;
+}
+#profileWrp #addrInfo > div:first-child {
+    margin-left: 0;
 }
 a.side-nav-a[aria-selected="true"] {
     font-weight: 600;
@@ -3373,60 +3377,54 @@ a.side-nav-a[aria-selected="true"] {
     font-size: 100%;
 }
 
-#helpRightWrp > div.current, #profileRightWrp > div.current {
+#helpRightWrp > div.current {
     display: flex;
 }
-#helpRightWrp > div, #profileRightWrp > div {
+#helpRightWrp > div{
     display: none;
 }
-#paymentMethodWrp > div {
+.paymentMethodItem {
     padding: 1.3em;
-    padding-top: 1.9em;
-    padding-bottom: 1.9em;
+    padding-top: 1.3em;
+    padding-bottom: 1.3em;
     border-bottom: 1px solid rgba(0, 0, 0, 0.20);
     display: flex;
-    padding-left: 2.5em;
+    padding-left: 1.5em;
     align-items: center;
 }
-#paymentMethodWrp > div:last-child {
-    padding-top: 1.8em;
-    padding-bottom: none;
-    border-bottom: none;
-    padding-left: 3em;
-    opacity: 0.8;
 
-}
-#paymentMethodWrp > div:last-child span {
-    font-size: 105%;
 
-}
-#paymentMethodWrp > div > div{
+.paymentMethodItme > div{
 
     display: flex;
     align-items: center;
 }
-#paymentMethodWrp > div > div > img:first-child {
+.paymentMethodItem > div > img:first-child {
     width: 5em;
     padding: 0.9em;
     height: auto;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 7px;
 }
-#paymentMethodWrp > div > div > span {
-    margin-left: 1em;
+.paymentMethodItem > div > span {
+    margin-left: 0.6em;
+    margin-right: 0.6em;
     font-family: 'MontserratReg';
 }
-#paymentMethodWrp img {
-    height: 2em;
-    width: 2em;
+.paymentMethodItem img {
+    height: 1.7em;
+    width: 1.7em;
 }
 .profileWrpPic1 {
     height: 6em;
     width: 6em;
-    margin-right: 2em;
+ 
     object-fit: cover;
 }
 
 .mainWrp1 {
     margin-top: 0;
+}
+.driver-dashboard-treeview-menu > a {
+    font-size: 90%;
 }

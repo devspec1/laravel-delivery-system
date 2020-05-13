@@ -111,8 +111,7 @@ Route::get('driver/new_signup', 'DriverDashboardController@driver_new_signup');
 // Driver Routes..
 Route::group(['middleware' => ['locale','driver_guest']], function () {
 
-	
-	Route::get('driver_profile', 'DriverDashboardController@driver_profile');
+;
 	Route::get('documents/{id}', 'DriverDashboardController@documents');
 	Route::post('document_upload/{id}', 'DriverDashboardController@document_upload');
 	Route::get('add_vehicle', 'DriverDashboardController@add_vehicle');
@@ -142,6 +141,8 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 	//New Routes (Menu)
 
 
+	Route::get('driver/driver_payment', 'DriverDashboardController@driver_payment');
+	Route::get('driver_profile', 'DriverDashboardController@driver_profile');
 	Route::get('driver/home', 'DriverDashboardController@driver_home');
 	Route::get('driver/delivery_orders', 'DriverDashboardController@driver_delivery_orders');
 	Route::get('driver/driver_team', 'DriverDashboardController@driver_driver_team');
