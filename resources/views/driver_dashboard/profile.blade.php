@@ -174,10 +174,10 @@
         {{ Form::close() }}
      
       </div>
-      <div style="display: flex; width: 100%; justify-content: space-between;margin-top: 2.1em;">
+      <div style="display: flex; width: 100%; justify-content: space-between;margin-top: 0.7emem;">
 
       <div style="display: flex; flex-direction: column; width: 50%">
-       <span style="font-size: 115%; color: #1B187F; font-weight: bold;margin-bottom: 0.1em; font-family:'MontserratReg'">Password</span>
+       <span style="font-size: 105%; color: #1B187F; font-weight: bold;margin-bottom: 0.1em; font-family:'MontserratReg'">Password</span>
          <label style="padding:2px 0px;">Current password</label>
             <div  style="padding:2px 0px;">
               <input class="_style_3vhmZK" type="password" name="postal_code" value="{{ @$result->driver_address->postal_code}}" placeholder="{{trans('messages.profile.profile_postal_code')}}">
@@ -205,10 +205,10 @@
         </div>
       </div>
        <div style=" display: flex; flex-direction: column;padding: 15px 10px;margin-right: 2.5em">
-            <span style="font-size: 115%; color: #1B187F;font-weight: bold; margin-bottom: 0.4em; font-family:'MontserratReg'">Membership</span>
+            <span style="font-size: 105%; color: #1B187F;font-weight: bold; margin-bottom: 0.4em; font-family:'MontserratReg'">Membership</span>
               <div style="display: flex; flex-direction: row; align-items: center ">
-                <span style="font-size: 100%; font-weight: bold">Executive</span>
-              <span style="font-size: 90%; margin-left: 1.5em; color: #8f2a06; font-weight: bold">Cancel</span>
+                <span style="font-size: 90%; font-weight: bold">Executive</span>
+              <span style="font-size: 85%; margin-left: 1.5em; color: #8f2a06; font-weight: bold">Cancel</span>
             </div>
            </div>
           </div>
