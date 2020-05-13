@@ -174,10 +174,10 @@
         {{ Form::close() }}
      
       </div>
-      <div style="display: flex; width: 100%; justify-content: space-between;margin-top: 2em;">
+      <div style="display: flex; width: 100%; justify-content: space-between;margin-top: 2.1em;">
 
       <div style="display: flex; flex-direction: column; width: 50%">
-       <span style="font-size: 130%; color: #1B187F; font-weight: bold;margin-bottom: 0.7em; font-family:'MontserratReg'">Password</span>
+       <span style="font-size: 115%; color: #1B187F; font-weight: bold;margin-bottom: 0.1em; font-family:'MontserratReg'">Password</span>
          <label style="padding:2px 0px;">Current password</label>
             <div  style="padding:2px 0px;">
               <input class="_style_3vhmZK" type="password" name="postal_code" value="{{ @$result->driver_address->postal_code}}" placeholder="{{trans('messages.profile.profile_postal_code')}}">
@@ -197,7 +197,7 @@
               </div>
             </div>
           <div class="page-lead separated--bottom col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; border-bottom:0px !important;">
-         <button type="button" class="btn  doc-button" style="background: #6e7175;margin-top: 0.8em;border-radius: 7px; color: white" ng-click="selectFile()">
+         <button type="button" class="btn  doc-button" style="background: #6e7175;margin-top: 0.5em;border-radius: 7px; color: white" ng-click="selectFile()">
                 <span style="padding: 0px 30px !important;font-size: 11px !important;" id="span-cls">Update
                 </span>
               </button>
@@ -205,9 +205,9 @@
         </div>
       </div>
        <div style=" display: flex; flex-direction: column;padding: 15px 10px;margin-right: 2.5em">
-            <span style="font-size: 130%; color: #1B187F;font-weight: bold; margin-bottom: 0.4em; font-family:'MontserratReg'">Membership</span>
+            <span style="font-size: 115%; color: #1B187F;font-weight: bold; margin-bottom: 0.4em; font-family:'MontserratReg'">Membership</span>
               <div style="display: flex; flex-direction: row; align-items: center ">
-                <span style="font-size: 120%; font-weight: bold">Executive</span>
+                <span style="font-size: 100%; font-weight: bold">Executive</span>
               <span style="font-size: 90%; margin-left: 1.5em; color: #8f2a06; font-weight: bold">Cancel</span>
             </div>
            </div>
