@@ -65,6 +65,19 @@
 								<span class="text-danger">{{ $errors->first('last_name') }}</span>
 							</div>
                         </div>
+						{{-- <div class="form-group">
+							<label for="used_referral_code" class="col-sm-3 control-label">Invitation Code<em class="text-danger">*</em></label>
+							<div class="col-sm-6">
+								{!! Form::text('used_referral_code', '', ['class' => 'form-control', 'id' => 'input_used_referral_code', 'placeholder' => 'Used referral code']) !!}
+								<span class="text-danger">{{ $errors->first('used_referral_code') }}</span>
+							</div>
+						</div> --}}
+						<div class="form-group" style="margin-bottom: 1em">
+							<label for="input-tags3" class="col-sm-3 control-label">Used Referral Code</label>
+							<div class="col-sm-6">
+								<input type="text" id="input-tags3" name="referrer_id" value="" />						
+							</div>	
+						</div>
 						<div class="form-group">
 							<label for="input_email" class="col-sm-3 control-label">Email<em class="text-danger">*</em></label>
 							<div class="col-sm-6">
@@ -141,3 +154,49 @@
 	</section>
 </div>
 @endsection
+
+@push('scripts')
+<script src="{{ url('js/selectize.js') }}"></script>
+<script>
+	$(function() {
+		$('#input-tags3').selectize({
+		    plugins: ['remove_button'],
+		    maxItems: 1
+    		
+		});
+		init_user();
+	})
+	function init_user()
+{
+  var usertype= 'all';
+    var select = $("#input-tags3").selectize();
+    var selectize = select[0].selectize;
+    selectize.disable();
+    
+    $.ajax({
+      type: 'POST',
+      url: APP_URL+'/{{LOGIN_USER_TYPE}}/get_send_users',
+      data: "type="+usertype,
+      dataType: "json",
+      success: function(resultData) {
+        var select = $("#input-tags3").selectize();
+        var selectize = select[0].selectize;
+        selectize.clear();
+        selectize.clearOptions();
+        $.each(resultData, function (key, value) {
+		  if (value.user_type.toLowerCase() == 'driver')
+          	selectize.addOption({value:value.id,text:value.first_name + ' ' +  value.last_name+' - ' + value.user_type + ' - ' + value.mobile_number + ' - ' + value.referral_code});
+        });
+        selectize.enable();
+		
+        if(v = $("#referrer").val())
+            selectize.setValue(v, false);
+
+      }
+    });
+  }
+
+</script>
+
+@endpush
+

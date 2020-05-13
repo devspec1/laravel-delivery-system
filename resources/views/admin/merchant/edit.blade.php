@@ -77,21 +77,19 @@
                               <span class="text-danger">{{ $errors->first('referral_code') }}</span>
                             </div>
                           </div>
-                           {{-- <div class="form-group">
-                            <label for="used_referral_code" class="col-sm-3 control-label">Invitation Code<em class="text-danger">*</em></label>
-                            <div class="col-sm-6">
-                              {!! Form::text('used_referral_code', $result_info->used_referral_code, ['class' => 'form-control', 'id' => 'input_used_referral_code', 'placeholder' => 'Used referral code']) !!}
-                              <span class="text-danger">{{ $errors->first('used_referral_code') }}</span>
-                            </div>
-                          </div> --}}
-
-                          <div class="form-group" style="margin-bottom: 1em">
-                          	<label for="input-tags3" class="col-sm-3 control-label">Used Referral Code</label>
-                          	<div class="col-sm-6">
-	                    	<input type="text" id="input-tags3" name="referrer_id" value="" />
-	                    
-	                 		</div>	
-	                  	</div>
+						{{-- <div class="form-group">
+							<label for="used_referral_code" class="col-sm-3 control-label">Invitation Code<em class="text-danger">*</em></label>
+							<div class="col-sm-6">
+								{!! Form::text('used_referral_code', $result_info->used_referral_code, ['class' => 'form-control', 'id' => 'input_used_referral_code', 'placeholder' => 'Used referral code']) !!}
+								<span class="text-danger">{{ $errors->first('used_referral_code') }}</span>
+							</div>
+						</div> --}}
+						<div class="form-group" style="margin-bottom: 1em">
+							<label for="input-tags3" class="col-sm-3 control-label">Used Referral Code</label>
+							<div class="col-sm-6">
+								<input type="text" id="input-tags3" name="referrer_id" value="" />						
+							</div>	
+						</div>
 						<div class="form-group">
 							<label for="input_email" class="col-sm-3 control-label">Email<em class="text-danger">*</em></label>
 							<div class="col-sm-6">
@@ -198,7 +196,8 @@
         selectize.clear();
         selectize.clearOptions();
         $.each(resultData, function (key, value) {
-          selectize.addOption({value:value.id,text:value.first_name + ' ' +  value.last_name+' - ' + value.user_type + ' - ' + value.mobile_number + ' - ' + value.referral_code});
+		  if (value.user_type.toLowerCase() == 'driver')
+          	selectize.addOption({value:value.id,text:value.first_name + ' ' +  value.last_name+' - ' + value.user_type + ' - ' + value.mobile_number + ' - ' + value.referral_code});
         });
         selectize.enable();
 		
