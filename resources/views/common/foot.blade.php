@@ -108,7 +108,7 @@
   {!! Html::script('js/payment.js?v='.$version) !!}
 @endif
 
-@if (Route::current()->uri() == 'signup_rider' || Route::current()->uri() == 'signup_driver' || Route::current()->uri() == 'signup_company' || Route::current()->uri() == 'driver_profile'|| Route::current()->uri() == 'driver/edit_profile')
+@if (Route::current()->uri() == 'signup_rider' || Route::current()->uri() == 'signup_driver' || Route::current()->uri() == 'signup_company' || Route::current()->uri() == 'driver_profile'|| Route::current()->uri() == 'profile')
 
 <script src="{{url('js/accountkit.js?v='.$version)}}"></script>
 @endif

@@ -4,7 +4,7 @@
 }
 @font-face {
     font-family: MontserratBold;
-    src: url('../font/montserrat-bold.otf');
+    src: url('../font/MONTSERRAT-BOLD.OTF');
 }
 @font-face {
     font-family: MontserratReg;
@@ -27,7 +27,9 @@ img.car-cls {
     display: block;
     text-align: center;
 }
-
+.driver-nav a {
+    font-family: 'MontserratReg';
+}
 .dr_invo {
     position: relative;
     display: block;
@@ -1325,20 +1327,23 @@ select {
 }
 
 ._style_3vhmZK {
-    background-color: transparent !important;
+
     box-sizing: border-box !important;
-    color: #000 !important;
+    
     flex-grow: 1 !important;
-    font-family: ff-clan-web-pro, "Helvetica Neue", Helvetica, sans-serif !important;
-    font-size: 13px !important;
+    font-family: 'MontserratReg';
+    font-size: 11px !important;
     font-weight: 500 !important;
     line-height: 24px !important;
     margin-bottom: 0 !important;
     max-width: 100% !important;
     outline: 0 none !important;
-    padding: 6px 10px !important;
+    border-radius: 7px;
+      
+        padding: 0.6em;
     transition: all 0.4s ease 0s !important;
 }
+
 
 .join-page .push-tiny--bottom--legacy {
     margin-bottom: 12px !important;
@@ -2951,7 +2956,7 @@ i.google-ride {
 
 @media (min-width: 1600px) {
     .container{
-       width: 1600px;
+       width: 1900px;
     }
 
     .page-sidebar {
@@ -2961,4 +2966,467 @@ i.google-ride {
 
 .sidenav-item.current {
     color: #1B187F!important;
+}
+.fa-angle-right:before {
+ 
+    font-size: 24px;
+}
+
+
+
+#newLoginWrp .spanB1 {
+    cursor: pointer;
+    width: 65%; border-radius: 6px; padding: 0.8em; font-size: 110%; color: white;
+      font-weight: bold; font-family: 'MontserratReg'; text-align: center
+}
+.newSignupWrp1 .spanB1 {
+    cursor: pointer;
+    width: 75%; border-radius: 6px; padding: 0.4em; font-size: 140%; color: white;
+      font-weight: bold; font-family: 'MontserratReg'; text-align: center;
+}
+.newSignupWrp2 .spanB1 {
+    cursor: pointer;
+    margin-top :0.5em;
+    text-transform: uppercase;
+    width: 75%; border-radius: 6px; padding: 1.1em; font-size: 95%; color: white;
+      font-weight: bold; font-family: 'MontserratReg'; text-align: center;
+
+}
+#newLoginWrp .span1 {
+    font-size: 95%;margin-top: 0.9em; margin-bottom: 0.9em; 
+    opacity: 0.7; font-family: 'MontserratReg'; font-weight: bold;
+}
+#newSignupWrp .span1 {
+    font-size: 120%;margin-top: 0.9em; margin-bottom: 0.9em; 
+    opacity: 0.7; font-family: 'MontserratReg'; font-weight: bold;
+}
+
+.newDashSubItemRow {
+    display: flex; justify-content: flex-start; align-items: center; font-size: 91%;  width: 100%; padding-left: 1.5em;padding-right: 1.5em; padding-top: 0.85em; padding-bottom: 0.85em; border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+}
+#newDashMainWrp {
+
+     display: flex; justify-content: space-between; width: 100%; height: 80%; border-top: 1px solid rgba(0, 0, 0, 0.15);padding: 1.5em;  padding-top: 3em; padding-right: 0; font-family: 'MontserratReg';
+ 
+     border-top: 1px solid rgba(0, 0, 0, 0.15);padding: 1.5em;  padding-top: 3em; padding-right: 0; font-family: 'MontserratReg';
+
+}
+#newDashMainWrp > div {
+    display: flex; flex-direction: column; width: 23.3%;
+}
+
+.newDashCardWrp {
+    display: flex; flex-direction: column; align-items: center; justify-content:space-between; height: 30%; border-radius: 9px; border: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); padding-top: 2em; padding-bottom: 2em;
+}
+#homeMainWrp {
+    padding-right: 10em;
+}
+#homeMainWrp  .newDashCardWrp:nth-child(2) {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+#homeMainWrp .newDashCardWrp {
+    display: flex; flex-direction: column; align-items: center;
+    background: #3B5998;
+    width: 100%;
+   
+     justify-content:space-between; height: 100%;
+     color: white;
+      border-radius: 9px; border: 1px solid rgba(0, 0, 0, 0.1);
+       box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); 
+       padding-top: 2em; padding-bottom: 2em;
+}
+#newDashMainWrp .link1 {
+    color: #17609c; font-size: 90%; font-family: 'MontserratReg'; font-weight: bold;
+}
+
+.newSignupWrp2 .inputWrp {
+   display: flex; align-items: center; margin-top: 0.4em;margin-bottom: 0.3em;
+   padding: 1.1em; width: 75%; background: rgba(0, 0, 0, 0.02);
+    border:1px solid rgba(0, 0, 0, 0.12);
+}
+.newSignupWrp2 .inputWrp input {
+    width: 100%;
+    border: none; background: transparent; font-size: 80%; font-weight: bold; opacity: 0.8;
+}
+
+#deliveryMainWrp, #leaderboardMainWrp, #driverteamWrp, #homeMainWrp {
+    display:  flex;
+    flex-direction: column;
+    width: 100%;
+    padding-left: 5em;
+    padding-top: 2em;
+}
+#deliverySubWrp > div > div:first-child {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+}
+#deliverySubWrp > div > div:first-child > span {
+    opacity: 0.75;
+   font-size: 93%;
+}
+#deliverySubWrp > div > span:last-child {
+    font-family: 'MontserratBold';
+}
+#deliverySubWrp, #leaderboardSubWrp, #driverteamSubWrp, #merchantsSubWrp {
+    margin-top: 3em;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+}
+.deliverySubHeader, .leaderboardSubHeader, .driverteamSubHeader, .merchantsSubHeader {
+    background: rgba(0, 0, 0, 0.06);
+    opacity: 0.8;
+}
+.deliverySubHeader > span, .leaderbordSubHeader > span, .driverteamSubHeader > span, .merchantsSubHeader > span {
+    opacity: 0.8;
+}
+#deliverySubWrp .deliverySubHeader >span:first-child {
+    text-align: left;
+}
+#deliverySubWrp > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.31em;
+    padding-left: 2.5em;
+    padding-right: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+#leaderboardSubWrp > div, #driverteamSubWrp > div, #merchantsSubWrp > div {
+    display: flex;
+    align-items: center;
+    padding: 1.31em;
+    padding-left: 2.5em;
+    padding-right: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+#deliverySubWrp > div:first-child {
+    font-weight: bold;
+    font-family: 'MontserratBold';
+    
+}
+#deliverySubWrp > div:first-child > span, #merchantsSubWrp > .merchantsSubHeader > span,  #leaderboardSubWrp .leaderboardSubHeader > span, #driverteamSubWrp > .driverteamSubHeader > span {
+    font-weight: bold;
+    font-family: 'MontserratBold';
+    
+}
+#leaderboardSubWrp > div > div:first-child {
+    display: flex;
+    align-items: center;
+    width: 30%;
+}
+#leaderboardSubWrp > div > div:first-child span {
+    opacity: 0.9;
+    font-size: 89%;
+    font-family: 'MontserratReg';
+}
+#leaderboardSubWrp > div > div:first-child > img {
+    height: 3em;
+    width: 3em;
+    border-radius: 50%;
+    margin-right: 1.4em;
+}
+#merchantsSubWrp > div > div:first-child {
+    display: flex;
+    align-items: center;
+    width: 40%;
+}
+#merchantsSubWrp > div > div:first-child span {
+    opacity: 0.9;
+    font-size: 89%;
+    font-family: 'MontserratReg';
+}
+#merchantsSubWrp > div > div:first-child > img {
+    height: 3em;
+    width: 3em;
+    border-radius: 50%;
+    margin-right: 1.4em;
+}
+#driverteamSubWrp > div > div:first-child {
+    display: flex;
+    align-items: center;
+    width: 30%;
+}
+#driverteamSubWrp > div > div:first-child span {
+    opacity: 0.9;
+    font-size: 89%;
+    font-family: 'MontserratReg';
+}
+#driverteamSubWrp > div > div:first-child > img {
+    height: 3em;
+    width: 3em;
+    border-radius: 50%;
+    margin-right: 1.4em;
+}
+#deliverySubWrp > div > span {
+    font-family: 'MontserratReg';
+    opacity: 0.75;
+   font-size: 93%;
+   width: 20%;
+   text-align: center;
+
+}
+#leaderboardSubWrp > div > span {
+    font-family: 'MontserratReg';
+    opacity: 0.75;
+   font-size: 93%;
+   width: 25%;
+ 
+
+}
+ #merchantsSubWrp > div > span {
+    font-family: 'MontserratReg';
+    opacity: 0.75;
+   font-size: 93%;
+   width: 40%;
+ 
+
+}
+#driverteamSubWrp > div > span {
+    font-family: 'MontserratReg';
+    opacity: 0.75;
+   font-size: 93%;
+   width: 25%;
+ 
+
+}
+#driverteamSubWrp .status1, #leaderboardSubWrp .status1 {
+    padding: 0.4em;
+    padding-left: 0.9em;
+    padding-right: 0.9em;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    width: 7em;
+    text-align: center;
+    border-radius: 9px;
+    color: white;
+}
+.statusActive1 {
+    background: #44BE64;
+}
+.statusPending1 {
+    background: rgba(0, 0, 0, 0.3);
+}
+#deliverySubWrp .acceptBtn1 {
+    padding: 0.8em;
+    color: white;
+    border-radius: 7px;
+    opacity: 1;
+    background: #75BB53;
+    cursor: pointer;
+    width: 8%;
+    text-align: center;
+}
+.site-nav {
+    border-right: 1px solid rgba(0 , 0, 0, 0.15);
+    font-family: 'MontserratReg';
+    height: 100%;
+}
+.site-nav > li > a {
+    padding: 1.3em;
+}
+#deliveryKmWrp > span {
+    padding: 0.8em;
+    opacity: 1;
+    padding-left: 1.6em;
+    padding-right: 1.6em;
+    color: black;
+    font-size: 95%;
+    font-weight: bold;
+    font-family: 'MontserratReg';
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+#newSignupCheckboxWrp > div > div {
+    cursor: pointer;
+}
+
+#dragDiv {
+    background: rgba(0, 0, 0, 0.02)
+}
+#dragDiv.is-dragover {
+    background: white;
+}
+.site-nav>li>a {
+    font-size: 13px!important;
+
+}
+.inputWrp span {
+    font-size: 85%;
+}
+
+.dash-panel {
+    float:left;
+}
+.page-content {
+    width: 80%;
+}
+#profileWrp input:read-only, #profileWrp select:disabled {
+    background: rgba(0, 0, 0, 0.05);
+}
+#profileWrp {
+    width: 74%;
+    
+    border-left: none;
+    box-shadow: none;
+   
+}
+
+#profileWrp #addrInfo > div {
+   margin-left: 1.5em;
+    width: 24%;
+}
+#profileWrp #addrInfo > div:first-child {
+    margin-left: 0;
+}
+a.side-nav-a[aria-selected="true"] {
+    font-weight: 600;
+    font-family: 'MontserratReg';
+    color: #3B5998;
+}
+#helpTopWrp > span, #profileLeftWrp > span {
+    padding: 1.3em;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    width: 16em;
+    font-family: 'MontserratReg';
+    font-size: 13px;
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
+}
+ #profileLeftWrp {
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+#helpWrp, #profileWrp, #deliveryMainWrp, #leaderboardMainWrp, #driverteamWrp, #homeMainWrp {
+    font-family: 'MontserratReg';
+    height: 45em;
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+#helpWrp {
+    flex-direction: column;
+    padding-top: 2em;
+    padding-left: 5em;
+    width: 80%;
+}
+#profileLeftWrp > span.current {
+    color: #3B5998;
+    font-family: 'MontserratBold';
+}
+#helpTopWrp .callBtn {
+    background: #5cb85c; padding: 0.5em; color: white; cursor: pointer;font-family: 'MontserratReg'; border-radius: 9px;
+    font-size: 75%;
+    margin-left: 0.7em;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+#helpTopWrp > div {
+    padding: 1.2em;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    padding-top: 1.6em;
+    padding-bottom: 1.6em;
+    border-radius: 5px;
+    width: 49%;
+    justify-content: space-between;;
+    font-size: 115%;
+    font-family: 'MontserratReg';
+    font-weight: bold;
+}
+#helpTopWrp {
+    margin-top: 2em;
+}
+#helpTopWrp > div > img {
+    height: 1.5em;
+    width: 1.5em;
+}
+#helpFaqWrp {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 2em;
+    padding-left: 2em;
+    padding-top: 1.5em;
+    font-size: 95%;
+    margin-top: 2em;
+    border-radius: 5px;
+}
+#helpFaqWrp > div {
+
+    margin-bottom: 0.7em;
+
+    font-family: 'MontserratReg';
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+#helpFaqWrp > div.current {
+    margin-bottom:1.4em;
+    margin-top: 1.4em;
+}
+#helpFaqWrp > div.current > span:first-child {
+       margin-bottom: 1.2em;
+}
+#helpFaqWrp > div:not(.current) > span:nth-child(2) {
+    display: none;
+}
+#helpFaqWrp > div > span:first-child {
+    opacity: 0.75;
+    font-size: 110%;
+    font-weight: bold;
+ 
+}
+#helpFaqWrp > div > span {
+    opacity: 0.75;
+    font-size: 100%;
+}
+
+#helpRightWrp > div.current {
+    display: flex;
+}
+#helpRightWrp > div{
+    display: none;
+}
+.paymentMethodItem {
+    padding: 1.3em;
+    padding-top: 1.3em;
+    padding-bottom: 1.3em;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+    display: flex;
+    padding-left: 1.5em;
+    align-items: center;
+}
+
+#profileWrp label {
+    font-size: 85%;
+}
+.paymentMethodItme > div{
+
+    display: flex;
+    align-items: center;
+}
+.paymentMethodItem > div > img:first-child {
+    width: 5em;
+    padding: 0.9em;
+    height: auto;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+}
+.paymentMethodItem > div > span {
+    margin-left: 0.6em;
+    margin-right: 0.6em;
+    font-family: 'MontserratReg';
+}
+.paymentMethodItem img {
+    height: 1.7em;
+    width: 1.7em;
+}
+.profileWrpPic1 {
+    height: 6em;
+    width: 6em;
+ 
+    object-fit: cover;
+}
+
+.mainWrp1 {
+    margin-top: 0;
+}
+.driver-dashboard-treeview-menu > a {
+    font-size: 90%;
 }

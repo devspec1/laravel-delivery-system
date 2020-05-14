@@ -101,9 +101,17 @@ Route::group(['middleware' => ['locale','rider_guest']], function () {
 	Route::post('ajax_referral_data/{id}', 'DashboardController@ajax_referral_data');
 });
 
+	
+
+
+Route::get('driver/new_login', 'DriverDashboardController@driver_new_login');
+Route::get('driver/new_signup', 'DriverDashboardController@driver_new_signup');
+
+
 // Driver Routes..
 Route::group(['middleware' => ['locale','driver_guest']], function () {
-	Route::get('driver_profile', 'DriverDashboardController@driver_profile');
+
+;
 	Route::get('documents/{id}', 'DriverDashboardController@documents');
 	Route::post('document_upload/{id}', 'DriverDashboardController@document_upload');
 	Route::get('add_vehicle', 'DriverDashboardController@add_vehicle');
@@ -131,6 +139,16 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 	Route::get('payout_default/{id}', 'UserController@payoutDefault')->where('id', '[0-9]+')->name('payout_default');
 
 	//New Routes (Menu)
+
+
+	Route::get('driver/driver_payment', 'DriverDashboardController@driver_payment');
+	Route::get('driver_profile', 'DriverDashboardController@driver_profile');
+	Route::get('driver/home', 'DriverDashboardController@driver_home');
+	Route::get('driver/delivery_orders', 'DriverDashboardController@driver_delivery_orders');
+	Route::get('driver/driver_team', 'DriverDashboardController@driver_driver_team');
+	Route::get('driver/merchants', 'DriverDashboardController@driver_merchants');
+	Route::get('driver/leaderboard', 'DriverDashboardController@driver_leaderboard');
+	Route::get('driver/new_dash', 'DriverDashboardController@driver_new_dash');
 	Route::get('driver/inbox', 'DriverDashboardController@show_inbox');
 	Route::get('driver/trips_payments', 'DriverDashboardController@driver_trip');
 	Route::get('driver/trips_payments_detail/{id}', 'DriverDashboardController@driver_trip_detail');
@@ -153,9 +171,9 @@ Route::get('sign_out', function () {
 	$user_type = @Auth::user()->user_type;
 	Auth::logout();
 	if (@$user_type == 'Rider') {
-		return redirect('signin_rider');
+		return redirect('login');
 	} else {
-		return redirect('signin_driver');
+		return redirect('driver/new_login');
 	}
 
 });
@@ -167,7 +185,7 @@ Route::get('driver/sign_out', function () {
 	if (@$user_type == 'Rider') {
 		return redirect('signin_rider');
 	} else {
-		return redirect('signin_driver');
+		return redirect('driver/new_login');
 	}
 
 });

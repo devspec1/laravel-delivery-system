@@ -48,6 +48,51 @@ class DriverDashboardController extends Controller
         return view('driver_dashboard.profile',$data);
     }
 
+    public function driver_home()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+
+        return view('driver_dashboard.home',$data);
+    }
+
+        public function driver_new_dash()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.new_dash',$data);
+    }
+     public function driver_leaderboard()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.leaderboard',$data);
+    }
+     public function driver_merchants()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.merchants',$data);
+    }
+    public function driver_driver_team()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.driver_team',$data);
+    }
+    public function driver_payment()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.driver_payment',$data);
+    }
+     public function driver_delivery_orders()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.delivery',$data);
+    }
+      public function driver_new_login()
+    {
+        return view('driver_dashboard.new_login');
+    }
+     public function driver_new_signup()
+    {
+        return view('driver_dashboard.new_signup');
+    }
     /**
      * Driver Download invoice Page
      */
@@ -209,7 +254,7 @@ class DriverDashboardController extends Controller
 
         $user = User::find(@Auth::user()->id);
         $user_profile_image = ProfilePicture::find($user->id);
-
+        
         if(!$user_profile_image) {
             $user_profile_image = new ProfilePicture;
             $user_profile_image->user_id = $user->id;
@@ -218,21 +263,24 @@ class DriverDashboardController extends Controller
         $user_profile_image->photo_source = 'Local';
         $profile_image          =   $request->file('file');
         $path = dirname($_SERVER['SCRIPT_FILENAME']).'/images/users/'.$user->id;
-                            
+                                
         if(!file_exists($path)) {
             mkdir(dirname($_SERVER['SCRIPT_FILENAME']).'/images/users/'.$user->id, 0777, true);
         }
-
         if($profile_image) { 
-                $profile_image_extension      =   $profile_image->getClientOriginalExtension();
-                $profile_image_filename       =   'profile_image' . time() .  '.' . $profile_image_extension;
-
-                $success = $profile_image->move('images/users/'.$user->id, $profile_image_filename);
-                if(!$success) {
-                    return back()->withError('Could not upload profile Image');
-                }
-                $user_profile_image->src   =url('images/users').'/'.$user->id.'/'.$profile_image_filename;
-                $user_profile_image->save();
+            $result['success'] = 'true';
+            $profile_image_extension      =   $profile_image->getClientOriginalExtension();
+            $profile_image_filename       =   'profile_image' . time() .  '.' . $profile_image_extension;
+            $profile_image_save_filename       =   'profile_image' . time() .  '_450x250.' . $profile_image_extension;
+            $success = $profile_image->move('images/users/'.$user->id, $profile_image_filename);
+            if(!$success) {
+                return back()->withError(trans('messages.user.update_fail'));
+            }
+            else {
+                $this->helper->compress_image("images/users/".$user->id."/".$profile_image_filename, "images/users/".$user->id."/".$profile_image_filename, 80, 450, 250);
+            }
+            $user_profile_image->src   =url('images/users').'/'.$user->id.'/'.$profile_image_save_filename;
+            $user_profile_image->save();
         }
 
         return ['success' => 'true','profile_url' => $user_profile_image->src,'status_message'=>'Uploaded Successfully'];
@@ -373,7 +421,7 @@ class DriverDashboardController extends Controller
     /*
     * Driver payment page
     */
-    public function driver_payment()
+    /*public function driver_payment()
     {
         $data['total_earnings'] = Trips::where('driver_id',Auth::id())
                      ->where('status','Completed')
@@ -394,7 +442,7 @@ class DriverDashboardController extends Controller
         $data['all_trips'] = $data['all_trips']->paginate(4)->toJson();
         return view('driver_dashboard.payment',$data);
     }
-
+    */
     /*
     * Driver invoice page
     */
@@ -661,6 +709,8 @@ class DriverDashboardController extends Controller
     */
     public function show_help()
     {
+        $data['result'] = User::find(@Auth::user()->id);
+        
         $faq_array_1 = array("question" => "What is the booking commission for drivers?" ,
         "answer" => "Zero. Zip. Nada. Drivers earn a combination of fares, profit bonuses and residual income for their membership fee of $9.95 per week." );
 

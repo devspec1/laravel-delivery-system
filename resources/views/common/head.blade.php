@@ -30,5 +30,15 @@
   @endif
 
   <link rel="stylesheet" type="text/css" href=" https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149445554-4"></script>
+  <script>
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-149445554-4');
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
 </head>
 <body ng-app="App">

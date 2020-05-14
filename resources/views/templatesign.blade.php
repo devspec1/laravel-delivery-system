@@ -6,6 +6,4 @@
 @yield('main')
 
 
-
-@include('common.footer')
 @include('common.foot')
