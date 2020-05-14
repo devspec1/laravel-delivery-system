@@ -15,7 +15,13 @@ namespace App\DataTables;
 
 use App\Models\User;
 use App\Models\HomeDeliveryOrder;
+
+use Yajra\DataTables\Html\Button;
+use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\Html\Editor\Fields;
+use Yajra\DataTables\Html\Editor\Editor;
+
 use DB;
 
 class HomeDeliveryOrderDataTable extends DataTable
@@ -52,11 +58,18 @@ class HomeDeliveryOrderDataTable extends DataTable
             ->join('request as ride_request', function($join) {
                 $join->on('ride_request.id', '=', 'delivery_orders.ride_request');
             })
+            ->join('merchants', function($join) {
+                $join->on('merchants.id', '=', 'delivery_orders.merchant_id');
+            })
             ->select([
                 'delivery_orders.id as id',
+                DB::raw('CONCAT(delivery_orders.estimate_time," mins") as estimate_time'),
                 'delivery_orders.driver_id as driver_id', 
                 'delivery_orders.created_at as created_at',
+                'delivery_orders.created_at as created_at',
+                'merchants.name as merchant_name',
                 'delivery_orders.order_description as order_description',
+                DB::raw('CONCAT(delivery_orders.distance/1000," KM") as distance'),
                 DB::raw('CONCAT(delivery_orders.estimate_time," mins") as estimate_time'),
                 'delivery_orders.fee as fee',
                 'delivery_orders.status as status',
@@ -75,12 +88,17 @@ class HomeDeliveryOrderDataTable extends DataTable
     public function html()
     {
         return $this->builder()
+            ->setTableId('delivery-orders-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('lBfr<"table-responsive"t>ip')
             ->orderBy(0)
             ->buttons(
-                ['csv', 'excel', 'print', 'reset']
+                Button::make('csv'),
+                Button::make('excel'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
             );
     }
 
@@ -92,18 +110,25 @@ class HomeDeliveryOrderDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            ['data' => 'id', 'name' => 'id', 'title' => 'Id'],
-            ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Created At'],
-            ['data' => 'status', 'name' => 'status', 'title' => 'Status'],
-            ['data' => 'driver_id', 'name' => 'driver_id', 'title' => 'Assigned Driver'],
-            ['data' => 'estimate_time', 'name' => 'estimate_time', 'title' => 'Estimate time'],
-            ['data' => 'fee', 'name' => 'fee', 'title' => 'Fee'],
-            ['data' => 'pick_up_location', 'name' => 'pick_up_location', 'title' => 'Pick Up'],
-            ['data' => 'drop_off_location', 'name' => 'drop_off_location', 'title' => 'Drop Off'],
-            ['data' => 'customer_name', 'name' => 'customer_name', 'title' => 'Customer Name'],
-            ['data' => 'mobile_number', 'name' => 'mobile_number', 'title' => 'Customer Phone'],
-            ['data' => 'order_description', 'name' => 'order_description', 'title' => 'Order Description'],
-            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false],
+            Column::make('id', 'Id'),
+            Column::make('created_at', 'Created At'),
+            Column::make('status', 'Status'),
+            Column::make('driver_id', 'Assigned Driver'),
+            Column::make('estimate_time', 'Estimate time'),
+            Column::make('fee', 'Fee'),
+            Column::make('pick_up_location', 'Pick Up'),
+            Column::make('drop_off_location', 'Drop Off'),
+            Column::make('distance', 'Distance'),
+            Column::make('order_description', 'Order Description'),
+            Column::make('customer_name', 'Customer Name'),
+            Column::make('mobile_number', 'Customer Phone'),
+            Column::make('merchant_name', 'Merchant'),
+            Column::make('action', 'Action')
+                ->exportable(false)
+                ->printable(false)
+                ->orderable(false)
+                ->searchable(false)
+                ->addClass('text-center'),
         ];
     }
 

@@ -295,6 +295,8 @@ class DriverController extends Controller
         $response_array['motor_insurance'] = '1';
         $response_array['certificate_of_registration'] = '1';
         $response_array['driver_accreditation'] = '1';
+        $response_array['right_to_work'] = '1';
+        $response_array['abn_number'] = '1';
         
 
         $user_profile_image = ProfilePicture::find($user_details->id);
@@ -329,10 +331,18 @@ class DriverController extends Controller
             if (!$driver_docs->license_back) {
                 $response_array['driver_license_back'] = '0';
             }
+            if (!$driver_docs->right_to_work) {
+                $response_array['right_to_work'] = '0';
+            }
+            if (!$driver_docs->abn_number) {
+                $response_array['abn_number'] = '0';
+            }
         }
         else{
             $response_array['driver_license_back'] = '0';
             $response_array['driver_license_front'] = '0';
+            $response_array['abn_number'] = '0';
+            $response_array['right_to_work'] = '0';
         }
 
         // return response()->json([

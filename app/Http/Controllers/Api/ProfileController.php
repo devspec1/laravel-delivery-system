@@ -123,7 +123,7 @@ class ProfileController extends Controller
 		$user_id = $user_details->id;
 
 		$rules = array(
-			'document_type' => 'required|in:license_front,license_back,insurance,rc,permit',
+			'document_type' => 'required|in:license_front,license_back,insurance,rc,permit,right_to_work,abn_number',
 			'image' 		=> 'required|mimes:jpg,jpeg,png,gif',
 		);
 
@@ -234,7 +234,8 @@ class ProfileController extends Controller
 				DriverDocuments::updateOrCreate(['user_id' => $user_id], $data);
 			}
 
-			if ($driver_document_count == 2 && $vehicle_document_count==3) {
+			//if ($driver_document_count == 2 && $vehicle_document_count==3) {
+            if ($driver_document_count == 2) {
 				$status = isLiveEnv() ? "Active" : "Pending";
 				User::where('id', $user_id)->update(['status' => $status]);
 			}

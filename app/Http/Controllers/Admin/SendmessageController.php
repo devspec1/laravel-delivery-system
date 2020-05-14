@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Merchant;
 use App\Models\User;
 use App\Models\Company;
 use App\Http\Start\Helpers;
@@ -169,6 +170,20 @@ class SendmessageController extends Controller
             return $user_details;
         }
         return $user_details->get()->toJson();
+    }
+
+    /**
+     * Get merchants function
+     *
+     * @return users list
+     */
+    public function get_send_merchants()
+    {
+        $user_details = Merchant::select('id','name');
+
+        $user_details = $user_details->get();
+        $user_details->all();
+        return $user_details;
     }
 
 

@@ -19,7 +19,7 @@ use DateTime;
 
 class HomeDeliveryController extends Controller
 {
-    /**
+    /** 
      * Get orders data
      * 
      * @param  Get method request inputs
@@ -375,6 +375,7 @@ class HomeDeliveryController extends Controller
                 'delivery_orders.created_at as created_at',
                 'delivery_orders.estimate_time as estimate_time',
                 'delivery_orders.fee as fee',
+                'delivery_orders.distance as delivery_distance',
                 'delivery_orders.status as status',
                 'delivery_orders.currency_code as currency_code',
                 'ride_request.pickup_location as pick_up_location',
@@ -421,7 +422,7 @@ class HomeDeliveryController extends Controller
                 $temp_details['customer_phone_number'] = $order->customer_phone_number;
             }
 
-            $temp_details['distance'] = (string)round((float)$order->distance, 2) . 'KM';
+            $temp_details['distance'] = (string)round((float)$order->delivery_distance/1000, 2) . 'KM';
             $temp_details['fee'] = '$'. $order->fee;
             
             array_push($job_array,$temp_details);
@@ -452,8 +453,13 @@ class HomeDeliveryController extends Controller
                 'delivery_orders.estimate_time as estimate_time',
                 'delivery_orders.order_description as order_description',
                 'delivery_orders.fee as fee',
+                'delivery_orders.distance as delivery_distance',
                 'delivery_orders.status as status',
                 'delivery_orders.currency_code as currency_code',
+                'ride_request.pickup_latitude as pickup_latitude',
+                'ride_request.pickup_longitude as pickup_longitude',
+                'ride_request.drop_latitude as drop_latitude',
+                'ride_request.drop_longitude as drop_longitude',
                 'ride_request.pickup_location as pick_up_location',
                 'ride_request.drop_location as drop_off_location',
                 DB::raw('CONCAT(rider.first_name," ",rider.last_name) as customer_name'),
@@ -487,6 +493,11 @@ class HomeDeliveryController extends Controller
             $temp_details['date'] = $date->format('d M Y | H:i');
             $temp_details['pick_up_time'] = $date_estimate->format('H:i A');
             $temp_details['pick_up'] = $order->pick_up_location;
+            $temp_details['pickup_latitude'] = floatval($order->pickup_latitude);
+            $temp_details['pickup_longitude'] = floatval($order->pickup_longitude);
+            $temp_details['drop_longitude'] = floatval($order->drop_longitude);
+            $temp_details['drop_latitude'] = floatval($order->drop_latitude);
+
             $temp_details['drop_off'] = $order->drop_off_location;
             $temp_details['customer_name'] = $order->customer_name;
             $temp_details['customer_phone_number'] = $order->customer_phone_number;

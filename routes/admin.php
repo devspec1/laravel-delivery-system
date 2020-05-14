@@ -59,7 +59,8 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
 	// Send message
 	Route::group(['middleware' => 'admin_can:manage_send_message'], function() {
 		Route::match(array('GET', 'POST'), 'send_message', 'SendmessageController@index')->name('admin.send_message');
-		Route::post('get_send_users', 'SendmessageController@get_send_users');
+        Route::post('get_send_users', 'SendmessageController@get_send_users');
+        Route::get('get_send_merchants', 'SendmessageController@get_send_merchants');
 	});
 	
 	// Manage Rider
@@ -82,10 +83,11 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
 
     //Manage Merchants
     Route::get('merchants', 'MerchantsController@index');
+    Route::get('merchant_orders/{id}', 'MerchantsController@merchant_order_details');
     Route::match(array('GET', 'POST'),'add_merchant', 'MerchantsController@add');
     Route::match(array('GET', 'POST'),'edit_merchant/{id}', 'MerchantsController@update');
     Route::match(array('GET', 'POST'),'delete_merchant/{id}', 'MerchantsController@delete');
-	
+    
 	//Import Driver
 	Route::match(array('GET', 'POST'), 'import_drivers', 'DriverController@import_drivers');
 	

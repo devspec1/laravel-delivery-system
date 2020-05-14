@@ -36,12 +36,19 @@
 			<li class="active">Edit delivery order</li>
 		</ol>
 	</section>
-	{!! Form::open(['method'=>'POST','url' => LOGIN_USER_TYPE.'/edit_home_delivery/'.$result->id, 'class' => 'form-horizontal delivery_adding','id'=>'delivery_order','name'=>'deliveryAddForm']) !!}
+    {!! Form::open(['method'=>'POST','url' => LOGIN_USER_TYPE.'/edit_home_delivery/'.$result->id, 'class' => 'form-horizontal delivery_adding','id'=>'delivery_order','name'=>'deliveryAddForm']) !!}
+    
+    @if($result->merchant_id)
+
+    {!! Form::hidden('merchant_id', $result->merchant_id, ['id' => 'merchant-id']) !!}
+    
+    @endif
+
 	<section class="content">
         <h4>Edit delivery order</h4>
         <h5>Customer data</h5>
 		<div class="row">
-			<div class="col-md-3" ng-init="country_code={{($country_code)}}">
+ 			<div class="col-md-3" ng-init="country_code={{($country_code)}}">
 				<select class ='form-control selectpicker' data-live-search="true" id="input_country_code" name='country_code' ng-model="country_code">
 					@foreach($country_code_option as $country_code)
 					<option value="{{@$country_code->phone_code}}">{{$country_code->long_name}}</option>
@@ -76,6 +83,12 @@
         <h5>Delivery data</h5>
 		<div class="clearfix">
 			<div class="col-md-4 location-form">
+                <div class="row pick-location clearfix">
+                    <div class="col-md-12">
+                        <input type="text" id="input-merchant-id" name="merchant_id" placeholder="Merchant" value="" />
+                        <span class="text-danger error_msg error_merchant_id">{{ $errors->first('merchant_id') }}</span>
+                    </div>
+                </div>
 				<div class="row pick-location clearfix">
 					<div class="col-md-12" ng-init='pick_up_latitude = ""'>
 						{!! Form::hidden('pick_up_latitude', @$result->pick_up_latitude, ['id' => 'pick_up_latitude']) !!}
@@ -100,7 +113,7 @@
                 </div>
                 <div class="row clearfix">
 					<div class="col-md-12">
-						{!! Form::text('fee', @$result->fee, ['class' => 'form-control', 'id' => 'input_fee', 'placeholder' => 'Fee, AUD', 'autocomplete' => 'off']) !!}
+                        {!! Form::number('fee', @$result->fee, ['class' => 'form-control', 'id' => 'input_fee', 'placeholder' => '0.00', 'autocomplete' => 'off',"step" => "0.01"]) !!}
 				        <span class="text-danger error_msg">{{ $errors->first('fee') }}</span>
 					</div>
                 </div>
@@ -154,5 +167,45 @@
 	var REQUEST_URL = "{{url('/'.LOGIN_USER_TYPE)}}"; 
 	var old_edit_date = "{{''}}"
 	var page = "{{'new'}}"
+</script>
+<script src="{{ url('js/selectize.js') }}"></script>
+<script>
+	$(function() {
+		$('#input-merchant-id').selectize({
+		    plugins: ['remove_button'],
+		    maxItems: 1
+    		
+		});
+		init_user();
+	})
+	function init_user()
+{
+  var usertype= 'all';
+    var select = $("#input-merchant-id").selectize();
+    var selectize = select[0].selectize;
+    selectize.disable();
+    
+    $.ajax({
+      type: 'GET',
+      url: APP_URL+'/{{LOGIN_USER_TYPE}}/get_send_merchants',
+      dataType: "json",
+      success: function(resultData) {
+        console.log(resultData);
+        var select = $("#input-merchant-id").selectize();
+        var selectize = select[0].selectize;
+        selectize.clear();
+        selectize.clearOptions();
+        $.each(resultData, function (key, value) {
+          selectize.addOption({value:value.id,text:value.id + ' - ' +  value.name});
+        });
+        selectize.enable();
+
+        if(v = $("#merchant-id").val())
+            selectize.setValue(v, false);
+
+      }
+    });
+  }
+
 </script>
 @endpush

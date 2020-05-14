@@ -26,7 +26,7 @@ class DriverDocuments extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['user_id','license_front','license_back','document_count'];
+    protected $fillable = ['user_id','license_front','license_back', 'right_to_work', 'abn_number', 'document_count'];
 
     /*public function car_type()
     {

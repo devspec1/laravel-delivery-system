@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\DataTables\HomeDeliveryOrderDataTable;
 use App\Models\HomeDeliveryOrder;
 use App\Models\User;
+use App\Models\Merchant;
 use App\Models\Country;
 use App\Models\Company;
 use App\Models\CarType;
@@ -84,7 +85,6 @@ class HomeDeliveryController extends Controller
 
             $rules = array(
                 'estimate_time'     => 'required',
-                'fee'               => 'required',
                 'pick_up_location'  => 'required',
                 'drop_off_location' => 'required',
                 'customer_name'         => 'required',
@@ -93,12 +93,12 @@ class HomeDeliveryController extends Controller
                 'pick_up_longitude'     => 'required',
                 'drop_off_latitude'      => 'required',
                 'drop_off_longitude'     => 'required',
+                'merchant_id'            => 'required',
             );
             
             // Add Driver Validation Custom Names
             $attributes = array(
                 'estimate_time'     => 'Estimate Time',
-                'fee'               => 'Fee',
                 'pick_up_location'  => 'Pick Up Location',
                 'drop_off_location' => 'Drop Off Location',
                 'customer_name'         => 'Customer Name',
@@ -107,8 +107,10 @@ class HomeDeliveryController extends Controller
                 'pick_up_longitude'     => 'Pick Up Longitude',
                 'drop_off_latitude'      => 'Drop Off Latitude',
                 'drop_off_longitude'     => 'Drop Off Longitude',
+                'merchant_id'            => 'Merchant',
             );
-                // Edit Rider Validation Custom Fields message
+
+            // Edit Rider Validation Custom Fields message
             $messages = array(
                 'required'            => ':attribute is required.',
             );
@@ -125,11 +127,38 @@ class HomeDeliveryController extends Controller
             //create order
             $order = new HomeDeliveryOrder;
 
+            $get_fare_estimation = $this->request_helper->GetDrivingDistance($request->pick_up_latitude, $request->drop_off_latitude,$request->pick_up_longitude, $request->drop_off_longitude);
+
+            if ($get_fare_estimation['status'] == "success") {
+                if ($get_fare_estimation['distance'] == '') {
+                    $get_fare_estimation['distance'] = 0;
+                }
+            }
+            else{
+                $get_fare_estimation['distance'] = 0;
+            }
+            $order->distance                = $get_fare_estimation['distance'];
             $order->estimate_time           = $request->estimate_time;
-            $order->fee                     = $request->fee;
+
             $order->customer_id             = $user->id;
             $order->ride_request            = $ride_request->id;
             $order->order_description       = $request->order_description;
+            $order->merchant_id             = $request->merchant_id;
+
+            $merchant = Merchant::where('id', $request->merchant_id)->first();
+            $fee = 0.0;
+            if($request->fee){
+                $fee = (float)$request->fee;
+            }
+            else{
+                if(($get_fare_estimation['distance']/1000) > $merchant->delivery_fee_base_distance){
+                    $fee = $merchant->delivery_fee + $merchant->delivery_fee_per_km * ($get_fare_estimation['distance']/1000 - $merchant->delivery_fee_base_distance);
+                }
+                else{
+                    $fee = $merchant->delivery_fee;
+                }
+            }
+            $order->fee                     = round($fee, 2);
             
             $order->save();
           
@@ -212,7 +241,6 @@ class HomeDeliveryController extends Controller
             // Add Driver Validation Rules
             $rules = array(
                 'estimate_time'     => 'required',
-                'fee'               => 'required',
                 'pick_up_location'  => 'required',
                 'drop_off_location' => 'required',
                 'customer_name'         => 'required',
@@ -221,12 +249,12 @@ class HomeDeliveryController extends Controller
                 'pick_up_longitude'     => 'required',
                 'drop_off_latitude'      => 'required',
                 'drop_off_longitude'     => 'required',
+                'merchant_id'            => 'required',
             );
             
             // Add Driver Validation Custom Names
             $attributes = array(
                 'estimate_time'     => 'Estimate Time',
-                'fee'               => 'Fee',
                 'pick_up_location'  => 'Pick Up Location',
                 'drop_off_location' => 'Drop Off Location',
                 'customer_name'         => 'Customer Name',
@@ -235,6 +263,7 @@ class HomeDeliveryController extends Controller
                 'pick_up_longitude'     => 'Pick Up Longitude',
                 'drop_off_latitude'      => 'Drop Off Latitude',
                 'drop_off_longitude'     => 'Drop Off Longitude',
+                'merchant_id'            => 'Merchant',
             );
             
             // Edit Rider Validation Custom Fields message
@@ -253,8 +282,19 @@ class HomeDeliveryController extends Controller
 
             $user = $this->get_or_create_rider($request);
 
+            $get_fare_estimation = $this->request_helper->GetDrivingDistance($request->pick_up_latitude, $request->drop_off_latitude,$request->pick_up_longitude, $request->drop_off_longitude);
+
+            if ($get_fare_estimation['status'] == "success") {
+                if ($get_fare_estimation['distance'] == '') {
+                    $get_fare_estimation['distance'] = 0;
+                }
+            }
+            else{
+                $get_fare_estimation['distance'] = 0;
+            }
+
+            $order->distance                    = $get_fare_estimation['distance'];
             $order->estimate_time               = $request->estimate_time;
-            $order->fee                         = $request->fee;
             $order->order_description           = $request->order_description;
             $ride_request->pickup_location      = $request->pick_up_location;
             $ride_request->drop_location        = $request->drop_off_location;
@@ -263,6 +303,23 @@ class HomeDeliveryController extends Controller
             $ride_request->pickup_longitude     = $request->pick_up_longitude;
             $ride_request->drop_latitude        = $request->drop_off_latitude;
             $ride_request->drop_longitude       = $request->drop_off_longitude;
+
+            $order->merchant_id             = $request->merchant_id;
+
+            $merchant = Merchant::where('id', $request->merchant_id)->first();
+            $fee = 0.0;
+            if($request->fee){
+                $fee = (float)$request->fee;
+            }
+            else{
+                if(($get_fare_estimation['distance']/1000) > $merchant->delivery_fee_base_distance){
+                    $fee = $merchant->delivery_fee + $merchant->delivery_fee_per_km * ($get_fare_estimation['distance']/1000 - $merchant->delivery_fee_base_distance);
+                }
+                else{
+                    $fee = $merchant->delivery_fee;
+                }
+            }
+            $order->fee                     = round($fee, 2);
             
             $order->save();
            

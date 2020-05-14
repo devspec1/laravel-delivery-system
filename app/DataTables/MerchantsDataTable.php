@@ -34,10 +34,11 @@ class MerchantsDataTable extends DataTable
     {
         return datatables()
         ->of($query)
-        ->addColumn('action', function ($orders) {
-            $edit = (LOGIN_USER_TYPE=='company' || auth('admin')->user()->can('update_driver')) ? '<a href="'.url(LOGIN_USER_TYPE.'/edit_merchant/'.$orders->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;' : '';
-            $delete = (auth()->guard('company')->user()!=null || auth('admin')->user()->can('delete_driver')) ? '<a data-href="'.url(LOGIN_USER_TYPE.'/delete_merchant/'.$orders->id).'" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#confirm-delete"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;':'';
-            return $edit.$delete;
+        ->addColumn('action', function ($merchant) {
+            $detail = '<a href="'.url(LOGIN_USER_TYPE.'/merchant_orders/'.$merchant->id).'" class="btn btn-xs btn-primary"><i class="fa fa-eye" ></i></a>&nbsp;';
+            $edit = (LOGIN_USER_TYPE=='company' || auth('admin')->user()->can('update_driver')) ? '<a href="'.url(LOGIN_USER_TYPE.'/edit_merchant/'.$merchant->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;' : '';
+            $delete = (auth()->guard('company')->user()!=null || auth('admin')->user()->can('delete_driver')) ? '<a data-href="'.url(LOGIN_USER_TYPE.'/delete_merchant/'.$merchant->id).'" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#confirm-delete"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;':'';
+            return $detail.$edit.$delete;
         });
     }
 
@@ -57,6 +58,9 @@ class MerchantsDataTable extends DataTable
             'integration.name as integration',
             'merchants.name as name', 
             'merchants.description as description',
+            'merchants.delivery_fee as base_fee',
+            'merchants.delivery_fee_base_distance as base_distance_km',
+            'merchants.delivery_fee_per_km as surcharge_fee',
             'merchants.shared_secret as shared_secret',
             'merchants.created_at as created_at',
         ]);
@@ -96,6 +100,9 @@ class MerchantsDataTable extends DataTable
             Column::make('name', 'Name'),
             Column::make('description', 'Description'),
             Column::make('integration', 'Integration Type'),
+            Column::make('base_fee', 'Base fee'),
+            Column::make('base_distance_km', 'Base distance'),
+            Column::make('surcharge_fee', 'Surchange fee per KM'),
             Column::make('shared_secret', 'Integration Secret'),
             Column::make('created_at', 'Created At'),
             Column::make('action', 'Action')
