@@ -114,24 +114,6 @@ class MerchantsController extends Controller
             );
             $validator = Validator::make($request->all(), $rules,$messages, $attributes);
 
-            $validator = Validator::make($request->all(), $rules,$messages, $attributes);
-            if($request->mobile_number!="") {
-                $validator->after(function ($validator) use($request) {
-                    $user = User::where('mobile_number', $request->mobile_number)->where('user_type', $request->user_type)->where('id','!=', $request->id)->count();
-
-                    if($user) {
-                       $validator->errors()->add('mobile_number',trans('messages.user.mobile_no_exists'));
-                    }
-                });
-            }
-            $validator->after(function ($validator) use($request) {
-                $user_email = User::where('email', $request->email)->where('user_type', $request->user_type)->where('id','!=', $request->id)->count();
-
-                if($user_email) {
-                    $validator->errors()->add('email',trans('messages.user.email_exists'));
-                }
-            });
-
             if ($validator->fails()) {
                 return back()->withErrors($validator)->withInput(); // Form calling with Errors and Input values
             }
@@ -143,7 +125,12 @@ class MerchantsController extends Controller
 
             $user->first_name   = $request->first_name;
             $user->last_name    = $request->last_name;
-            $user->used_referral_code = $usedRef->referral_code;
+            
+            if ($usedRef)
+                $user->used_referral_code = $usedRef->referral_code;
+            else
+                $user->used_referral_code = 0;
+
             $user->email        = $request->email;
             $user->country_code = $country_code;
 
@@ -224,10 +211,10 @@ class MerchantsController extends Controller
 
                 $usedRef = User::where('referral_code', $data['result_info']->used_referral_code)->first();
                 if($usedRef){
-                    $data['referrer'] = $usedRef->id;
+                    $data['referrer_id'] = $usedRef->id;
                 }
                 else{
-                    $data['referrer'] = null;
+                    $data['referrer_id'] = null;
                 }
     
                 return view('admin.merchant.edit', $data);
@@ -280,24 +267,8 @@ class MerchantsController extends Controller
             
             $merchant = Merchant::find($request->id);
             $user_id = $merchant->user_id;
-
-            if($request->mobile_number!="") {
-                $validator->after(function ($validator) use($request, $user_id) {
-                    $user = User::where('mobile_number', $request->mobile_number)->where('user_type', $request->user_type)->where('id','!=', $user_id)->count();
-
-                    if($user) {
-                       $validator->errors()->add('mobile_number',trans('messages.user.mobile_no_exists'));
-                    }
-                });
-            }
            
-            $validator->after(function ($validator) use($request, $user_id) {
-                $user_email = User::where('email', $request->email)->where('user_type', $request->user_type)->where('id','!=', $user_id)->count();
-
-                if($user_email) {
-                    $validator->errors()->add('email',trans('messages.user.email_exists'));
-                }
-
+            $validator->after(function ($validator) use($request, $user_id) {                
                 //--- Konstantin N edits: refferal checking for coincidence
                 $referral_c = User::where('referral_code', $request->referral_code)->where('user_type', $request->user_type)->where('id','!=', $user_id)->count();
 
@@ -409,6 +380,9 @@ class MerchantsController extends Controller
 
         try {
             $merchant = Merchant::find($request->id);
+            $contact_info = User::find($merchant->user_id);
+            DriverAddress::where('user_id', $contact_info->id)->delete();
+            $contact_info->delete();
             $merchant->delete();
         }
         catch(\Exception $e) {

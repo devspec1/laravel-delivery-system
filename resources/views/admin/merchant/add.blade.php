@@ -2,7 +2,7 @@
 @section('main')
 <div class="content-wrapper" ng-controller="driver_management">
 	<section class="content-header">
-		<h1> Add Driver </h1>
+		<h1> Add Merchant </h1>
 		<ol class="breadcrumb">
 			<li>
 				<a href="{{ url(LOGIN_USER_TYPE.'/dashboard') }}"> <i class="fa fa-dashboard"></i> Home </a>
@@ -71,7 +71,29 @@
                                 {!! Form::select('integration_type', $integrations, '1', ['class'=>'form-control', 'id' => 'input_integration_type']) !!}
                                 <span class="text-danger">{{ $errors->first('integration_type') }}</span>
                            </div>	
-                        </div>
+						</div>						
+						<div class="form-group">
+							<label for="input_status" class="col-sm-3 control-label">Country Code<em class="text-danger">*</em></label>
+							<div class="col-sm-4">
+								<select class ='form-control' id = 'input_country_code' name='country_code'>
+									<option value="" disabled=""> Select </option>
+									@foreach($country_code_option as $country_code)
+									<option value="{{@$country_code->phone_code}}" <?php if (old('country_code') == $country_code->phone_code) echo 'selected'; ?>>{{$country_code->long_name}}</option>
+									@endforeach
+								</select>
+								<span class="text-danger">{{ $errors->first('country_code') }}</span>
+							</div>							
+							<div class="col-sm-2">
+								<input type="text" disabled name="country_code_view" class ='form-control' id = 'country_code_view'>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="input_status" class="col-sm-3 control-label">Mobile Number </label>
+							<div class="col-sm-6">
+								{!! Form::text('mobile_number','', ['class' => 'form-control', 'id' => 'mobile_number', 'placeholder' => 'Mobile Number']) !!}
+								<span class="text-danger">{{ $errors->first('mobile_number') }}</span>
+							</div>
+						</div>
 						<div class="form-group">
 							<label for="input_first_name" class="col-sm-3 control-label">First Name<em class="text-danger">*</em></label>
 							<div class="col-sm-6">
@@ -86,18 +108,12 @@
 								<span class="text-danger">{{ $errors->first('last_name') }}</span>
 							</div>
                         </div>
-						{{-- <div class="form-group">
-							<label for="used_referral_code" class="col-sm-3 control-label">Invitation Code<em class="text-danger">*</em></label>
-							<div class="col-sm-6">
-								{!! Form::text('used_referral_code', '', ['class' => 'form-control', 'id' => 'input_used_referral_code', 'placeholder' => 'Used referral code']) !!}
-								<span class="text-danger">{{ $errors->first('used_referral_code') }}</span>
-							</div>
-						</div> --}}
 						<div class="form-group" style="margin-bottom: 1em">
 							<label for="input-tags3" class="col-sm-3 control-label">Used Referral Code</label>
 							<div class="col-sm-6">
-								<input type="text" id="input-tags3" name="referrer_id" value="" />						
-							</div>	
+								{!! Form::hidden('referrer_id', '', ['class' => 'form-control', 'id' => 'referrer_id', 'placeholder' => 'referrer id']) !!}
+								<input type="text" id="input-tags3" value=""/>						
+							</div>
 						</div>
 						<div class="form-group">
 							<label for="input_email" class="col-sm-3 control-label">Email<em class="text-danger">*</em></label>
@@ -106,14 +122,7 @@
 								<span class="text-danger">{{ $errors->first('email') }}</span>
 							</div>
 						</div>
-						{!! Form::hidden('user_type','Merchant', ['class' => 'form-control', 'id' => 'user_type', 'placeholder' => 'Select']) !!}						
-						<div class="form-group">
-							<label for="input_status" class="col-sm-3 control-label">Mobile Number </label>
-							<div class="col-sm-6">
-								{!! Form::text('mobile_number','', ['class' => 'form-control', 'id' => 'mobile_number', 'placeholder' => 'Mobile Number']) !!}
-								<span class="text-danger">{{ $errors->first('mobile_number') }}</span>
-							</div>
-						</div>						
+						{!! Form::hidden('user_type','Merchant', ['class' => 'form-control', 'id' => 'user_type', 'placeholder' => 'Select']) !!}										
 						<div class="form-group">
 							<label for="input_status" class="col-sm-3 control-label">Address Line 1 </label>
 							<div class="col-sm-6">
@@ -138,8 +147,7 @@
 						</div>
 						<div class="form-group">
 							<label for="input_status" class="col-sm-3 control-label">State</label>
-							<div class="col-sm-6">
-								
+							<div class="col-sm-6">								
 								{!! Form::text('state','', ['class' => 'form-control', 'id' => 'state', 'placeholder' => 'State']) !!}
 								<span class="text-danger">{{ $errors->first('state') }}</span>
 							</div>
@@ -149,18 +157,6 @@
 							<div class="col-sm-6">
 								{!! Form::text('postal_code','', ['class' => 'form-control', 'id' => 'postal_code', 'placeholder' => 'Postal Code']) !!}
 								<span class="text-danger">{{ $errors->first('postal_code') }}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="input_status" class="col-sm-3 control-label">Country Code<em class="text-danger">*</em></label>
-							<div class="col-sm-6">
-								<select class ='form-control' id = 'input_status' name='country_code'>
-									<option value="" disabled=""> Select </option>
-									@foreach($country_code_option as $country_code)
-									<option value="{{@$country_code->phone_code}}">{{$country_code->long_name}}</option>
-									@endforeach
-								</select>
-								<span class="text-danger">{{ $errors->first('country_code') }}</span>
 							</div>
 						</div>
 					</div>
@@ -177,6 +173,9 @@
 @endsection
 
 @push('scripts')
+<script type="text/javascript">
+	var REQUEST_URL = "{{url('/'.LOGIN_USER_TYPE)}}"; 
+</script>
 <script src="{{ url('js/selectize.js') }}"></script>
 <script>
 	$(function() {
@@ -210,7 +209,7 @@
         });
         selectize.enable();
 		
-        if(v = $("#referrer").val())
+        if(v = $("#referrer_id").val())
             selectize.setValue(v, false);
 
       }
