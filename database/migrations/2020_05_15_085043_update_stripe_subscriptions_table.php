@@ -13,7 +13,7 @@ class UpdateStripeSubscriptionsTable extends Migration
      */
     public function up()
     {
-        \DB::statement("ALTER TABLE stripe_subscriptions CHANGE COLUMN status status ENUM('subscribed, 'paused', 'canceled') DEFAULT 'paused'");
+        \DB::statement("ALTER TABLE stripe_subscriptions CHANGE COLUMN status status ENUM('subscribed', 'paused', 'canceled') DEFAULT 'paused'");
     }
 
     /**
