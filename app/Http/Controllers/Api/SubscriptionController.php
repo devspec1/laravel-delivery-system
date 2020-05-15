@@ -107,7 +107,7 @@ class SubscriptionController extends Controller
                 ]
             ]);
 
-            $plan = StripeSubscriptionsPlans::where('plan_name','Founder')->first();
+            $plan = StripeSubscriptionsPlans::where('plan_name','Member Driver')->first();
 
             $subscription = \Stripe\Subscription::create([
                 'customer' => $customer->id,
@@ -456,7 +456,7 @@ class SubscriptionController extends Controller
             
             $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
             $type = $plan->plan_name;
-            if($type == "Founder"){
+            if($type == "Member driver"){
                 return response()->json([
                     'status_code'		=> '0',
                     'status_message'	=> 'You are already a member.',
