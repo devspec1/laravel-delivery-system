@@ -38,7 +38,32 @@
 @endsection
 @push('scripts')
 <link rel="stylesheet" href="{{ url('css/buttons.dataTables.css') }}">
+<link rel="stylesheet" href="{{ url('css/toastr.min.css') }}">
 <script src="{{ url('js/dataTables.buttons.js') }}"></script>
 <script src="{{ url('js/buttons.server-side.js') }}"></script>
+<script src="{{ url('js/toastr.min.js') }}"></script>
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        Get_Expired_Order();
+    });
+
+    function Get_Expired_Order(){
+           $.ajax({
+               type: 'GET',
+               url: APP_URL+'/admin/home_delivery_test',
+               async: false,
+               dataType: "json",
+               success: function(resultData) {
+                   console.log(resultData.Order_ID_List.length);
+                   for(var i=0;i<resultData.Order_ID_List.length;i++){
+                       var toastr_button = "<a type='button' href='"+APP_URL+"/admin/home_delivery_orders/"+resultData.Order_ID_List[i]+"' style='color:lawngreen;font-size:14px; font-weight:bold'>Click here to see more details of Order</a>";
+                       toastr.error(toastr_button,'Order '+resultData.Order_ID_List[i]+'has been Expired',  {timeOut: 10000, closeButton: false, tapToDismiss: false, draggable: true});
+                   }
+                }
+           });
+       }
+       setInterval(Get_Expired_Order, 300000);
+</script>
 {!! $dataTable->scripts() !!}
 @endpush

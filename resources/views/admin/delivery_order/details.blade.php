@@ -1,20 +1,20 @@
 @extends('admin.template')
 @section('main')
 <div class="content-wrapper">
-	<section class="content-header">
-		<h1> View Merchant Orders </h1>
-		<ol class="breadcrumb">
-			<li>
-				<a href="{{ url(LOGIN_USER_TYPE.'/dashboard') }}"><i class="fa fa-dashboard"></i> Home </a>
-			</li>
-			<li>
-				<a href="{{ url(LOGIN_USER_TYPE.'/merchant_orders') }}"> Merchant Orders </a>
-			</li>
-			<li class="active">
-				Details
-			</li>
-		</ol>
-	</section>
+		<section class="content-header">
+			<h1> View Merchant Orders </h1>
+			<ol class="breadcrumb">
+				<li>
+					<a href="{{ url(LOGIN_USER_TYPE.'/dashboard') }}"><i class="fa fa-dashboard"></i> Home </a>
+				</li>
+				<li>
+					<a href="{{ url(LOGIN_USER_TYPE.'/merchant_orders') }}"> Merchant Orders </a>
+				</li>
+				<li class="active">
+					Details
+				</li>
+			</ol>
+		</section>
 	<section class="content">
 		<div class="row">
 			<div class="col-md-8 col-sm-offset-2" style="margin-left: 0px; width:100%;">

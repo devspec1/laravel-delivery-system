@@ -37,9 +37,10 @@ class HomeDeliveryOrderDataTable extends DataTable
         return datatables()
             ->of($query)
             ->addColumn('action', function ($orders) {
+                $detail = '<a href="'.url(LOGIN_USER_TYPE.'/home_delivery_orders/'.$orders->id).'" class="btn btn-xs btn-primary"><i class="fa fa-eye" ></i></a>&nbsp;';
                 $edit = (LOGIN_USER_TYPE=='company' || auth('admin')->user()->can('update_driver')) ? '<a href="'.url(LOGIN_USER_TYPE.'/edit_home_delivery/'.$orders->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;' : '';
                 $delete = (auth()->guard('company')->user()!=null || auth('admin')->user()->can('delete_driver')) ? '<a data-href="'.url(LOGIN_USER_TYPE.'/delete_home_delivery/'.$orders->id).'" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#confirm-delete"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;':'';
-                return $edit.$delete;
+                return $detail.$edit.$delete;
             });
     }
 
@@ -64,7 +65,7 @@ class HomeDeliveryOrderDataTable extends DataTable
             ->select([
                 'delivery_orders.id as id',
                 DB::raw('CONCAT(delivery_orders.estimate_time," mins") as estimate_time'),
-                'delivery_orders.driver_id as driver_id', 
+                'delivery_orders.driver_id as driver_id',
                 'delivery_orders.created_at as created_at',
                 'delivery_orders.created_at as created_at',
                 'merchants.name as merchant_name',
