@@ -77,6 +77,8 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
     
     //Manage Home Delivery
     Route::get('home_delivery', 'HomeDeliveryController@index');
+    Route::get('home_delivery_orders/{id}', 'HomeDeliveryController@home_delivery_order_details');
+    Route::get('home_delivery_test', 'HomeDeliveryController@test');
     Route::match(array('GET', 'POST'),'add_home_delivery', 'HomeDeliveryController@add');
     Route::match(array('GET', 'POST'),'edit_home_delivery/{id}', 'HomeDeliveryController@update');
     Route::match(array('GET', 'POST'),'delete_home_delivery/{id}', 'HomeDeliveryController@delete');

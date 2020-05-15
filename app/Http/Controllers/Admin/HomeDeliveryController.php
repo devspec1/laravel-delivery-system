@@ -19,6 +19,7 @@ use App\Models\DriverLocation;
 use App\Http\Start\Helpers;
 use App\Http\Helper\RequestHelper;
 
+use DateInterval;
 use Validator;
 use JWTAuth;
 use DB;
@@ -46,6 +47,28 @@ class HomeDeliveryController extends Controller
     public function index(HomeDeliveryOrderDataTable $dataTable)
     {
         return $dataTable->render('admin.delivery_order.view');
+    }
+
+    public function test(Request $request){
+        $data = HomeDeliveryOrder::all();
+        $Order_ID_List =[];
+        for($i=0;$i<count($data);$i++){
+            $estimate_time = $data[$i]['estimate_time'];
+            $delivery_time = new DateTime($data[$i]['created_at']);
+            $delivery_time->add(new DateInterval('PT' . $estimate_time . 'M'));
+            $delivery_time_stamp = $delivery_time->format('Y-m-d H:i:s');
+            $data->delivery_time =$delivery_time_stamp;
+            if(now()>$delivery_time_stamp){
+                $data[$i]-> delivery_current_status = true;
+                array_push($Order_ID_List, $data[$i]->id);
+            }
+            else{
+                $data[$i]-> delivery_current_status = false;
+            }
+        }
+
+        return response()->json( [ "Order_ID_List"=>$Order_ID_List]);
+
     }
 
     /**
@@ -181,7 +204,7 @@ class HomeDeliveryController extends Controller
      * @return redirect     to Home Delivery Order View
      */
     public function update(Request $request)
-    {   
+    {
         if($request->isMethod("GET")) {
             //Inactive Company could not add driver
             if (LOGIN_USER_TYPE=='company' && Auth::guard('company')->user()->status != 'Active') {
@@ -206,7 +229,7 @@ class HomeDeliveryController extends Controller
 
                 $data['country_code'] = $user->country_code;
 
-                $data['result']['pick_up_latitude'] = $ride_request->pickup_latitude;
+               $data['result']['pick_up_latitude'] = $ride_request->pickup_latitude;
                 $data['result']['pick_up_longitude'] = $ride_request->pickup_longitude;
                 $data['result']['pick_up_location'] = $ride_request->pickup_location;
                 $data['result']['drop_off_latitude'] = $ride_request->drop_latitude;
@@ -216,9 +239,9 @@ class HomeDeliveryController extends Controller
                 $timezone = date_default_timezone_get();
         
                 $date_obj = \Carbon\Carbon::now()->setTimezone($timezone);
-        
+
                 $data['timezon'] = $timezone;
-        
+
                 if (LOGIN_USER_TYPE=='company' && session()->get('currency') != null) {
                     $default_currency = Currency::whereCode(session()->get('currency'))->first();
                 }
@@ -490,4 +513,35 @@ class HomeDeliveryController extends Controller
 
         return $ride_request;
     }
+
+    public function home_delivery_order_details(Request $request, HomeDeliveryOrder $model){
+
+        // This is for getting Order Result
+        $data['order_result'] = HomeDeliveryOrder::find($request->id);
+
+        $data['order_result'] ->merchant_name = Merchant::where('id', $data['order_result']['merchant_id'])->get()->first()->name;
+        $estimate_time = $data['order_result']['estimate_time'];
+        $delivery_time = new DateTime($data['order_result']['created_at']);
+        $delivery_time->add(new DateInterval('PT' . $estimate_time . 'M'));
+        $delivery_time_stamp = $delivery_time->format('Y-m-d H:i:s');
+        $data['order_result'] ->delivery_time =$delivery_time_stamp;
+        if(now()>$delivery_time_stamp){
+            $data['order_result'] -> delivery_current_status = true;
+        }
+        else{
+            $data['order_result'] -> delivery_current_status = false;
+        }
+
+        // This is for getting Location Result
+        $data['location_result'] = RideRequest::where('id', $data['order_result']->ride_request)->get()->first();
+        $data['location_result'] ->distance = $data['order_result']->distance/1000;
+
+        //This is for getting Customer Data
+        $data['customer'] = User::where('id',$data['order_result']->customer_id)->first();
+        $data['customer']->country = Country::where('phone_code',$data['customer'] ->country_code)->get()->first()->long_name;
+
+        return view('admin.delivery_order.order_details', $data);
+    }
+
+
 }
