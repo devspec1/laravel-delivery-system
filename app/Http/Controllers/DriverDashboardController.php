@@ -85,7 +85,7 @@ class DriverDashboardController extends Controller
     {
 
 
-        $data['merchants'] = DB::select(DB::raw('SELECT * FROM merchants WHERE user_id IN (SELECT id FROM Users WHERE used_referral_code = ' . @Auth::user()->id) . ")");
+        $data['merchants'] = DB::select(DB::raw('SELECT * FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ")");
         
         foreach($data['merchants'] as $k => $v) {
 
