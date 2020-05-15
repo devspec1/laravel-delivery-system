@@ -218,7 +218,7 @@ class ManualBookingController extends Controller
     //get user by phone number
     public function search_phone(Request $request)
     {
-        $user_details=User::where('user_type',$request->type)->where(function ($query) use ($request) {
+        $user_details=DB::table('users')->leftJoin('driver_address', 'users.id', '=', 'driver_address.user_id')->where('user_type',$request->type)->where(function ($query) use ($request) {
                 $query->where('country_code', '')
                 ->orWhere('country_code', $request->country_code);
             });
@@ -226,7 +226,16 @@ class ManualBookingController extends Controller
         {
             $user_details=$user_details->where('mobile_number', 'like', '%'.$request->text.'%');
         }
-        return $user_details->get()->toJson();
+        $result = $user_details->get();
+        foreach ($result as $row)
+        {
+            $usedRef = User::where('referral_code', $row->used_referral_code)->first();
+            if ($usedRef)
+                $row->used_referral_code = $usedRef->id;
+            else
+                $row->used_referral_code = 0;
+        }
+        return $result->toJson();
     }
 
     //get car type list

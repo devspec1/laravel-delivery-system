@@ -86,8 +86,9 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
     Route::get('merchant_orders/{id}', 'MerchantsController@merchant_order_details');
     Route::match(array('GET', 'POST'),'add_merchant', 'MerchantsController@add');
     Route::match(array('GET', 'POST'),'edit_merchant/{id}', 'MerchantsController@update');
-    Route::match(array('GET', 'POST'),'delete_merchant/{id}', 'MerchantsController@delete');
-    
+	Route::match(array('GET', 'POST'),'delete_merchant/{id}', 'MerchantsController@delete');
+	Route::post('search_phone_merchant', 'MerchantsController@search_phone_merchant');
+	
 	//Import Driver
 	Route::match(array('GET', 'POST'), 'import_drivers', 'DriverController@import_drivers');
 	
