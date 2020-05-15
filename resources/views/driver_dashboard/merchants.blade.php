@@ -14,36 +14,20 @@
                 <span>Location</span>
                 <span>Since</span>   
               </div>
-               <div>
-                <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>Jan 2019</span>
+              <?php foreach($merchants as $m) { ?>
+                <div>
+                <div>
+                 @if($m->profile_picture->src == '')
+                                <img src="{{ url('images/user.jpeg')}}">
+
+                                @else
+                                <img src="{{ $m->profile_picture->src }}" >
+                                @endif <span> <?php echo $m['first_name'] . " " . $m['last_name']; ?> </span> </div>
+                <span><?php echo $m['address']; ?></span>
+                <span><?php echo $m['since']; ?></span>
                 </div>
-                 <div>
-                <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>Jan 2019</span>
-                </div>
-                 <div>
-                <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>Jan 2019</span>
-                </div>
-                 <div>
-                <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>Jan 2019</span>
-                </div>
-                 <div>
-                <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>Jan 2019</span>
-                </div>
-                 <div>
-                <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>Jan 2019</span>
-                </div>
+              <?php  } ?>
+               
               
             </div>
 

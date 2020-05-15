@@ -140,7 +140,8 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 
 	//New Routes (Menu)
 
-
+	Route::get('driver/membership', 'DriverDashboardController@driver_membership');
+	Route::get('driver/password', 'DriverDashboardController@driver_password');
 	Route::get('driver/driver_payment', 'DriverDashboardController@driver_payment');
 	Route::get('driver_profile', 'DriverDashboardController@driver_profile');
 	Route::get('driver/home', 'DriverDashboardController@driver_home');

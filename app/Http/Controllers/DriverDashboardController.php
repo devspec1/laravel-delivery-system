@@ -42,7 +42,7 @@ class DriverDashboardController extends Controller
     /*
     * Driver Profile
     */
-	public function driver_profile()
+    public function driver_profile()
     {
         $data['result'] = User::find(@Auth::user()->id);
         return view('driver_dashboard.profile',$data);
@@ -51,6 +51,10 @@ class DriverDashboardController extends Controller
     public function driver_home()
     {
         $data['result'] = User::find(@Auth::user()->id);
+
+        $data['driveteam'] = count(User::where("used_referral_code", @Auth::user()->id)->get());
+        $data['deliveries'] = count(DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM Users WHERE used_referral_code = ' . @Auth::user()->id) . ")"));
+        $data['merchantCount'] = count(DB::select(DB::raw('SELECT * FROM merchants WHERE user_id IN (SELECT id FROM Users WHERE used_referral_code = ' . @Auth::user()->id) . ")"));
 
         return view('driver_dashboard.home',$data);
     }
@@ -62,16 +66,54 @@ class DriverDashboardController extends Controller
     }
      public function driver_leaderboard()
     {
+         $data['merchants'] = User::where("used_referral_code", @Auth::user()->id)->get();
+        
+        foreach($data['merchants'] as $k => $v) {
+
+            $add = DB::table('driver_address')->where('user_id', $v->id)->first();
+     
+            if($add)
+                $data['merchants'][$k]['address'] = $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code;
+            $data['merchants'][$k]['profile_picture'] = DB::table('profile_picture')->where('user_id', $v->id)->first();
+
+            $data['merchants'][$k]['since'] = date_format($v->created_at, "M Y");
+        }
         $data['result'] = User::find(@Auth::user()->id);
         return view('driver_dashboard.leaderboard',$data);
     }
      public function driver_merchants()
     {
+
+
+        $data['merchants'] = DB::select(DB::raw('SELECT * FROM merchants WHERE user_id IN (SELECT id FROM Users WHERE used_referral_code = ' . @Auth::user()->id) . ")");
+        
+        foreach($data['merchants'] as $k => $v) {
+
+            $add = DB::table('driver_address')->where('user_id', $v->id)->first();
+     
+            if($add)
+                $data['merchants'][$k]['address'] = $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code;
+            $data['merchants'][$k]['profile_picture'] = DB::table('profile_picture')->where('user_id', $v->id)->first();
+
+            $data['merchants'][$k]['since'] = date_format($v->created_at, "M Y");
+        }
         $data['result'] = User::find(@Auth::user()->id);
         return view('driver_dashboard.merchants',$data);
     }
     public function driver_driver_team()
     {
+        $data['merchants'] = User::where("used_referral_code", @Auth::user()->id)->get();
+        
+        foreach($data['merchants'] as $k => $v) {
+
+            $add = DB::table('driver_address')->where('user_id', $v->id)->first();
+     
+            if($add)
+                $data['merchants'][$k]['address'] = $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code;
+            $data['merchants'][$k]['profile_picture'] = DB::table('profile_picture')->where('user_id', $v->id)->first();
+
+            $data['merchants'][$k]['since'] = date_format($v->created_at, "M Y");
+        }
         $data['result'] = User::find(@Auth::user()->id);
         return view('driver_dashboard.driver_team',$data);
     }
@@ -79,6 +121,16 @@ class DriverDashboardController extends Controller
     {
         $data['result'] = User::find(@Auth::user()->id);
         return view('driver_dashboard.driver_payment',$data);
+    }
+    public function driver_password()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.password',$data);
+    }
+    public function driver_membership()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.membership',$data);
     }
      public function driver_delivery_orders()
     {
@@ -755,14 +807,14 @@ class DriverDashboardController extends Controller
     */
     public function vehicle_view()
     {
-		$user = User::where('id', @Auth::user()->id)->first();
+        $user = User::where('id', @Auth::user()->id)->first();
 
         if ($user == '') {
-			abort(404);
-		}
+            abort(404);
+        }
         // $vehicle_details = array(
-    	//     ["key" => "car_id", "value" => @$user->driver_documents->vehicle_id ?: '1'],
-    	//     ["key" => "car_type", "value" => $user->car_type],
+        //     ["key" => "car_id", "value" => @$user->driver_documents->vehicle_id ?: '1'],
+        //     ["key" => "car_type", "value" => $user->car_type],
         //     ["key" => "car_image", "value" => @$user->driver_documents->car_type->vehicle_image],
         //     ["key" => "car_active_image", "value" => @$user->driver_documents->car_type->active_image],
         //     ["key" => "vehicle_name", "value" => @$user->driver_documents->vehicle_name ?? ''],
@@ -775,7 +827,7 @@ class DriverDashboardController extends Controller
         $vehicle_details['vehicle_name'] = @$user->driver_documents->vehicle_name ?? '';
         $vehicle_details['vehicle_number'] = @$user->driver_documents->vehicle_number ?? '';
         
-		//return response()->json($vehicle_details);
+        //return response()->json($vehicle_details);
         return view('driver_dashboard.vehicle_view', $vehicle_details);
     }
 

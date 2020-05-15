@@ -15,44 +15,22 @@
                 <span>Since</span>
                 <span style="width: 7em">Status</span>   
               </div>
-               <div>
-                <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>Jan 2019</span>
-                <span class="statusActive1 status1">Active</span> 
-                </div>
+              <?php foreach($merchants as $m) { ?>
                 <div>
-                <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>Jan 2019</span>
-                <span class="statusPending1 status1">Pending</span> 
-                </div>
                 <div>
-                <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>Jan 2019</span>
-                <span class="statusActive1 status1">Active</span> 
+                 @if($m->profile_picture->src == '')
+                                <img src="{{ url('images/user.jpeg')}}">
+
+                                @else
+                                <img src="{{ $m->profile_picture->src }}" >
+                                @endif <span> <?php echo $m['first_name'] . " " . $m['last_name']; ?> </span> </div>
+                <span><?php echo $m['address']; ?></span>
+                <span><?php echo $m['since']; ?></span>
+                 <span class="status{{$m->status}}1 status1">{{$m->status}}</span>
+                
                 </div>
-                <div>
-                <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>Jan 2019</span>
-                <span class="statusActive1 status1">Active</span> 
-                </div>
-                <div>
-                <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>Jan 2019</span>
-                <span class="statusActive1 status1">Active</span> 
-                </div>
-                <div>
-                <div> <img src="{{ url('images/user.jpeg')}}"> <span> Joe Corrigan </span> </div>
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>Jan 2019</span>
-                <span class="statusActive1 status1">Active</span> 
-                </div>
+              <?php  } ?>
               
-            </div>
 
 
 

@@ -23,7 +23,7 @@
           <div class="newDashCardWrp">
           <span style="font-size: 130%; font-weight: bold">Deliveries</span>
           <div style="display: flex; flex-direction: column; align-items: center">
-            <b style="font-size: 400%; margin-top: 0.2em; margin-bottom: 0.2em; font-family: 'MontserratBold'">3</b>
+            <b style="font-size: 400%; margin-top: 0.2em; margin-bottom: 0.2em; font-family: 'MontserratBold'"><?php echo $deliveries; ?></b>
             <span style="font-size: 100%; ">+1 this week</span>
           </div>
           
@@ -31,7 +31,7 @@
         <div class="newDashCardWrp">
           <span style="font-size: 130%; font-weight: bold">Drive Team</span>
           <div style="display: flex; flex-direction: column; align-items: center">
-            <b style="font-size: 400%; margin-top: 0.2em; margin-bottom: 0.2em; font-family: 'MontserratBold'">8</b>
+            <b style="font-size: 400%; margin-top: 0.2em; margin-bottom: 0.2em; font-family: 'MontserratBold'"><?php echo $driveteam; ?></b>
             <span style="font-size: 100%; ">+1 this week</span>
           </div>
           
@@ -39,7 +39,7 @@
         <div class="newDashCardWrp">
           <span style="font-size: 130%; font-weight: bold">Merchants</span>
           <div style="display: flex; flex-direction: column; align-items: center">
-            <b style="font-size: 400%; margin-top: 0.2em; margin-bottom: 0.2em; font-family: 'MontserratBold'">8</b>
+            <b style="font-size: 400%; margin-top: 0.2em; margin-bottom: 0.2em; font-family: 'MontserratBold'"><?php echo $merchantCount; ?></b>
             <span style="font-size: 100%; ">+1 this week</span>
           </div>
           

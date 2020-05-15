@@ -16,7 +16,7 @@
                         </a>
 
                     </li>
-                     <li class="driver-dashboard-treeview {{ (Route::current()->uri() == 'driver/driver_payment' || Route::current()->uri() == 'driver_profile') ? 'active' : ''  }}">
+                     <li class="driver-dashboard-treeview {{ (Route::current()->uri() == 'driver/driver_payment' || Route::current()->uri() == 'driver_profile' || Route::current()->uri() == 'driver/membership'|| Route::current()->uri() == 'driver/password') ? 'active' : ''  }}">
                         <a href="#" style="border-bottom: none">
                             <span>{{trans('messages.header.account.root')}}</span><i class="fa fa-angle-right pull-right"></i>
                         </a>
@@ -27,6 +27,12 @@
                             
                             <li>
                                 <a href="{{ url('driver/driver_payment') }}" aria-selected="{{ (Route::current()->uri() == 'driver/driver_payment') ? 'true' : 'false' }}" class="side-nav-a">Payment</a>
+                            </li>
+                            <li>
+                                <a href="{{ url('driver/password') }}" aria-selected="{{ (Route::current()->uri() == 'driver/password') ? 'true' : 'false' }}" class="side-nav-a">Password</a>
+                            </li>
+                            <li>
+                                <a href="{{ url('driver/membership') }}" aria-selected="{{ (Route::current()->uri() == 'driver/membership') ? 'true' : 'false' }}" class="side-nav-a">Membership</a>
                             </li>
                         </ul>
                     </li>
