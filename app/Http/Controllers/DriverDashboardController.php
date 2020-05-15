@@ -53,8 +53,8 @@ class DriverDashboardController extends Controller
         $data['result'] = User::find(@Auth::user()->id);
 
         $data['driveteam'] = count(User::where("used_referral_code", @Auth::user()->id)->get());
-        $data['deliveries'] = count(DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM Users WHERE used_referral_code = ' . @Auth::user()->id) . ")"));
-        $data['merchantCount'] = count(DB::select(DB::raw('SELECT * FROM merchants WHERE user_id IN (SELECT id FROM Users WHERE used_referral_code = ' . @Auth::user()->id) . ")"));
+        $data['deliveries'] = count(DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ")"));
+        $data['merchantCount'] = count(DB::select(DB::raw('SELECT * FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ")"));
 
         return view('driver_dashboard.home',$data);
     }
