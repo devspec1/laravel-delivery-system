@@ -30,32 +30,8 @@
                  <span class="status{{$m->status}}1 status1">{{$m->status}}</span>
 
                 </div>
-                <div>
-                <div>
-                 @if($m->profile_picture->src == '')
-                                <img src="{{ url('images/user.jpeg')}}">
-
-                                @else
-                                <img src="{{ $m->profile_picture->src }}" >
-                                @endif <span> <?php echo $m->first_name. " " . $m->last_name; ?> </span> </div>
-                <span><?php echo $m->address; ?></span>
-                <span><?php echo $m->since; ?></span>
-                 <span class="status{{$m->status}}1 status1">{{$m->status}}</span>
-
-                </div>
-                <div>
-                <div>
-                 @if($m->profile_picture->src == '')
-                                <img src="{{ url('images/user.jpeg')}}">
-
-                                @else
-                                <img src="{{ $m->profile_picture->src }}" >
-                                @endif <span> <?php echo $m->first_name. " " . $m->last_name; ?> </span> </div>
-                <span><?php echo $m->address; ?></span>
-                <span><?php echo $m->since; ?></span>
-                 <span class="status{{$m->status}}1 status1">{{$m->status}}</span>
-
-                </div>
+              
+                
               <?php  } ?>
         </div>
               
