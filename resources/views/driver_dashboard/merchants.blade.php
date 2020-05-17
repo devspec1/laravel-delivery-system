@@ -8,12 +8,13 @@
               <span style="font-size: 200%; color: #1B187F;opacity: 0.8; font-weight: bold; font-family:'MontserratReg'">Merchants</span>
               
             </div>
-            <div style="display: flex; flex-direction: column; width: 70%" id="merchantsSubWrp">
+            <div style="display: flex; flex-direction: column; width: 70%" >
               <div class="merchantsSubHeader">
                 <span>Trading Name</span>
                 <span>Location</span>
                 <span>Since</span>   
               </div>
+              <div class="subWrapper1" id="merchantsSubWrp">
               <?php foreach($merchants as $m) { ?>
                 <div>
                 <div>
@@ -22,11 +23,12 @@
 
                                 @else
                                 <img src="{{ $m->profile_picture->src }}" >
-                                @endif <span> <?php echo $m['first_name'] . " " . $m['last_name']; ?> </span> </div>
-                <span><?php echo $m['address']; ?></span>
-                <span><?php echo $m['since']; ?></span>
+                                @endif <span> <?php echo $m->first_name. " " . $m->last_name; ?> </span> </div>
+                <span><?php echo $m->address; ?></span>
+                <span><?php echo $m->since; ?></span>
                 </div>
               <?php  } ?>
+            </div>
                
               
             </div>

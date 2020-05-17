@@ -52,9 +52,14 @@ class DriverDashboardController extends Controller
     {
         $data['result'] = User::find(@Auth::user()->id);
 
-        $data['driveteam'] = count(User::where("used_referral_code", @Auth::user()->id)->get());
-        $data['deliveries'] = count(DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ")"));
-        $data['merchantCount'] = count(DB::select(DB::raw('SELECT * FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ")"));
+        $data['driveteam'] = count(DB::select(DB::raw('SELECT * FROM users WHERE used_referral_code = ' . @Auth::user()->id . " OR id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")")));
+
+
+        $data['deliveries'] = count(DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR driver_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ") OR merchant_id IN (SELECT id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code =" . @Auth::user()->id . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . "))"));
+
+
+        $data['merchantCount'] = count(DB::select(DB::raw('SELECT DISTINCT user_id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")"));
+
 
         return view('driver_dashboard.home',$data);
     }
@@ -85,34 +90,35 @@ class DriverDashboardController extends Controller
     {
 
 
-        $data['merchants'] = DB::select(DB::raw('SELECT * FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ")");
+        $data['merchants'] = DB::select(DB::raw('SELECT * FROM users WHERE id IN (SELECT user_id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . "))");
         
         foreach($data['merchants'] as $k => $v) {
 
             $add = DB::table('driver_address')->where('user_id', $v->id)->first();
      
             if($add)
-                $data['merchants'][$k]['address'] = $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code;
-            $data['merchants'][$k]['profile_picture'] = DB::table('profile_picture')->where('user_id', $v->id)->first();
+                $data['merchants'][$k]->address = $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code;
+            $data['merchants'][$k]->profile_picture = DB::table('profile_picture')->where('user_id', $v->id)->first();
 
-            $data['merchants'][$k]['since'] = date_format($v->created_at, "M Y");
+            
+            $data['merchants'][$k]->since = $v->created_at ? date_format(date_create($v->created_at), "M Y") : "";
         }
         $data['result'] = User::find(@Auth::user()->id);
         return view('driver_dashboard.merchants',$data);
     }
     public function driver_driver_team()
     {
-        $data['merchants'] = User::where("used_referral_code", @Auth::user()->id)->get();
+        $data['merchants'] = DB::select(DB::raw('SELECT * FROM users WHERE id IN (SELECT user_id FROM referral_users WHERE referral_id = ' . @Auth::user()->id) . ") OR used_referral_code = " . @Auth::user()->id);
         
         foreach($data['merchants'] as $k => $v) {
 
             $add = DB::table('driver_address')->where('user_id', $v->id)->first();
      
-            if($add)
-                $data['merchants'][$k]['address'] = $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code;
-            $data['merchants'][$k]['profile_picture'] = DB::table('profile_picture')->where('user_id', $v->id)->first();
+            
+                $data['merchants'][$k]->address = $add ?  $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code : "";
+            $data['merchants'][$k]->profile_picture = DB::table('profile_picture')->where('user_id', $v->id)->first();
 
-            $data['merchants'][$k]['since'] = date_format($v->created_at, "M Y");
+            $data['merchants'][$k]->since = date_format(date_create($v->created_at), "M Y");
         }
         $data['result'] = User::find(@Auth::user()->id);
         return view('driver_dashboard.driver_team',$data);
@@ -134,6 +140,26 @@ class DriverDashboardController extends Controller
     }
      public function driver_delivery_orders()
     {
+       $data['deliveries'] =  DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR driver_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ") OR merchant_id IN (SELECT id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code =" . @Auth::user()->id . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")) ORDER BY created_at DESC");
+
+       foreach($data['deliveries'] as $k => $v) {
+        $driver = User::find($v->driver_id);
+       
+        if($driver) {
+             $request = DB::table("request")->where('id', $v->ride_request)->first();
+            $data['deliveries'][$k]->driver_name = $driver->first_name . " " . $driver->last_name;
+            if($request) {
+            $data['deliveries'][$k]->pickup_loc = $request->pickup_location;
+            $data['deliveries'][$k]->drop_loc = $request->drop_location;
+            }
+                else
+                     unset($data['deliveries'][$k]);
+            
+        }
+        else
+            unset($data['deliveries'][$k]);
+        }
+
         $data['result'] = User::find(@Auth::user()->id);
         return view('driver_dashboard.delivery',$data);
     }

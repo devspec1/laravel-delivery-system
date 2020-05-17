@@ -8,71 +8,35 @@
               <span style="font-size: 200%; color: #1B187F;opacity: 0.8; font-weight: bold; font-family:'MontserratReg'">Deliveries</span>
               
             </div>
-            <div style="display: flex; flex-direction: column; width: 100%" id="deliverySubWrp">
+            <div style="display: flex; flex-direction: column; width: 100%" >
               <div class="deliverySubHeader">
                 <span>Order Completed</span>
                 <span>Venue</span>
                 <span>Address</span>
                 <span>Driver Name</span>
-                <span>Total</span>
+                <span style="width: 10%">Total</span>
                
               </div>
+              <div class="subWrapper1"  id="deliverySubWrp">
+                <?php foreach($deliveries as $d) { 
+
+                  $created_at = date_format(date_create($d->created_at), 'm/d/Y H:i:s');
+                  ?>
                <div>
-                <div> <span>04/02/2020 | 11:25</span> <span> Order No. 1246098 </span> </div>
+                <div> <span><?php echo str_replace(" ", " | ", $created_at); ?></span> <span> Order No. {{ $d->id }}</span> </div>
                
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>The Ants Cafe, 2259 14A</span>
-               <span>Joe Corrigan</span>
-                <span>$76.00</span>
+                <span style="font-size: 85%"><?php echo $d->pickup_loc; ?></span>
+                <span style="font-size: 85%"><?php echo $d->drop_loc; ?></span>
+               <span><?php echo $d->driver_name; ?></span>
+                <span style="width: 10%"><?php echo $d->fee . "$"; ?></span>
                 
               </div>
-              <div>
-                <div> <span>04/02/2020 | 11:25</span> <span> Order No. 1246098 </span> </div>
-               
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>The Ants Cafe, 2259 14A</span>
-               <span>Joe Corrigan</span>
-                <span>$76.00</span>
-                
-              </div>
-              <div>
-                <div> <span>04/02/2020 | 11:25</span> <span> Order No. 1246098 </span> </div>
-               
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>The Ants Cafe, 2259 14A</span>
-               <span>Joe Corrigan</span>
-                <span>$76.00</span>
-                
-              </div>
-              <div>
-                <div> <span>04/02/2020 | 11:25</span> <span> Order No. 1246098 </span> </div>
-               
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>The Ants Cafe, 2259 14A</span>
-               <span>Joe Corrigan</span>
-                <span>$76.00</span>
-                
-              </div>
-              <div>
-                <div> <span>04/02/2020 | 11:25</span> <span> Order No. 1246098 </span> </div>
-               
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>The Ants Cafe, 2259 14A</span>
-               <span>Joe Corrigan</span>
-                <span>$76.00</span>
-                
-              </div>
-              <div>
-                <div> <span>04/02/2020 | 11:25</span> <span> Order No. 1246098 </span> </div>
-               
-                <span>The Ants Cafe, 2259 14A</span>
-                <span>The Ants Cafe, 2259 14A</span>
-               <span>Joe Corrigan</span>
-                <span>$76.00</span>
-                
-              </div>
+              <?php 
+            } ?>
+             
               
             </div>
+          </div>
 
 
 

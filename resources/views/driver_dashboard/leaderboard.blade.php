@@ -8,13 +8,14 @@
               <span style="font-size: 200%; color: #1B187F;opacity: 0.8; font-weight: bold; font-family:'MontserratReg'">Leaderboard</span>
               
             </div>
-            <div style="display: flex; flex-direction: column; width: 100%" id="leaderboardSubWrp">
+            <div style="display: flex; flex-direction: column; width: 100%" >
              <div class="leaderboardSubHeader">
                 <span style="width: 30%">Driver Name</span>
                 <span>Location</span>
                 <span>Since</span>
                 <span style="width: 7em">Status</span>   
               </div>
+              <div class="subWrapper1" id="leaderboardSubWrp">
               <?php foreach($merchants as $m) { ?>
                 <div>
                 <div>

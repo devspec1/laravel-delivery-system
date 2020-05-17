@@ -3066,16 +3066,20 @@ i.google-ride {
     opacity: 0.75;
    font-size: 93%;
 }
-#deliverySubWrp > div > span:last-child {
-    font-family: 'MontserratBold';
-}
+
 #deliverySubWrp, #leaderboardSubWrp, #driverteamSubWrp, #merchantsSubWrp {
-    margin-top: 3em;
+ 
     border: 1px solid rgba(0, 0, 0, 0.25);
+    border-top: none;
 }
 .deliverySubHeader, .leaderboardSubHeader, .driverteamSubHeader, .merchantsSubHeader {
     background: rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: none;
+
     opacity: 0.8;
+       margin-top: 3em;
+       padding-right: 1em;
 }
 .deliverySubHeader > span, .leaderbordSubHeader > span, .driverteamSubHeader > span, .merchantsSubHeader > span {
     opacity: 0.8;
@@ -3083,29 +3087,35 @@ i.google-ride {
 #deliverySubWrp .deliverySubHeader >span:first-child {
     text-align: left;
 }
-#deliverySubWrp > div {
+#deliverySubWrp > div, .deliverySubHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1.31em;
     padding-left: 2.5em;
-    padding-right: 0;
+    
     border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
-#leaderboardSubWrp > div, #driverteamSubWrp > div, #merchantsSubWrp > div {
+#deliverySubWrp > div {
+    padding-right: 0;
+}
+.subWrapper1 {
+    display: flex; flex-direction: column; max-height: 37em; overflow-y: scroll;
+}
+#leaderboardSubWrp > div, #driverteamSubWrp > div, #merchantsSubWrp > div, .leaderboardSubHeader, .driverteamSubHeader, .merchantsSubHeader, .deliverySubHeader {
     display: flex;
     align-items: center;
     padding: 1.31em;
     padding-left: 2.5em;
-    padding-right: 0;
+  
     border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
-#deliverySubWrp > div:first-child {
+.deliverySubHeader {
     font-weight: bold;
     font-family: 'MontserratBold';
     
 }
-#deliverySubWrp > div:first-child > span, #merchantsSubWrp > .merchantsSubHeader > span,  #leaderboardSubWrp .leaderboardSubHeader > span, #driverteamSubWrp > .driverteamSubHeader > span {
+.deliverySubHeader > span, #merchantsSubWrp > .merchantsSubHeader > span,  #leaderboardSubWrp .leaderboardSubHeader > span, #driverteamSubWrp > .driverteamSubHeader > span {
     font-weight: bold;
     font-family: 'MontserratBold';
     
@@ -3142,17 +3152,17 @@ i.google-ride {
     border-radius: 50%;
     margin-right: 1.4em;
 }
-#driverteamSubWrp > div > div:first-child {
+#driverteamSubWrp > div > div:first-child, .driverteamSubHeader > div:first-child {
     display: flex;
     align-items: center;
     width: 30%;
 }
-#driverteamSubWrp > div > div:first-child span {
+#driverteamSubWrp > div > div:first-child span, .driverteamSubHeader > div:first-child span {
     opacity: 0.9;
     font-size: 89%;
     font-family: 'MontserratReg';
 }
-#driverteamSubWrp > div > div:first-child > img {
+#driverteamSubWrp > div > div:first-child > img, .driverteamSubHeader > div:first-child > img {
     height: 3em;
     width: 3em;
     border-radius: 50%;
@@ -3163,10 +3173,10 @@ i.google-ride {
     opacity: 0.75;
    font-size: 93%;
    width: 20%;
-   text-align: center;
+   
 
 }
-#leaderboardSubWrp > div > span {
+#leaderboardSubWrp > div > span, .leaderboardSubHeader  > span {
     font-family: 'MontserratReg';
     opacity: 0.75;
    font-size: 93%;
@@ -3174,7 +3184,7 @@ i.google-ride {
  
 
 }
- #merchantsSubWrp > div > span {
+ #merchantsSubWrp > div > span, .merchantsSubHeader > span {
     font-family: 'MontserratReg';
     opacity: 0.75;
    font-size: 93%;
@@ -3182,7 +3192,7 @@ i.google-ride {
  
 
 }
-#driverteamSubWrp > div > span {
+#driverteamSubWrp > div > span, .driverteamSubHeader > span {
     font-family: 'MontserratReg';
     opacity: 0.75;
    font-size: 93%;
@@ -3257,9 +3267,7 @@ i.google-ride {
 .dash-panel {
     float:left;
 }
-.page-content {
-    width: 80%;
-}
+
 #profileWrp input:read-only, #profileWrp select:disabled {
     background: rgba(0, 0, 0, 0.05);
 }
