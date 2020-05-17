@@ -129,6 +129,8 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
     
 	// profile update
 	Route::post('driver_update_profile/{id}', 'DriverDashboardController@driver_update_profile');
+
+	Route::post('driver_update_password/{id}', 'DriverDashboardController@driver_update_password');
 	Route::get('driver_invoice', 'DriverDashboardController@show_invoice');
 	Route::get('print_invoice/{id}', 'DriverDashboardController@print_invoice');
 

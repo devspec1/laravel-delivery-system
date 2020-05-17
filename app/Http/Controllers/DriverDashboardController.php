@@ -14,6 +14,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Trips;
@@ -131,6 +132,8 @@ class DriverDashboardController extends Controller
     }
     public function driver_password()
     {
+
+
         $data['result'] = User::find(@Auth::user()->id);
         return view('driver_dashboard.password',$data);
     }
@@ -203,6 +206,28 @@ class DriverDashboardController extends Controller
     /**
     *    Driver Profile update
     **/
+
+    public function driver_update_password(Request $request) {
+        $user = @Auth::user();
+
+        if(Hash::check($request->currPass, $user->password)) {
+
+            if($request->pass1 == $request->pass2) {
+                $user->password = Hash::make($request->pass1);
+                //echo $user->password;
+                $user->save();
+                return redirect('driver/password');
+            }
+            else {
+                return back()->withErrors(["password" => "New passwords doesn't match"]);
+            }
+
+        }
+        else {
+               return back()->withErrors(["password" => "Incorrect current password"]);
+        }
+        
+    }
     public function driver_update_profile(Request $request)
     {
         $rules = array(

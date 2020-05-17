@@ -3098,7 +3098,7 @@ i.google-ride {
     padding-right: 0;
 }
 .subWrapper1 {
-    display: flex; flex-direction: column; max-height: 37em; overflow-y: scroll;
+    display: flex; flex-direction: column; max-height: 35em; overflow-y: scroll;
 }
 #leaderboardSubWrp > div, #driverteamSubWrp > div, #merchantsSubWrp > div, .leaderboardSubHeader, .driverteamSubHeader, .merchantsSubHeader, .deliverySubHeader {
     display: flex;
