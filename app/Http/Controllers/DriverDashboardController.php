@@ -77,8 +77,8 @@ class DriverDashboardController extends Controller
 
             $add = DB::table('driver_address')->where('user_id', $v->id)->first();
      
-            if($add)
-                $data['merchants'][$k]['address'] = $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code;
+         
+                $data['merchants'][$k]['address'] = $add ? $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code : "";
             $data['merchants'][$k]['profile_picture'] = DB::table('profile_picture')->where('user_id', $v->id)->first();
 
             $data['merchants'][$k]['since'] = date_format($v->created_at, "M Y");
@@ -96,8 +96,8 @@ class DriverDashboardController extends Controller
 
             $add = DB::table('driver_address')->where('user_id', $v->id)->first();
      
-            if($add)
-                $data['merchants'][$k]->address = $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code;
+            
+                $data['merchants'][$k]->address = $add ? $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code : "";
             $data['merchants'][$k]->profile_picture = DB::table('profile_picture')->where('user_id', $v->id)->first();
 
             
@@ -125,8 +125,9 @@ class DriverDashboardController extends Controller
     }
     public function driver_payment()
     {
+        echo Auth::user()->id;
         $data['result'] = User::find(@Auth::user()->id);
-        return view('driver_dashboard.driver_payment',$data);
+        //return view('driver_dashboard.driver_payment',$data);
     }
     public function driver_password()
     {
