@@ -109,7 +109,7 @@ Route::get('driver/new_signup', 'DriverDashboardController@driver_new_signup');
 Route::post('driver/reset_password', 'DriverDashboardController@driver_reset_password');
 Route::get('driver/forget_password', 'DriverDashboardController@driver_forget_password');
 Route::get('driver/reset_password', 'DriverDashboardController@show_reset_password');
-Route::post('driver/submit_password_reset', 'DriverDashboardController@submit_passwordreset');
+Route::post('driver/submit_password_reset', 'DriverDashboardController@submit_password_reset');
 // Driver Routes..
 Route::group(['middleware' => ['locale','driver_guest']], function () {
 
