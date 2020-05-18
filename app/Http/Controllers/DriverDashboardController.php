@@ -23,6 +23,7 @@ use App\Models\Request as RideRequest;
 use App\Models\ProfilePicture;
 use App\Models\DriverDocuments;
 use App\Models\Vehicle;
+use App\Models\PasswordResets;
 use Auth;
 use App;
 use DB;
