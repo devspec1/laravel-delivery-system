@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Start\Helpers;
 use App\Http\Helper\RequestHelper;
 use App\Models\DriversSubscriptions;
+use App\Models\PaymentMethod;
 use App\Models\StripeSubscriptionsPlans;
 use App\Models\User;
 use Auth;
