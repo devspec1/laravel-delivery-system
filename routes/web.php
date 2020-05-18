@@ -106,7 +106,8 @@ Route::group(['middleware' => ['locale','rider_guest']], function () {
 
 Route::get('driver/new_login', 'DriverDashboardController@driver_new_login');
 Route::get('driver/new_signup', 'DriverDashboardController@driver_new_signup');
-
+Route::post('driver/reset_password', 'DriverDashboardController@driver_reset_password');
+Route::get('driver/forget_password', 'DriverDashboardController@driver_forget_password');
 
 // Driver Routes..
 Route::group(['middleware' => ['locale','driver_guest']], function () {
@@ -141,6 +142,7 @@ Route::group(['middleware' => ['locale','driver_guest']], function () {
 	Route::get('payout_default/{id}', 'UserController@payoutDefault')->where('id', '[0-9]+')->name('payout_default');
 
 	//New Routes (Menu)
+
 
 	Route::get('driver/membership', 'DriverDashboardController@driver_membership');
 	Route::get('driver/password', 'DriverDashboardController@driver_password');

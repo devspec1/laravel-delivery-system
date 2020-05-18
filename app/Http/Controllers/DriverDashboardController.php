@@ -171,7 +171,19 @@ class DriverDashboardController extends Controller
     {
         return view('driver_dashboard.new_login');
     }
+    public function driver_forget_password() {
+        return view('driver_dashboard.forget_password');
+    }
+    public function driver_reset_password(Request $request, EmailController $email_controller) {
+         $user = User::whereEmail($request->email)->first();
+            
+            $email_controller->forgot_password_link($user);
+            Session::flash('success', trans('messages.user.link') . $user->email);
+            return redirect('driver/new_login');
+
+    }
      public function driver_new_signup()
+    
     {
         return view('driver_dashboard.new_signup');
     }
