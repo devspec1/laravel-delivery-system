@@ -175,7 +175,7 @@ class DriverDashboardController extends Controller
     public function driver_forget_password() {
         return view('driver_dashboard.forget_password');
     }
-    public function show_reset_password() {
+    public function show_reset_password(Request $request) {
         
        
         $password_resets = PasswordResets::whereToken($request->secret)->first();
