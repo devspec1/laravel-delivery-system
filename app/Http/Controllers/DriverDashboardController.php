@@ -232,7 +232,7 @@ class DriverDashboardController extends Controller
 
                 $user->save(); // Update Password in users table
 
-                Session:flash('success', trans('messages.user.pswrd_chnge'));
+                Session::flash('success', trans('messages.user.pswrd_chnge'));
                 return redirect('driver/new_login');
 
             }
