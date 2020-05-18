@@ -3106,7 +3106,7 @@ i.google-ride {
     font-weight: bold;
     font-family: 'MontserratReg';
     background: none!important;
-    border-color: none!important;
+    border: none!important;
 
 }
 #leaderboardSubWrp > div, #driverteamSubWrp > div, #merchantsSubWrp > div, .leaderboardSubHeader, .driverteamSubHeader, .merchantsSubHeader, .deliverySubHeader {
