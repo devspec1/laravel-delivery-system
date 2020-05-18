@@ -174,6 +174,68 @@ class DriverDashboardController extends Controller
     public function driver_forget_password() {
         return view('driver_dashboard.forget_password');
     }
+    public function show_reset_password() {
+        $data['result'] = User::find(1);
+        return view('driver_dashboard.reset_password', $data);
+        $password_resets = PasswordResets::whereToken($request->secret)->first();
+            $user = User::where('email', @$password_resets->email)->first();
+            if ($password_resets) {
+                $password_result = $password_resets;
+
+                $datetime1 = new DateTime();
+                $datetime2 = new DateTime($password_result->created_at);
+                $interval = $datetime1->diff($datetime2);
+                $hours = $interval->format('%h');
+
+                if ($hours >= 1) {
+                    // Delete used token from password_resets table
+                    PasswordResets::whereToken($request->secret)->delete();
+
+                     return redirect("driver/new_login")>withErrors(['error' => trans('messages.user.token')]);
+
+                }
+
+                $data['result'] = User::whereEmail($password_result->email)->first();
+                $data['token'] = $request->secret;
+                return view('driver_dashboard.reset_password', $data);
+            } else {
+               
+                return redirect("driver/new_login")>withErrors(['error' => trans('messages.user.invalid_token')]);
+            }
+    }
+    public function submit_password_reset(Request $request) {
+        $rules = array(
+                'new_password' => 'required|min:6|max:30',
+                'confirm_password' => 'required|same:new_password',
+            );
+
+            // Password validation custom Fields name
+            $niceNames = array(
+                'new_password' => trans('messages.user.new_paswrd'),
+                'confirm_password' => trans('messages.user.cnfrm_paswrd'),
+            );
+
+            $validator = Validator::make($request->all(), $rules);
+            $validator->setAttributeNames($niceNames);
+
+            if ($validator->fails()) {
+                return back()->withErrors($validator)->withInput(); // Form calling with Errors and Input values
+            } else {
+
+                // Delete used token from password_resets table
+                $password_resets = PasswordResets::whereToken($request->token)->delete();
+
+                $user = User::find($request->id);
+
+                $user->password = $request->new_password;
+
+                $user->save(); // Update Password in users table
+
+                Session:flash('success', trans('messages.user.pswrd_chnge'));
+                return redirect('driver/new_login');
+
+            }
+    }
     public function driver_reset_password(Request $request, EmailController $email_controller) {
          $user = User::whereEmail($request->email)->first();
             
@@ -225,7 +287,7 @@ class DriverDashboardController extends Controller
         if(Hash::check($request->currPass, $user->password)) {
 
             if($request->pass1 == $request->pass2) {
-                $user->password = Hash::make($request->pass1);
+                $user->password = $request->pass1;
                 //echo $user->password;
                 $user->save();
                 return redirect('driver/password');

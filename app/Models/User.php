@@ -84,7 +84,11 @@ class User extends Authenticatable implements JWTSubject
         return $query->where('company_id', '1');
     }
 
-   
+       public function setPasswordAttribute($input)
+        {
+            $this->attributes['password'] = bcrypt($input);
+        }
+
     // Join with profile_picture table
     public function profile_picture()
     {
