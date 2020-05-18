@@ -82,9 +82,7 @@ class SubscriptionController extends Controller
 
         $rules = array(
 			'country' => 'required',
-			'card_name' => 'required',
 			'payment_method' => 'required',
-			'email' => 'required',
 		);
 
 		$validator = Validator::make($request->all(), $rules);
@@ -144,10 +142,10 @@ class SubscriptionController extends Controller
             }
             $subscription_row->stripe_id    = $subscription->id;
             $subscription_row->status       = 'subscribed';
-            $subscription_row->email        = $request->email;
+            $subscription_row->email        = $user_details->email;
             $subscription_row->plan         = $plan->id;
             $subscription_row->country      = $country;
-            $subscription_row->card_name    = $card_name;   
+            $subscription_row->card_name    = $user_details->first_name . ' ' . $user_details->last_name;   
             $subscription_row->save();    
   
 
