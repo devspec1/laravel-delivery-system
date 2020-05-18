@@ -34,6 +34,7 @@ Route::get('language_list', 'TokenAuthController@language_list');
 Route::get('currency_list', 'TokenAuthController@currency_list');
 
 Route::match(array('GET', 'POST'), 'integrations/gloria_food', 'TokenAuthController@gloria_food');
+Route::match(array('GET', 'POST'), 'integrations/square', 'TokenAuthController@square_up');
 
 Route::get('faq', 'HomeController@faq');
 

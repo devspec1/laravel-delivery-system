@@ -966,8 +966,7 @@ class TokenAuthController extends Controller
      * @return Response Json 
      */
     public function gloria_food(Request $request) 
-    {       
-
+    {
         if($request->isMethod("POST")) {
 
             $server_key = $request->header("Authorization");
@@ -1055,7 +1054,165 @@ class TokenAuthController extends Controller
         }
     }
 
-        /**
+    /**
+     * Webhook for integration with SquareUp 
+     * @param Get method request inputs
+     *
+     * @return Response Json 
+     */
+    public function square_up(Request $request) 
+    {
+        if($request->isMethod("POST")) {
+
+            // Notification signature: 'gf6sy...wOFw9Gw='
+            // Note: Signature is truncated for illustration
+            // webhook notification body
+            $notificationSignature = $request->header('X-Square-Signature');
+            $notificationBody = $request->getContent();
+
+            // Concatenate your notification URL and
+            // the JSON body of the webhook notification
+            // webhook listener endpoint: http://webhook.site/my-listener-endpoint
+            $notificationUrl = 'https://ca1b917c.ngrok.io/api/integrations/square';
+            $stringToSign = $notificationUrl . $notificationBody;
+
+            // Webhook subscription signature key defined in dev portal for app 
+            $webhookSignatureKey = 'bP5-h2xt_68Mvvi2vx2a8Q';
+
+            // Generate the HMAC-SHA1 signature of the string
+            // signed with your webhook signature key
+            $hash = hash_hmac('sha1', $stringToSign, $webhookSignatureKey, true);
+            $generatedSignature = base64_encode($hash);
+
+            // Compare HMAC-SHA1 signatures.
+            if (hash_equals($generatedSignature, $notificationSignature)) {
+
+                echo "Validation success!";
+
+                // --------------------- Get order info by order_id ----------------
+                    $order_id = $request->data['object']['order_created']['order_id'];
+                    $location_id = $request->data['object']['order_created']['location_id'];
+                    $merchant_key = $request->merchant_id;
+                    
+                    // curl initiate
+                    $ch = curl_init();
+                    
+                    // API URL to send data
+                    $url = 'https://connect.squareup.com/v2/locations/' . $location_id . '/orders/batch-retrieve';
+                    curl_setopt($ch, CURLOPT_URL, $url);
+
+                    // SET Header
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        'Square-Version: 2020-04-22',
+                        'Authorization: Bearer ACCESS_TOKEN',
+                        'Content-Type: application/json'));
+
+                    // SET Method as a POST
+                    curl_setopt($ch, CURLOPT_POST, 1);
+
+                    // Data should be passed as json format
+                    $data = array('order_ids'=> array($order_id));
+                    $data_json = json_encode($data);
+
+                    // Pass user data in POST command
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
+
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                    // Execute curl and assign returned data
+                    $response  = curl_exec($ch);
+                    
+                    // Close curl
+                    curl_close($ch);
+                    
+                // ------------------- Create new order ----------------------
+                    $merchant_id = Merchant::where('shared_secret', $merchant_key)->first()->id;
+
+                    $data['pick_up_latitude'] = $response["restaurant_latitude"];
+                    $data['pick_up_longitude'] = $response["restaurant_longitude"];
+                    $data['pick_up_location'] = $response["restaurant_street"] . ' ' . $response["restaurant_city"];
+                    $data['drop_off_longitude'] = $response["longitude"];
+                    $data['drop_off_latitude'] = $response["latitude"];
+                    $data['drop_off_location'] = $response["client_address"];
+                    $data['country_code'] = "61";
+                    $data['mobile_number'] = ltrim($response["client_phone"], "+".$data['country_code']);
+
+                    $data['first_name'] = $response["client_first_name"];
+                    $data['last_name'] = $response["client_last_name"];
+                    $data['email'] = $response["client_email"];
+                    
+                    $data['delivery_fee'] = null;
+                    try {
+                        if ($response["items"][0]["name"] == "DELIVERY_FEE"){
+                            $data['delivery_fee'] = (float)$response["items"][0]["total_item_price"];
+                        }
+                    } 	catch (\Exception $e) {
+                        logger('getting delivery fee error : '.$e->getMessage());
+                    }
+
+                    $user = $this->get_or_create_rider((object)$data);
+
+                    $ride_request = $this->create_ride_request((object)$data, $user);
+
+                    //create order
+                    $new_order = new HomeDeliveryOrder;
+
+                    $accepted_time = new \Carbon\Carbon($response["accepted_at"]);
+                    $fulfill_time = new \Carbon\Carbon($response["fulfill_at"]);
+
+                    $get_fare_estimation = $this->request_helper->GetDrivingDistance($data['pick_up_latitude'], $data['drop_off_latitude'] ,$data['pick_up_longitude'], $data['drop_off_longitude']);
+
+                    if ($get_fare_estimation['status'] == "success") {
+                        if ($get_fare_estimation['distance'] == '') {
+                            $get_fare_estimation['distance'] = 0;
+                        }
+                    }
+                    else{
+                        $get_fare_estimation['distance'] = 0;
+                    }
+        
+                    $new_order->distance                = $get_fare_estimation['distance'];
+                    $new_order->estimate_time           = $fulfill_time->diffInMinutes($accepted_time);
+                    $new_order->fee                     = 0;
+                    $new_order->customer_id             = $user->id;
+                    $new_order->ride_request            = $ride_request->id;
+                    $new_order->order_description       = $response["instructions"];
+                    $new_order->merchant_id             = $merchant_id;
+
+                    $merchant = Merchant::where('id', $request->merchant_id)->first();
+                    $fee = 0.0;
+                    if($data['delivery_fee']){
+                        $fee = $data['delivery_fee'];
+                    }
+                    else{
+                        if(($get_fare_estimation['distance']/1000) > $merchant->delivery_fee_base_distance){
+                            $fee = $merchant->delivery_fee + $merchant->delivery_fee_per_km * ($get_fare_estimation['distance']/1000 - $merchant->delivery_fee_base_distance);
+                        }
+                        else{
+                            $fee = $merchant->delivery_fee;
+                        }
+                    }
+                    $new_order->fee                     = round($fee, 2);
+                    
+                    $new_order->save();
+
+                    $this->notify_drivers((object)$data, 'New job(s) in your location');
+                    
+                return response()->json([
+                    'status_code'     => '1',
+                    'status_message' => 'Validation success.',
+                ]);
+            } else {
+                echo "Validation failure.";
+                return response()->json([
+                    'status_code'     => '1',
+                    'status_message' => 'Validation failure.',
+                ]);
+            }
+        }
+    }
+
+    /**
      * custom push notification
      *
      * @return success or fail
