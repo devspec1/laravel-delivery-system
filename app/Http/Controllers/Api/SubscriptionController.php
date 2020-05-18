@@ -464,18 +464,69 @@ class SubscriptionController extends Controller
 			]);
         }
         else{
-            $subscription_row = DriversSubscriptions::where('user_id',$user->id)
-                ->whereNotIn('status', ['canceled'])
-                ->first();
+            $stripe_payment = resolve('App\Repositories\StripePayment');
 
-            if($subscription_row->stripe_id){
-                $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
-                $type = $plan->plan_name;
-                if($type == "Member driver"){
+            $payment_details = PaymentMethod::firstOrNew(['user_id' => $user_details->id]);
+    
+            if(!isset($payment_details->customer_id)) {
+                $stripe_customer = $stripe_payment->createCustomer($user_details->email);
+                if($stripe_customer->status == 'failed') {
                     return response()->json([
-                        'status_code'		=> '0',
-                        'status_message'	=> 'You are already a member.',
+                        'status_code' 		=> "0",
+                        'status_message' 	=> $stripe_customer->status_message,
                     ]);
+                }
+                $payment_details->customer_id = $stripe_customer->customer_id;
+                $payment_details->save();
+            }
+
+            $subscription_row = DriversSubscriptions::where('user_id',$user->id)
+            ->whereNotIn('status', ['canceled'])
+            ->first();
+
+            $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
+            $type = $plan->plan_name;
+
+            if($type == "Member driver"){
+                return response()->json([
+                    'status_code'		=> '0',
+                    'status_message'	=> 'You are already a member.',
+                ]);
+            }
+            else{
+                if(!$subscription_row->stripe_id){
+                    $plan = StripeSubscriptionsPlans::where('plan_name','Member Driver')->first();
+
+                    $subscription = \Stripe\Subscription::create([
+                        'customer' => $payment_details->customer_id,
+                        'items' => [
+                            [
+                                'plan' =>  $plan->plan_id,
+                            ],
+                        ],
+                        'expand' => ['latest_invoice.payment_intent'],
+                    ]);
+
+                    $subscription_row->stripe_id    = $subscription->id;
+                    $subscription_row->status       = 'subscribed';
+                    $subscription_row->email        = $user_details->email;
+                    $subscription_row->plan         = $plan->id;
+                    $subscription_row->country      = $request->country;
+                    $subscription_row->card_name    = $user_details->first_name . ' ' . $user_details->last_name;   
+                    $subscription_row->save();
+                    
+                    if($subscription_row){
+                        $subscription_row['plan_id'] = $plan->plan_id;
+                        $subscription_row['plan_name'] = $plan->plan_name;
+                    }
+                    
+                    $sub_data = array(
+                        'status_code'		=> '1',
+                        'status_message'	=> trans('messages.subscriptions.upgraded'),
+                        'subscription'      => $subscription_row, 
+                    );
+
+                    return response()->json($sub_data);
                 }
                 else{
                     $stripe_skey = payment_gateway('secret','Stripe');
@@ -511,10 +562,6 @@ class SubscriptionController extends Controller
                     return response()->json($sub_data);
                 }
             }
-            else{
-                $this->createCustomer($request);
-            }
-
         }
     }
 }
