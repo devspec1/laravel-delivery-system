@@ -45,8 +45,9 @@ class PayoutController extends Controller
     {
     	$data['payout_title'] = 'Payouts';
     	$data['sub_title'] = 'Payouts';
-
+/*        return $dataTable->setFilter('OverAll');*/
         return $dataTable->setFilter('OverAll')->render('admin.payouts.view',$data);
+     /*   return $dataTable->setFilter('OverAll')->render('admin.payouts.view',$data);*/
     }
 
 	/**

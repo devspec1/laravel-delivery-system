@@ -11,6 +11,7 @@ use App\Models\Vehicle;
 use App\Models\Request as RideRequest;
 use App\Models\DriversSubscriptions;
 use App\Models\Trips;
+use App\Models\Payment;
 
 use Validator;
 use JWTAuth;
@@ -297,6 +298,8 @@ class HomeDeliveryController extends Controller
 
             $order->save();
 
+
+
             $assign_status_message = 'successfully delivered';
 
             //$order = HomeDeliveryOrder::where('id',$request->order_id)->first();
@@ -304,6 +307,15 @@ class HomeDeliveryController extends Controller
             $trip->end_trip = $order->updated_at;
 
             $trip->save();
+
+            $last_trip = Trips::orderBy('id', 'DESC')->first();
+            $data = [
+                'trip_id' => $last_trip->id,
+                'correlation_id' => null,
+                'driver_payout_status' => ($last_trip->driver_payout) ? 'Pending' : 'Completed',
+            ];
+
+            Payment::updateOrCreate(['trip_id' => $last_trip->trip_id], $data);
            
         }
         elseif ($order_status == 'delivered') {

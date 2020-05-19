@@ -33,7 +33,6 @@ class Kernel extends ConsoleKernel
         $schedule->call('App\Http\Controllers\Api\CronController@updateReferralStatus')->daily();
         $schedule->call('App\Http\Controllers\Api\CronController@updateOfflineUsers')->everyFifteenMinutes();
         $schedule->call('App\Http\Controllers\Api\CronController@updatePaypalPayouts')->twiceDaily();
-        $schedule->call('App\Http\Controllers\Admin\HomeDeliveryController@test')->everyMinute();
         $schedule->command('queue:work --tries=3 --once')->cron('* * * * *');
     }
 
