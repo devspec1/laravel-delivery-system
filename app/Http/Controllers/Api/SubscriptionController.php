@@ -497,16 +497,23 @@ class SubscriptionController extends Controller
             else{
                 if(!$subscription_row->stripe_id){
                     $plan = StripeSubscriptionsPlans::where('plan_name','Member Driver')->first();
-
-                    $subscription = \Stripe\Subscription::create([
-                        'customer' => $payment_details->customer_id,
-                        'items' => [
-                            [
-                                'plan' =>  $plan->plan_id,
+                    try{
+                        $subscription = \Stripe\Subscription::create([
+                            'customer' => $payment_details->customer_id,
+                            'items' => [
+                                [
+                                    'plan' =>  $plan->plan_id,
+                                ],
                             ],
-                        ],
-                        'expand' => ['latest_invoice.payment_intent'],
-                    ]);
+                            'expand' => ['latest_invoice.payment_intent'],
+                        ]);
+                    }
+                    catch{
+                        return response()->json([
+                            'status_code'		=> '0',
+                            'status_message'	=> 'Some stripe error.',
+                        ]);
+                    }
 
                     $subscription_row->stripe_id    = $subscription->id;
                     $subscription_row->status       = 'subscribed';
