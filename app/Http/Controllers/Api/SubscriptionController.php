@@ -486,6 +486,13 @@ class SubscriptionController extends Controller
             ->whereNotIn('status', ['canceled'])
             ->first();
 
+            if(!$subscription_row){
+                $subscription_row = new DriversSubscriptions;
+                $subscription_row->user_id      = $user->id;
+                $subscription_row->plan = 3;
+                $subscription_row->save();
+            }
+
             $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
             $type = $plan->plan_name;
 
@@ -497,35 +504,36 @@ class SubscriptionController extends Controller
             }
             else{
                 if(!$subscription_row->stripe_id){
-                    $plan = StripeSubscriptionsPlans::where('plan_name','Member Driver')->first();
-                    // $payment_method = \Stripe\PaymentMethod::create([
-                    //     'type' => 'card',
-                    //     'card' => [
-                    //       'number' => '4242424242424242',
-                    //       'exp_month' => 5,
-                    //       'exp_year' => 2021,
-                    //       'cvc' => '314',
-                    //     ],
-                    //   ]);
-                    // $setup_intent = \Stripe\SetupIntent::create([
-                    //     'payment_method_types' 	=> ['card'],
-                    //       'customer'				=> $payment_details->customer_id,
-                    //       'usage'					=> 'off_session',
-                    // ]);
-                    // $setup_intent = \Stripe\SetupIntent::update(
-                    //     $setup_intent->id,
-                    //     ['payment_method' => $payment_method],
-                    // );
-                    // $setup_intent->confirm([
-                    //     'payment_method' => $payment_method->id,
-                    //   ]);
-                    $payment = resolve('App\Http\Controllers\Api\ProfileController');
-                    $request->request->add(['intent_id' => $request->payment_method]);
-                    $setup_intent = \Stripe\SetupIntent::retrieve(
-                        $request->payment_method
-                    );
-                    $payment->add_card_details($request);
                     try{
+                        $plan = StripeSubscriptionsPlans::where('plan_name','Member Driver')->first();
+                        // $payment_method = \Stripe\PaymentMethod::create([
+                        //     'type' => 'card',
+                        //     'card' => [
+                        //     'number' => '4242424242424242',
+                        //     'exp_month' => 5,
+                        //     'exp_year' => 2021,
+                        //     'cvc' => '314',
+                        //     ],
+                        // ]);
+                        // $setup_intent = \Stripe\SetupIntent::create([
+                        //     'payment_method_types' 	=> ['card'],
+                        //     'customer'				=> $payment_details->customer_id,
+                        //     'usage'					=> 'off_session',
+                        // ]);
+                        // $setup_intent = \Stripe\SetupIntent::update(
+                        //     $setup_intent->id,
+                        //     ['payment_method' => $payment_method],
+                        // );
+                        // $setup_intent->confirm([
+                        //     'payment_method' => $payment_method->id,
+                        // ]);
+                        $payment = resolve('App\Http\Controllers\Api\ProfileController');
+                        $request->request->add(['intent_id' => $request->payment_method]);
+                        $setup_intent = \Stripe\SetupIntent::retrieve(
+                            $request->payment_method
+                        );
+                        $payment->add_card_details($request);
+                    
                         $subscription = \Stripe\Subscription::create([
                             'customer' => $payment_details->customer_id,
                             'items' => [
