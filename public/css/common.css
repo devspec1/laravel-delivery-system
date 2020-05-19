@@ -2992,8 +2992,19 @@ height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; di
 .newSignupWrp2 {
     height: 90%; width: 30%; padding: 1em; padding-top: 1em; padding-bottom: 4em; display: none; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg';
 }
+.site-nav  #logo1 {
+    height: 11.5em;
+}
 @media (max-width: 1024px) {
-  
+    .site-nav  #logo1 {
+        height: 7em;
+    }
+    .site-nav>li>a {
+    font-size: 9px!important;
+}
+  .site-nav >li {
+    padding-left: 0.5em;
+  }
   #newLoginWrp #logo1 {
     height: 6em;
 
@@ -3106,6 +3117,10 @@ height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; di
    display: flex; align-items: center; margin-top: 0.4em;margin-bottom: 0.3em;
    padding: 1.1em; width: 75%; background: rgba(0, 0, 0, 0.02);
     border:1px solid rgba(0, 0, 0, 0.12);
+}
+.site-nav>li>a {
+    font-size: 13px!important;
+
 }
 }
 .newSignupWrp2 .inputWrp input {
@@ -3328,10 +3343,7 @@ height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; di
 #dragDiv.is-dragover {
     background: white;
 }
-.site-nav>li>a {
-    font-size: 13px!important;
 
-}
 .inputWrp span {
     font-size: 85%;
 }
