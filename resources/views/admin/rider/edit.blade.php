@@ -17,6 +17,13 @@
 						<h3 class="box-title">Edit Rider Form</h3>
 					</div>
 					{!! Form::open(['url' => 'admin/edit_rider/'.$result->id, 'class' => 'form-horizontal']) !!}
+
+					@if($referrer)
+
+					{!! Form::hidden('referrer',$referrer, ['id' => 'referrer']) !!}
+					{!! Form::open(['url' => LOGIN_USER_TYPE.'/edit_driver/'.$result->id, 'class' => 'form-horizontal','files' => true]) !!}
+
+					@endif
 					<div class="box-body">
 						<span class="text-danger">(*)Fields are Mandatory</span>
 						<div class="form-group">
@@ -107,6 +114,13 @@
 								<span class="text-danger">{{ $errors->first('work_location') }}</span>
 							</div>
 						</div>
+						 <div class="form-group" style="margin-bottom: 1em">
+                          	<label for="input-tags3" class="col-sm-3 control-label">Referrer<em class="text-danger"></em></label>
+                          	<div class="col-sm-6">
+	                    	<input type="text" id="input-tags3" name="referrer_id" value="" />
+	                    
+	                 		</div>	
+	                  	</div>
 						{!! Form::hidden('work_latitude',@$location->work_latitude, ['class' => 'form-control', 'id' => 'work_latitude', 'placeholder' => 'Select']) !!}
 						{!! Form::hidden('work_longitude',@$location->work_longitude, ['class' => 'form-control', 'id' => 'work_longitude', 'placeholder' => 'Select']) !!}
 					</div>
@@ -121,3 +135,47 @@
 	</section>
 </div>
 @endsection
+
+
+@push('scripts')
+<script src="{{ url('js/selectize.js') }}"></script>
+<script>
+	$(function() {
+		$('#input-tags3').selectize({
+		    plugins: ['remove_button'],
+		    maxItems: 1
+    		
+		});
+		init_user();
+	})
+	function init_user()
+{
+  var usertype= 'all';
+    var select = $("#input-tags3").selectize();
+    var selectize = select[0].selectize;
+    selectize.disable();
+    $.ajax({
+      type: 'POST',
+      url: APP_URL+'/{{LOGIN_USER_TYPE}}/get_send_users',
+      data: "type="+usertype,
+      dataType: "json",
+      success: function(resultData) {
+        var select = $("#input-tags3").selectize();
+        var selectize = select[0].selectize;
+        selectize.clear();
+        selectize.clearOptions();
+        $.each(resultData, function (key, value) {
+          selectize.addOption({value:value.id,text:value.first_name + ' - ' +value.mobile_number});
+        });
+        selectize.enable();
+
+        if(v = $("#referrer").val())
+       	 selectize.setValue(v, false);
+
+      }
+    });
+  }
+
+</script>
+
+@endpush
