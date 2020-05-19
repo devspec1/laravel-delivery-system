@@ -521,8 +521,10 @@ class SubscriptionController extends Controller
                     //   ]);
                     $payment = resolve('App\Http\Controllers\Api\ProfileController');
                     $request->request->add(['intent_id' => $request->payment_method]);
+                    $setup_intent = \Stripe\SetupIntent::retrieve(
+                        $request->payment_method
+                    );
                     $payment->add_card_details($request);
-
                     try{
                         $subscription = \Stripe\Subscription::create([
                             'customer' => $payment_details->customer_id,
@@ -532,6 +534,7 @@ class SubscriptionController extends Controller
                                 ],
                             ],
                             'expand' => ['latest_invoice.payment_intent'],
+                            'default_payment_method' => $setup_intent->payment_method
                         ]);
                     }
                     catch(\Exception $e){
