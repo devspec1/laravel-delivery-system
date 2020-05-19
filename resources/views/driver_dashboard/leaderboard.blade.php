@@ -5,7 +5,7 @@
   @include('common.driver_dashboard_header_new')
   <div id="leaderboardMainWrp">
            <div style="display: flex;width: 100%">
-              <span style="font-size: 200%; color: #1B187F;opacity: 0.8; font-weight: bold; font-family:'MontserratReg'">Leaderboard</span>
+              <span id="spanMainTitle1" style="">Leaderboard</span>
               
             </div>
             <div style="display: flex; flex-direction: column; width: 100%" >
