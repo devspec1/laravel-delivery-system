@@ -11,6 +11,7 @@ use App\Models\DriversSubscriptions;
 use App\Models\PaymentMethod;
 use App\Models\StripeSubscriptionsPlans;
 use App\Models\User;
+use App\Http\Controllers\Api\ProfileController;
 use Auth;
 use App;
 use DateTime;
@@ -497,6 +498,7 @@ class SubscriptionController extends Controller
             else{
                 if(!$subscription_row->stripe_id){
                     $plan = StripeSubscriptionsPlans::where('plan_name','Member Driver')->first();
+                    app(PrintReportController::class)->add_card_details($request);
                     try{
                         $subscription = \Stripe\Subscription::create([
                             'customer' => $payment_details->customer_id,
