@@ -507,8 +507,9 @@ class SubscriptionController extends Controller
                           'cvc' => '314',
                         ],
                       ]);
-                    return response()->json($payment_method);
+                    
                     $request->intent_id = $payment_method->id;
+                    return response()->json($request);
                     $payment = resolve('App\Http\Controllers\Api\ProfileController');
                     $res = $payment->add_card_details($request);
                     
