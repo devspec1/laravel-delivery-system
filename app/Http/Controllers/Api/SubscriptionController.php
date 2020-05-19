@@ -508,10 +508,10 @@ class SubscriptionController extends Controller
                             'expand' => ['latest_invoice.payment_intent'],
                         ]);
                     }
-                    catch{
+                    catch(\Exception $e){
                         return response()->json([
                             'status_code'		=> '0',
-                            'status_message'	=> 'Some stripe error.',
+                            'status_message'	=> $e->getMessage(),
                         ]);
                     }
 
