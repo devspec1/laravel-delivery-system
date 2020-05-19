@@ -21,7 +21,6 @@
 					@if($referrer)
 
 					{!! Form::hidden('referrer',$referrer, ['id' => 'referrer']) !!}
-					{!! Form::open(['url' => LOGIN_USER_TYPE.'/edit_driver/'.$result->id, 'class' => 'form-horizontal','files' => true]) !!}
 
 					@endif
 					<div class="box-body">
