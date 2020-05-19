@@ -498,10 +498,20 @@ class SubscriptionController extends Controller
             else{
                 if(!$subscription_row->stripe_id){
                     $plan = StripeSubscriptionsPlans::where('plan_name','Member Driver')->first();
-                    $request->intent_id = $request->payment_method;
+                    $payment_method = \Stripe\PaymentMethod::create([
+                        'type' => 'card',
+                        'card' => [
+                          'number' => '4242424242424242',
+                          'exp_month' => 5,
+                          'exp_year' => 2021,
+                          'cvc' => '314',
+                        ],
+                      ]);
+                    return response()->json($payment_method);
+                    $request->intent_id = $payment_method->id;
                     $payment = resolve('App\Http\Controllers\Api\ProfileController');
                     $res = $payment->add_card_details($request);
-                    return response()->json($res);
+                    
                     try{
                         $subscription = \Stripe\Subscription::create([
                             'customer' => $payment_details->customer_id,
