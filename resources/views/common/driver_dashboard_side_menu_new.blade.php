@@ -1,7 +1,7 @@
-<div class="container mar-zero" style="padding:0px;">
-    <div class="col-lg-10 col-md-10 col-sm-13 col-xs-12  height--full dash-panel">
-        <div class="height--full pull-left separated--sides full-width">
-            <div style="padding:0px;height:100vh" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 flexbox__item one-fifth page-sidebar hidden--portable hide-sm-760">
+<div class="container mar-zero" style="width: 90%; margin: auto; padding:0px;">
+    <div class="dash-panel">
+        <div style="display:flex" class="height--full pull-left separated--sides full-width">
+            <div style="padding:0px;height:100vh" class="flexbox__item one-fifth page-sidebar hidden--portable hide-sm-760">
                 <ul class="site-nav">
                     <li class="soft--ends" style="display: flex;">
                         <img src="{{ asset('images/logos/logo.png') }}" style="height: 11.5em">

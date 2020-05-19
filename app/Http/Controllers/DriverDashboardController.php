@@ -128,9 +128,9 @@ class DriverDashboardController extends Controller
     }
     public function driver_payment()
     {
-        echo Auth::user()->id;
+     
         $data['result'] = User::find(@Auth::user()->id);
-        //return view('driver_dashboard.driver_payment',$data);
+        return view('driver_dashboard.driver_payment',$data);
     }
     public function driver_password()
     {

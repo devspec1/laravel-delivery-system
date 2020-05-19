@@ -4,10 +4,10 @@
 
 
 <div id="newSignupWrp" style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center">
-    <div class="newSignupWrp1 currentWrp" style="height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; display: flex; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg">
+    <div class="newSignupWrp1 currentWrp">
 
-        <img src="{{ asset('images/logos/logo.png') }}" style="height: 8em">
-        <img src="{{ asset('images/car_image/car4.png') }}" style="height: 13em">
+        <img src="{{ asset('images/logos/logo.png') }}" id="logo1">
+        <img src="{{ asset('images/car_image/car4.png') }}" id="car1">
 
         <div class="inputWrp" style="display: flex; flex-direction: column; width: 100%; margin-bottom: 5.5em; align-items: center"> <div style="display: flex; flex-direction: column; margin-top: 0.4em;margin-bottom: 0.9em;padding: 0.75em; width: 75%; background: rgba(0, 0, 0, 0.02); border:1px solid rgba(0, 0, 0, 0.12)">
             <span style="opacity: 0.5; font-family: 'MontserratReg'">Vehicle name  / eg: Toyoto Camry, Honda Accord...</span>
@@ -22,9 +22,9 @@
 
     </div>
 
-    <div class="newSignupWrp2" style="height: 90%; width: 30%; padding: 1em; padding-top: 1em; padding-bottom: 4em; display: none; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg">
+    <div class="newSignupWrp2">
 
-        <img src="{{ asset('images/logos/logo.png') }}" style="height: 8em">
+        <img src="{{ asset('images/logos/logo.png') }}" id="logo1">
 
         <div style="margin:50px;margin-bottom: 0.5em; margin-top: 1em; width:60%;height:50px;z-index: 1000">
   <div style="display: flex; justify-content: space-between; width:auto; height:2px;background:rgba(0, 0, 0, 0.05);position:relative;top:5px;">
@@ -62,9 +62,9 @@
 
     </div>
 
-     <div class="newSignupWrp2" style="height: 90%; width: 30%; padding: 1em; padding-top: 1em; padding-bottom: 4em; display: none; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg">
+     <div class="newSignupWrp2">
 
-        <img src="{{ asset('images/logos/logo.png') }}" style="height: 8em">
+        <img src="{{ asset('images/logos/logo.png') }}" id="logo1">
 
         <div style="margin:50px;margin-bottom: 0.2em; margin-top: 1.6em; width:60%;height:50px;z-index: 1000">
   <div style="display: flex; justify-content: space-between; width:auto; height:2px;background:rgba(0, 0, 0, 0.05);position:relative;top:5px;">
@@ -96,9 +96,9 @@
 
     </div>
 
-     <div class="newSignupWrp2" style="height: 90%; width: 30%; padding: 1em; padding-top: 1em; padding-bottom: 4em; display: none; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg">
+     <div class="newSignupWrp2">
 
-        <img src="{{ asset('images/logos/logo.png') }}" style="height: 8em">
+        <img src="{{ asset('images/logos/logo.png') }}" id="logo1">
 
         <div style="margin:50px;margin-bottom: 0.2em; margin-top: 1.6em; width:60%;height:50px;z-index: 1000">
               <div style="display: flex; justify-content: space-between; width:auto; height:2px;background:rgba(0, 0, 0, 0.05);position:relative;top:5px;">
@@ -146,9 +146,9 @@
 
     </div>
 
-      <div class="newSignupWrp2" style="height: 91%; width: 30%; padding: 1em; padding-top: 1em; padding-bottom: 4em; display: none; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg">
+      <div class="newSignupWrp2">
 
-        <img src="{{ asset('images/logos/logo.png') }}" style="height: 8em">
+        <img src="{{ asset('images/logos/logo.png') }}" id="logo1">
 
         <div style="margin:50px;margin-bottom: 0.2em; margin-top: 1.6em; width:60%;height:50px;z-index: 1000">
               <div style="display: flex; justify-content: space-between; width:auto; height:2px;background:rgba(0, 0, 0, 0.05);position:relative;top:5px;">
@@ -186,10 +186,10 @@
          <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 140%; width: 75%;margin-bottom: 0.6em; text-align:left">Your ABN</h1>
           <div class="inputWrp"><input type="text"></div>
 
-        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2em;  width: 100%"> 
+        <div id="bottom1" style="display: flex; flex-direction: column; align-items: center; margin-top: 2em;  width: 100%"> 
      
         <span class="spanB1 spanNext" style="background-color: #3B5998;">Finish<img src="{{ asset('images/icon/next.png') }}" style="position: relative; left: 9em;  height: 1.4em; width: 1.4em"></span>
-        <span style="width: 75%; opacity: 0.9; font-size: 90%; margin-top: 1em">By proceeding, I agree that RideOn Australia or its representatives may contact me by email, phone, or SMS (including by automated means) at the email address or number I provide, including for marketing purposes.</span>
+        <span id="bottom1span" style="width: 75%; opacity: 0.9; font-size: 90%; margin-top: 1em">By proceeding, I agree that RideOn Australia or its representatives may contact me by email, phone, or SMS (including by automated means) at the email address or number I provide, including for marketing purposes.</span>
       </div>
 
     </div>

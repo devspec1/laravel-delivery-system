@@ -1,5 +1,5 @@
 <div class="container-fluid dash-head">
-    <div class="col-lg-12 col-md-12 col-sm-11 col-xs-12 dash-panel">
+    <div class="dash-panel">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 headlog">
             <button type="button" class="navbar-toggle nav-click hide-md-760" data-toggle="collapse" data-target="#menu-collapse">
             <a href="#" data-slide-menu="#slide-menu" data-slide-menu-content="#slide-menu-content" class="text--uppercase menu-a">

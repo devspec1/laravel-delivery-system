@@ -2643,6 +2643,7 @@ button:focus {
     position: relative;
     box-shadow: -1px -0px rgba(0, 0, 0, .075);
     background: #fff;
+    width: 100%;
 }
 
 .flexbox,
@@ -3439,9 +3440,7 @@ button:focus {
 }
 
 @media only screen and (max-width: 940px) {
-    .hide-sm-760 {
-        display: none !important;
-    }
+   
     .mar-zero {
         margin: 0px !important;
     }
@@ -3454,18 +3453,7 @@ button:focus {
     .soft--top.milli a {
         color: #fff;
     }
-    .site-nav>li,
-    .site-nav>li>.trip-filter__origin-link.collapsed,
-    .site-nav>li>a {
-        padding: 14px;
-        color: #fff;
-        border-bottom: 1px solid #555 !important;
-    }
-    .site-nav>li>.trip-filter__origin-link.collapsed,
-    .site-nav>li>a {
-        padding: 15px 15px 14px;
-        margin: -15px;
-    }
+  
 }
 
 @media(min-width: 300px) and (max-width: 1000px) {
