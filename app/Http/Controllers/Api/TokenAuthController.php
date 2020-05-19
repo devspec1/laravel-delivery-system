@@ -1073,11 +1073,11 @@ class TokenAuthController extends Controller
             // Concatenate your notification URL and
             // the JSON body of the webhook notification
             // webhook listener endpoint: http://webhook.site/my-listener-endpoint
-            $notificationUrl = 'https://ca1b917c.ngrok.io/api/integrations/square';
+            $notificationUrl = 'https://1cfe6420.ngrok.io/api/integrations/square';
             $stringToSign = $notificationUrl . $notificationBody;
 
             // Webhook subscription signature key defined in dev portal for app 
-            $webhookSignatureKey = 'bP5-h2xt_68Mvvi2vx2a8Q';
+            $webhookSignatureKey = 'g5b8JFl2nbaWDxRgXt8xsA';
 
             // Generate the HMAC-SHA1 signature of the string
             // signed with your webhook signature key
@@ -1090,21 +1090,22 @@ class TokenAuthController extends Controller
                 echo "Validation success!";
 
                 // --------------------- Get order info by order_id ----------------
-                    $order_id = $request->data['object']['order_created']['order_id'];
-                    $location_id = $request->data['object']['order_created']['location_id'];
-                    $merchant_key = $request->merchant_id;
-                    
+                    $order_id = $request->data['object']['order_updated']['order_id'];
+                    $location_id = $request->data['object']['order_updated']['location_id'];
+                    $merchant_id = $request->merchant_id;
+                    $access_token = 'EAAAECT1ZaqB8te9NcOG53_QRrN9aGVqnssXCJV81kC-5uEWgi-QNX1SaSCC6xuX';
+
                     // curl initiate
                     $ch = curl_init();
-                    
+
                     // API URL to send data
-                    $url = 'https://connect.squareup.com/v2/locations/' . $location_id . '/orders/batch-retrieve';
+                    $url = 'https://connect.squareupsandbox.com/v2/locations/' . $location_id . '/orders/batch-retrieve';
                     curl_setopt($ch, CURLOPT_URL, $url);
 
                     // SET Header
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                         'Square-Version: 2020-04-22',
-                        'Authorization: Bearer ACCESS_TOKEN',
+                        'Authorization: Bearer ' . $access_token,
                         'Content-Type: application/json'));
 
                     // SET Method as a POST
@@ -1121,30 +1122,87 @@ class TokenAuthController extends Controller
 
                     // Execute curl and assign returned data
                     $response  = curl_exec($ch);
-                    
+                    $tmp = json_decode($response);
+                    $order = $tmp->orders[0];
+
+                    // Close curl
+                    curl_close($ch);
+
+                // -------------- Get Pickup location by location_id -------------
+
+                    // curl initiate
+                    $ch = curl_init();
+
+                    // API URL to send data
+                    $url = 'https://connect.squareupsandbox.com/v2/locations/' . $location_id;
+                    curl_setopt($ch, CURLOPT_URL, $url);
+
+                    // SET Header
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        'Square-Version: 2020-04-22',
+                        'Authorization: Bearer ' . $access_token,
+                        'Content-Type: application/json'));
+
+                    // SET Method as a POST
+                    curl_setopt($ch, CURLOPT_POST, false);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                    // Execute curl and assign returned data
+                    $response  = curl_exec($ch);
+                    $tmp = json_decode($response);
+                    $pickup_location = $tmp->location->address;
+                    $pickup_geocode = $this->request_helper->GetLatLng($pickup_location->country . ' ' . $pickup_location->locality . ' ' . $pickup_location->address_line_1);
+                    // Close curl
+                    curl_close($ch);
+
+                // -------------- Get Customer by customer_id -------------
+
+                    // curl initiate
+                    $ch = curl_init();
+
+                    // API URL to send data
+                    $url = 'https://connect.squareupsandbox.com/v2/customers/' . $order->customer_id;
+                    curl_setopt($ch, CURLOPT_URL, $url);
+
+                    // SET Header
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        'Square-Version: 2020-04-22',
+                        'Authorization: Bearer ' . $access_token,
+                        'Content-Type: application/json'));
+
+                    // SET Method as a POST
+                    curl_setopt($ch, CURLOPT_POST, false);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                    // Execute curl and assign returned data
+                    $response  = curl_exec($ch);
+                    $tmp = json_decode($response);
+                    $customer = $tmp->customer;
+                    $dropoff_geocode = $this->request_helper->GetLatLng($customer->address->country . ' ' . $customer->address->locality . ' ' . $customer->address->address_line_1);
                     // Close curl
                     curl_close($ch);
                     
                 // ------------------- Create new order ----------------------
-                    $merchant_id = Merchant::where('shared_secret', $merchant_key)->first()->id;
+                    //$merchant_id = Merchant::where('shared_secret', $merchant_key)->first()->id;
 
-                    $data['pick_up_latitude'] = $response["restaurant_latitude"];
-                    $data['pick_up_longitude'] = $response["restaurant_longitude"];
-                    $data['pick_up_location'] = $response["restaurant_street"] . ' ' . $response["restaurant_city"];
-                    $data['drop_off_longitude'] = $response["longitude"];
-                    $data['drop_off_latitude'] = $response["latitude"];
-                    $data['drop_off_location'] = $response["client_address"];
+                    $data['pick_up_latitude'] = $pickup_geocode[0];
+                    $data['pick_up_longitude'] = $pickup_geocode[1];
+                    $data['pick_up_location'] = $pickup_location->address_line_1 . ' ' . $pickup_location->locality;
+                    $data['drop_off_longitude'] = $dropoff_geocode[1];
+                    $data['drop_off_latitude'] = $dropoff_geocode[0];
+                    $data['drop_off_location'] = $customer->address->address_line_1 . ' ' . $customer->address->locality;
                     $data['country_code'] = "61";
-                    $data['mobile_number'] = ltrim($response["client_phone"], "+".$data['country_code']);
+                    $data['mobile_number'] = ltrim($customer->phone_number, "+".$data['country_code']);
 
-                    $data['first_name'] = $response["client_first_name"];
-                    $data['last_name'] = $response["client_last_name"];
-                    $data['email'] = $response["client_email"];
+                    $data['first_name'] = $customer->given_name;
+                    $data['last_name'] = $customer->family_name;
+                    $data['email'] = $customer->email_address;
                     
                     $data['delivery_fee'] = null;
                     try {
                         if ($response["items"][0]["name"] == "DELIVERY_FEE"){
-                            $data['delivery_fee'] = (float)$response["items"][0]["total_item_price"];
+                            $data['delivery_fee'] = (float)100;
+                            // $data['delivery_fee'] = (float)$response["items"][0]["total_item_price"];
                         }
                     } 	catch (\Exception $e) {
                         logger('getting delivery fee error : '.$e->getMessage());
@@ -1152,13 +1210,13 @@ class TokenAuthController extends Controller
 
                     $user = $this->get_or_create_rider((object)$data);
 
-                    $ride_request = $this->create_ride_request((object)$data, $user);
+                    // $ride_request = $this->create_ride_request((object)$data, $user);
 
                     //create order
                     $new_order = new HomeDeliveryOrder;
 
-                    $accepted_time = new \Carbon\Carbon($response["accepted_at"]);
-                    $fulfill_time = new \Carbon\Carbon($response["fulfill_at"]);
+                    //$accepted_time = new \Carbon\Carbon($response["accepted_at"]);
+                    //$fulfill_time = new \Carbon\Carbon($response["fulfill_at"]);
 
                     $get_fare_estimation = $this->request_helper->GetDrivingDistance($data['pick_up_latitude'], $data['drop_off_latitude'] ,$data['pick_up_longitude'], $data['drop_off_longitude']);
 
@@ -1172,14 +1230,16 @@ class TokenAuthController extends Controller
                     }
         
                     $new_order->distance                = $get_fare_estimation['distance'];
-                    $new_order->estimate_time           = $fulfill_time->diffInMinutes($accepted_time);
+                    //$new_order->estimate_time           = $fulfill_time->diffInMinutes($accepted_time);
                     $new_order->fee                     = 0;
                     $new_order->customer_id             = $user->id;
-                    $new_order->ride_request            = $ride_request->id;
-                    $new_order->order_description       = $response["instructions"];
-                    $new_order->merchant_id             = $merchant_id;
+                    //$new_order->ride_request            = $ride_request->id;
+                    $new_order->order_description       = $order->fulfillments[0]->shipment_details->shipping_note;
+                    $new_order->merchant_id             = 5;
+                    // $new_order->merchant_id             = $merchant_id;
 
-                    $merchant = Merchant::where('id', $request->merchant_id)->first();
+                    $merchant = Merchant::where('id', 5)->first();
+                    // $merchant = Merchant::where('id', $request->merchant_id)->first();
                     $fee = 0.0;
                     if($data['delivery_fee']){
                         $fee = $data['delivery_fee'];

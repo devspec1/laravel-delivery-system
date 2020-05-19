@@ -511,6 +511,53 @@ class RequestHelper
 	}
 
 	/**
+	 * Get geocode
+	 **/
+	public function GetLatLng($address)
+	{
+		$cache_key = 'address_'.$address;
+		$cacheExpireAt = Carbon::now()->addHours(CACHE_HOURS);
+		
+		if(Cache::has($cache_key)) {
+			return Cache::get($cache_key);
+		}
+
+		$result = file_get_contents_curl('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address) . '&key=' . MAP_KEY);
+
+		$geocode = json_decode($result);
+
+		// response status will be 'OK', if able to geocode given address 
+		if($geocode->status=='OK'){
+ 
+			// get the important data
+			$lati = isset($geocode->results[0]->geometry->location->lat) ? $geocode->results[0]->geometry->location->lat : "";
+			$longi = isset($geocode->results[0]->geometry->location->lng) ? $geocode->results[0]->geometry->location->lng : "";
+			
+			// verify if data is complete
+			if($lati && $longi) { //  && $formatted_address
+			 
+				// put the data in the array
+				$data_arr = array();            
+				 
+				array_push($data_arr, $lati, $longi);
+
+				Cache::put($cache_key, $data_arr, $cacheExpireAt);
+
+				return $data_arr;
+				 
+			} else{
+				echo "Error occured in getting geocode - 2";
+				return false;
+			}
+			 
+		}
+		else {
+			echo "Error occured in getting geocode - 1";
+			return false;
+		}
+	}
+
+	/**
 	 * Get location
 	 **/
 	public function GetLocation($lat1, $long1)
