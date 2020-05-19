@@ -499,7 +499,9 @@ class SubscriptionController extends Controller
                 if(!$subscription_row->stripe_id){
                     $plan = StripeSubscriptionsPlans::where('plan_name','Member Driver')->first();
                     $request->intent_id = $request->payment_method;
-                    app(ProfileController::class)->add_card_details($request);
+                    $payment = resolve('App\Http\Controllers\Api\ProfileController');
+                    $res = $payment->add_card_details($request);
+                    return response()->json($res);
                     try{
                         $subscription = \Stripe\Subscription::create([
                             'customer' => $payment_details->customer_id,
