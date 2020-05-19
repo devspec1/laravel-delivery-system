@@ -498,7 +498,7 @@ class SubscriptionController extends Controller
             else{
                 if(!$subscription_row->stripe_id){
                     $plan = StripeSubscriptionsPlans::where('plan_name','Member Driver')->first();
-                    app(PrintReportController::class)->add_card_details($request);
+                    app(ProfileController::class)->add_card_details($request);
                     try{
                         $subscription = \Stripe\Subscription::create([
                             'customer' => $payment_details->customer_id,
