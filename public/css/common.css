@@ -2995,7 +2995,30 @@ height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; di
 .site-nav  #logo1 {
     height: 11.5em;
 }
+#newPageHeader {
+    justify-content: flex-end;
+}
 @media (max-width: 1024px) {
+    ul.driver-dashboard-treeview-menu > li > a {
+        font-size: 8px;
+    }
+    #merchantsSub {
+        width: 100%;
+    }
+    #newPageHeader .img--bordered {
+        height: 40px;
+        width: 40px;
+    }
+    #deliveryMainWrp, #leaderboardMainWrp, #driverteamWrp, #homeMainWrp {
+    display:  flex;
+    flex-direction: column;
+    width: 100%;
+    padding-left: 1.5em;
+    padding-top: 2em;
+}
+    #newPageHeader {
+        justify-content: center;
+    }
     .site-nav  #logo1 {
         height: 7em;
     }
@@ -3113,6 +3136,10 @@ height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; di
 }
 
 @media (min-width: 1024px) {
+    #merchantsSub {
+         width: 70%
+    }
+
 .newSignupWrp2 .inputWrp {
    display: flex; align-items: center; margin-top: 0.4em;margin-bottom: 0.3em;
    padding: 1.1em; width: 75%; background: rgba(0, 0, 0, 0.02);
@@ -3122,12 +3149,6 @@ height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; di
     font-size: 13px!important;
 
 }
-}
-.newSignupWrp2 .inputWrp input {
-    width: 100%;
-    border: none; background: transparent; font-size: 80%; font-weight: bold; opacity: 0.8;
-}
-
 #deliveryMainWrp, #leaderboardMainWrp, #driverteamWrp, #homeMainWrp {
     display:  flex;
     flex-direction: column;
@@ -3135,6 +3156,13 @@ height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; di
     padding-left: 5em;
     padding-top: 2em;
 }
+}
+.newSignupWrp2 .inputWrp input {
+    width: 100%;
+    border: none; background: transparent; font-size: 80%; font-weight: bold; opacity: 0.8;
+}
+
+
 #deliverySubWrp > div > div:first-child {
     display: flex;
     flex-direction: column;

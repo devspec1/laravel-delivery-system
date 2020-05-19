@@ -6,9 +6,7 @@
   <div style="height: 100%; width: 100%; display: flex" id="profileWrp" class="mainWrp1">
 
   <div style="display: flex; width: 100%; height: 100%; padding-top: 1.5em" id="profileRightWrp">
-      <div style="margin-top: 1em; display: flex; flex-direction: column;padding: 15px 10px">
-      
-      </div>
+     
 
       <div style=" width: 100%; flex-direction: column; padding-left: 1.5em" data-tab="profile">
           

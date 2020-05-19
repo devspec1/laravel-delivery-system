@@ -8,7 +8,7 @@
               <span style="font-size: 200%; color: #1B187F;opacity: 0.8; font-weight: bold; font-family:'MontserratReg'">Merchants</span>
               
             </div>
-            <div style="display: flex; flex-direction: column; width: 70%" >
+            <div id="merchantsSub" style="display: flex; flex-direction: column;" >
               <div class="merchantsSubHeader">
                 <span>Trading Name</span>
                 <span>Location</span>
