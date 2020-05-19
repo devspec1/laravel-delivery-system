@@ -192,13 +192,25 @@ class SubscriptionController extends Controller
             $subscription = \Stripe\Subscription::retrieve($subscription_row->stripe_id);
             $subscription->cancel();
 
-            $subscription_row->status = 'canceled';
-            $subscription_row->save();
 
             if($subscription_row){
-                $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
-                $subscription_row['plan_id'] = $plan->plan_id;
-                $subscription_row['plan_name'] = $plan->plan_name;
+                $plan = StripeSubscriptionsPlans::where('id',3)->first();
+                $subscription_return['plan_id'] = $plan->plan_id;
+                $subscription_return['plan_name'] = $plan->plan_name;
+                $subscription_row->plan_id = $plan->plan_id;
+                $subscription_row->plan_name = $plan->plan_name;
+                $subscription_row->status = 'canceled';
+                $subscription_row->save();
+                $subscription_row = new DriversSubscriptions;
+                $subscription_row->user_id      = $user->id;
+                $subscription_row->plan = 3;
+                $subscription_row->save();
+            }
+            else{
+                $subscription_row = new DriversSubscriptions;
+                $subscription_row->user_id      = $user->id;
+                $subscription_row->plan = 3;
+                $subscription_row->save();
             }
 
             $sub_data = array(
