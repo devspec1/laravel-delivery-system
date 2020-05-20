@@ -506,7 +506,7 @@ class SubscriptionController extends Controller
             $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
             $type = $plan->plan_name;
 
-            if($type == "Member driver"){
+            if($type == "Member Driver"){
                 return response()->json([
                     'status_code'		=> '0',
                     'status_message'	=> 'You are already a member.',

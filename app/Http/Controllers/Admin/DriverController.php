@@ -634,7 +634,7 @@ class DriverController extends Controller
             $user_doc->save();
 
 
-            $plan = StripeSubscriptionsPlans::where('plan_name','Regular')->first();
+            $plan = StripeSubscriptionsPlans::where('plan_name','Driver only')->first();
             $subscription_row = new DriversSubscriptions;
             $subscription_row->user_id      = $user->id;
             $subscription_row->stripe_id    = '';
