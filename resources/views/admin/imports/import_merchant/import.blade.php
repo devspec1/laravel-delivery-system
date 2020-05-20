@@ -6,12 +6,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Import Driver
+        Import Merchants
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{ url(LOGIN_USER_TYPE.'/dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="{{ url(LOGIN_USER_TYPE.'/driver') }}">Drivers</a></li>
-        <li class="active">Add</li>
+        <li class="active">Import merchants</li>
       </ol>
     </section>
 
@@ -23,11 +22,11 @@
           <!-- Horizontal Form -->
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">Import Drivers</h3>
+              <h3 class="box-title">Import Merchants</h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            {!! Form::open(['url' => LOGIN_USER_TYPE.'/import_drivers', 'class' => 'form-horizontal','files' => true]) !!}
+            {!! Form::open(['url' => LOGIN_USER_TYPE.'/import_merchants', 'class' => 'form-horizontal','files' => true]) !!}
               <div class="box-body ed_bld">
               <input type="file" name="file" id="file">
               <!-- /.box-body -->

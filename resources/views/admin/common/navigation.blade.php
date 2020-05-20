@@ -284,9 +284,34 @@
 			<li class="{{ (Route::current()->uri() == 'admin/site_setting') ? 'active' : ''  }}"><a href="{{ url('admin/site_setting') }}"><i class="fa fa-cogs"></i><span>Site Setting</span></a></li>
 			@endif
 
-			@if(@$user->can('manage_site_settings'))
-
-			<li class="{{ (Route::current()->uri() == 'admin/import_drivers') ? 'active' : ''  }}"><a href="{{ url('admin/import_drivers') }}"><i class="fa fa-cogs"></i><span>Import Driver</span></a></li>
+            @if(@$user->can('manage_site_settings'))
+			<li class="treeview {{ (Route::current()->uri() == 'admin/import_drivers' || Route::current()->uri() == 'admin/import_leaders' || Route::current()->uri() == 'admin/import_merchants') ? 'active' : ''  }}">
+				<a href="#">
+                    <i class="fa fa-cogs"></i>
+                    <span>Import users</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+                    <li class="{{ (Route::current()->uri() == 'admin/import_leaders') ? 'active' : ''  }}">
+                        <a href="{{ url('admin/import_leaders') }}">
+                            <i class="fa fa-circle-o"></i>
+                            <span>Community Leaders</span>
+                        </a>
+                    </li>
+                    <li class="{{ (Route::current()->uri() == 'admin/import_drivers') ? 'active' : ''  }}">
+                        <a href="{{ url('admin/import_drivers') }}">
+                            <i class="fa fa-circle-o"></i>
+                            <span>Drivers</span>
+                        </a>
+                    </li>
+                    <li class="{{ (Route::current()->uri() == 'admin/import_merchants') ? 'active' : ''  }}">
+                        <a href="{{ url('admin/import_merchants') }}">
+                            <i class="fa fa-circle-o"></i>
+                            <span>Merchants</span>
+                        </a>
+                    </li>
+				</ul>
+			</li>
             @endif
 		</ul>
 	</section>

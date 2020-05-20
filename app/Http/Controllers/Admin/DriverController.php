@@ -71,8 +71,7 @@ class DriverController extends Controller
         return $dataTable->render('admin.driver.view');
     }
 
-
-       /**
+    /**
      * Import driver from csv
      *
      * @param array $request  csv file
@@ -81,7 +80,7 @@ class DriverController extends Controller
     public function import_drivers(Request $request)
     {
         if (!$_POST) {
-            return view('admin.import_driver.import');
+            return view('admin.imports.import_driver.import');
         } else {
 
 
@@ -400,6 +399,511 @@ class DriverController extends Controller
         }
     }
 
+    /**
+     * Import driver from csv
+     *
+     * @param array $request  csv file
+     * @return redirect     to Import Community leaders view
+     */
+    public function import_leaders(Request $request)
+    {
+        if (!$_POST) {
+            return view('admin.imports.import_leader.import');
+        } else {
+
+
+            if ($request->input('submit') != null) {
+
+                $file = $request->file('file');
+
+                // File Details 
+                $filename = $file->getClientOriginalName();
+                $extension = $file->getClientOriginalExtension();
+                $tempPath = $file->getRealPath();
+                $fileSize = $file->getSize();
+                $mimeType = $file->getMimeType();
+
+                // Valid File Extensions
+                $valid_extension = array("csv");
+
+
+                // Check file extension
+                if (in_array(strtolower($extension), $valid_extension)) {
+
+                    // File upload location
+                    $location = 'uploads';
+
+                    // Upload file
+                    $file->move($location, $filename);
+
+                    // Import CSV to Database
+                    $filepath = public_path($location . "/" . $filename);
+
+
+                    // Reading file
+                    $file = fopen($filepath, "r");
+
+                    $importData_arr = array();
+                    $i = 0;
+
+                    while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+                        $num = count($filedata);
+
+                        // Skip first row (Remove below comment if you want to skip the first row)
+                        if ($i == 0) {
+                            $i++;
+                            continue;
+                        }
+                        for ($c = 0; $c < $num; $c++) {
+                            $importData_arr[$i][] = $filedata[$c];
+                        }
+                        $i++;
+                    }
+                    fclose($file);
+
+                    $users_inserted = 0;
+
+                    // Insert to MySQL database
+                    foreach ($importData_arr as $index => $importData) {
+                        if (isset($importData[0])){
+                            
+                            //$referral_code = $importData[0];
+                            $first_name = $importData[0];
+                            $last_name = $importData[1];
+                            $email = $importData[2];
+                            $mobile_number = $importData[3];
+                            $address_line1 = $importData[7];
+                            $address_line2 = $importData[8];
+                            $city = $importData[9];
+                            $state = $importData[10];
+                            $postal_code = $importData[11];
+
+                            $plan = StripeSubscriptionsPlans::where('plan_name','Regular')->first();
+
+                            $user_count = User::where('email', $email)->count();
+
+                            $user_data = null;
+
+                            $address_data = [
+                                'address_line1' => $address_line1,
+                                'address_line2' => $address_line2,
+                                'city' => $city,
+                                'state' => $state,
+                                'postal_code' => $postal_code
+                            ];
+
+                            $subscription_data = [
+                                'stripe_id' => '',
+                                'status' => 'subscribed',
+                                'email' => $email,
+                                'plan' => $plan->id,
+                                'country' => 'Australia',
+                                'card_name' => $first_name . ' ' . $last_name
+                            ];
+
+                            if($user_count){
+                                $user_data = [
+                                    'first_name' => $first_name,
+                                    'last_name' => $last_name,
+                                    'email' => $email,
+                                    "country_code" => '61',
+                                ];
+                            }
+                            else{
+                                $user_data = [
+                                    "first_name" => $first_name,
+                                    "last_name" => $last_name,
+                                    "email" => $email,
+                                    "country_code" => '61',
+                                    "mobile_number" => $mobile_number,
+                                    "password" => bin2hex(openssl_random_pseudo_bytes(8, $crypto)),
+                                    "user_type" => "Driver",
+                                    "company_id" => 1,
+                                    "status" => 'Pending'
+                                ];
+                            }
+
+                            $user = User::where('email', $email)->where('user_type', 'Driver')->first();
+                            if(!$user){
+                                $user = new User;
+                                $user->user_type = "Driver";
+                                $user->save();
+                            }
+                            User::where('id', $user->id)->update($user_data);
+
+                            $address = DriverAddress::where('user_id',$user->id)->first();
+                            if(!$address){
+                                $address = new DriverAddress;
+                                $address->user_id = $user->id;
+                                $address->save();
+                            }
+                            DriverAddress::where('id',$address->id)->update($address_data);
+
+                            $subscription = DriversSubscriptions::where('user_id',$user->id)->first();
+                            if(!$subscription){
+                                $subscription = new DriversSubscriptions;
+                                $subscription->user_id = $user->id;
+                                $subscription->plan = $plan->id;
+                                $subscription->save();
+                            }
+                            DriversSubscriptions::where('id', $subscription->id)->update($subscription_data);
+                            
+
+                            // DriverAddress::updateOrCreate(
+                            //     ['user_id' => $user->id],
+                            //     $address_data
+                            // );
+
+                            // DriversSubscriptions::updateOrCreate(
+                            //     ['user_id' => $user->id],
+                            //     $subscription_data
+                            // );
+
+                            $users_inserted += 1;
+                        }
+                    }
+
+                    //Send response
+                    $this->helper->flash_message('success', 'Succesfully imported: '.$users_inserted.' users'); // Call flash message function
+
+                    return redirect(LOGIN_USER_TYPE . '/import_leaders');
+                } else {
+                    //Send response
+                    $this->helper->flash_message('danger', 'Invalid file type'); // Call flash message function
+
+                    return redirect(LOGIN_USER_TYPE . '/import_leaders');
+                }
+            }
+        }
+    }
+
+    /**
+     * Import driver from csv
+     *
+     * @param array $request  csv file
+     * @return redirect     to Import Merchants view
+     */
+    public function import_merchants(Request $request)
+    {
+        if (!$_POST) {
+            return view('admin.imports.import_merchant.import');
+        } else {
+
+
+            if ($request->input('submit') != null) {
+
+                $file = $request->file('file');
+
+                // File Details 
+                $filename = $file->getClientOriginalName();
+                $extension = $file->getClientOriginalExtension();
+                $tempPath = $file->getRealPath();
+                $fileSize = $file->getSize();
+                $mimeType = $file->getMimeType();
+
+                // Valid File Extensions
+                $valid_extension = array("csv");
+
+
+                // Check file extension
+                if (in_array(strtolower($extension), $valid_extension)) {
+
+                    // File upload location
+                    $location = 'uploads';
+
+                    // Upload file
+                    $file->move($location, $filename);
+
+                    // Import CSV to Database
+                    $filepath = public_path($location . "/" . $filename);
+
+
+                    // Reading file
+                    $file = fopen($filepath, "r");
+
+                    $importData_arr = array();
+                    $i = 0;
+
+                    while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+                        $num = count($filedata);
+
+                        // Skip first row (Remove below comment if you want to skip the first row)
+                        if ($i == 0) {
+                            $i++;
+                            continue;
+                        }
+                        for ($c = 0; $c < $num; $c++) {
+                            $importData_arr[$i][] = $filedata[$c];
+                        }
+                        $i++;
+                    }
+                    fclose($file);
+
+                    $users_inserted = 0;
+                    // Insert to MySQL database
+                    foreach ($importData_arr as $index => $importData) {
+                        if (isset($importData[0])){
+                            
+                            $user = new User;
+
+                            $referral_code = $importData[0];
+                            $first_name = $importData[1];
+                            $last_name = $importData[2];
+                            $email = $importData[3];
+
+                            $user_count = User::where('email', $email)->count();
+
+                            if(!$user_count){
+                                $users_inserted += 1;
+                                $full_mobile_no = isset($importData[4])? $importData[4] : '';
+                                $used_referral_code = isset($importData[5])? $importData[5] : '';
+                                $profile_pic = isset($importData[16])? $importData[16] : '';
+
+                                $address_line1 = isset($importData[9])? $importData[9] : '';
+                                $address_line2 = isset($importData[10])? $importData[10] : '';
+                                $city = isset($importData[11])? $importData[11] : '';
+                                $state = isset($importData[12])? $importData[12] : '';
+                                $postal_code = isset($importData[13])? $importData[13] : '';
+
+                                $vehicle_name = isset($importData[7])? $importData[7] : '';
+
+                                if (!empty($full_mobile_no)) {
+                                    $country_code = substr($importData[5], 0, 2);
+                                    $mobile_number = substr($importData[5], 2);
+                                } else {
+                                    $country_code = "00";
+                                    $mobile_number = "0000000000";
+                                }
+
+                                // check email or mobile number is empty then update 
+                                if (empty($email) && empty($mobile_number)) {
+                                    // Do nothing
+                                } else if (!empty($email)) {
+                                    $user_data = User::where('email', $email)->get();
+
+                                    if ($user_data->count() === 1) {
+
+                                        if (empty($referral_code)) {
+                                            $referral_code = 'TEST' . $index;
+                                        }
+
+                                        $updateData = array(
+                                            "first_name" => $first_name,
+                                            "last_name" => $last_name,
+                                            "email" => $email,
+                                            "country_code" => $country_code,
+                                            "mobile_number" => $mobile_number,
+                                            "password" => bin2hex(openssl_random_pseudo_bytes(8, $crypto)),
+                                            "user_type" => "Driver",
+                                            "company_id" => 1,
+                                            "used_referral_code" => $used_referral_code,
+                                            "referral_code" => $referral_code,
+                                            "status" => 'Car_details'
+                                        );
+
+                                        User::where('email', $email)->update($updateData);
+
+                                        $admin_referral_details = \DB::Table('referral_settings')->where('user_type', $user_data[0]->user_type)->get()->pluck('value', 'name');
+
+                                        if ($admin_referral_details['apply_referral']) {
+                                            $referred_user = User::where('referral_code', $user_data[0]->used_referral_code)->first();
+                                            if ($referred_user != '') {
+                                                $referal_present = ReferralUser::where('user_id', $referred_user->id)->where('referral_id',$user_data[0]->id )->first();
+                                                if($referal_present == null) {
+                                                    $referrel_user = new ReferralUser;
+                                                    $referrel_user->referral_id = $user_data[0]->id;
+                                                    $referrel_user->user_id     = $referred_user->id;
+                                                    $referrel_user->user_type   = $referred_user->user_type;
+                                                    $referrel_user->save();
+                                                }
+                                            }
+                                        }
+
+
+                                        $userID = $user_data[0]->id;
+                                        // Upload profile pic
+
+                                        $profile_data = ProfilePicture::where('user_id', $userID)->first();
+
+                                        if ($profile_data == null) {
+                                            $user_pic = new ProfilePicture;
+
+                                            $user_pic->user_id =  $userID;
+                                            $user_pic->src = $profile_pic;
+                                            $user_pic->photo_source = 'Local';
+
+                                            $user_pic->save();
+                                        } else {
+
+                                            $updateProfileData = array(
+                                                "src" => $profile_pic,
+                                                "photo_source" => 'Local'
+                                            );
+            
+                                            ProfilePicture::where('user_id', $userID)->update($updateProfileData);
+
+                                        }
+
+                                        $driver_address_data = DriverAddress::where('user_id', $userID)->first();
+
+                                        if ($driver_address_data == null) {
+
+                                            $user_address = new DriverAddress;
+
+                                            $user_address->user_id =  $userID;
+                                            $user_address->address_line1 = $address_line1 ? $address_line1 : '';
+                                            $user_address->address_line2 = $address_line2 ? $address_line2 : '';
+                                            $user_address->city = $city ? $city : '';
+                                            $user_address->state = $state ? $state : '';
+                                            $user_address->postal_code = $postal_code ? $postal_code : '';
+
+                                            $user_address->save();
+                                        } else {
+                                            $driver_add_data = array(
+                                                "address_line1" => $address_line1 ? $address_line1 : '',
+                                                "address_line2" => $address_line2 ? $address_line2 : '',
+                                                "city" => $city ? $city : '',
+                                                "state" => $state ? $state : '',
+                                                "postal_code" => $postal_code ? $postal_code : '',
+                                            );
+            
+                                            DriverAddress::where('user_id', $userID)->update($driver_add_data);
+                                        }
+
+
+                                        $user = User::find($userID);
+                                        $user->status = 'Document_details';
+                                        $user->save();
+
+                                        if ($user) {
+                                            $vehicle = Vehicle::where('user_id', $user->id)->first();
+                                            if ($vehicle == null) {
+                                                $vehicle = new Vehicle;
+                                                $vehicle->user_id = $user->id;
+                                                $vehicle->company_id = $user->company_id;
+                                            }
+                                            $vehicle->vehicle_name = $vehicle_name;
+                                            /* $vehicle->vehicle_number = $request->vehicle_number;
+                                            $vehicle->vehicle_id = $request->vehicle_type;
+                                            $vehicle->vehicle_type = CarType::find($request->vehicle_type)->car_name; */
+                                            $vehicle->status = 'Inactive';
+                                            $vehicle->save();
+
+                                            $driver_doc = DriverDocuments::where('user_id', $user->id)->first();
+                                            if ($driver_doc == null) {
+                                                $driver_doc = new DriverDocuments;
+                                                $driver_doc->user_id = $user->id;
+                                                $driver_doc->document_count = 0;
+                                                $driver_doc->save();
+                                            }
+
+                                            $data['country_code'] = $country_code;
+                                            $data['mobile_no'] = $mobile_number;
+
+                                            //$this->sendMailAndMessage($user, $data);
+                                        }
+                                    } else {
+
+                                        $user->first_name = $first_name;
+                                        $user->last_name = $last_name;
+                                        $user->email = $email;
+                                        $user->country_code = $country_code;
+                                        $user->mobile_number = $mobile_number;
+                                        $user->password = bin2hex(openssl_random_pseudo_bytes(8, $crypto));
+                                        $user->user_type = "Driver";
+                                        $user->company_id = 1;
+                                        $user->used_referral_code = $used_referral_code;
+
+                                        $user->status = 'Car_details';
+                                        $user->save();
+
+
+                                        if (!empty($referral_code)) {
+                                            User::where('id', $user->id)->update(array('referral_code' => $referral_code));
+                                        }
+
+
+
+                                        // Upload profile pic
+                                        $profile_data = ProfilePicture::where('user_id', $user->id)->first();
+
+                                        if ($profile_data == null) {
+                                            $user_pic = new ProfilePicture;
+
+                                            $user_pic->user_id = $user->id;
+                                            $user_pic->src = $profile_pic;
+                                            $user_pic->photo_source = 'Local';
+
+                                            $user_pic->save();
+                                        }
+
+
+                                        $driver_address_data = DriverAddress::where('user_id', $user->id)->first();
+
+                                        if ($driver_address_data == null) {
+                                            $user_address = new DriverAddress;
+
+                                            $user_address->user_id = $user->id;
+                                            $user_address->address_line1 = $address_line1 ? $address_line1 : '';
+                                            $user_address->address_line2 = $address_line2 ? $address_line2 : '';
+                                            $user_address->city = $city ? $city : '';
+                                            $user_address->state = $state ? $state : '';
+                                            $user_address->postal_code = $postal_code ? $postal_code : '';
+
+                                            $user_address->save();
+                                        }
+
+
+                                        $user = User::find($user->id);
+                                        $user->status = 'Document_details';
+                                        $user->save();
+
+                                        if ($user) {
+                                            $vehicle = Vehicle::where('user_id', $user->id)->first();
+                                            if ($vehicle == null) {
+                                                $vehicle = new Vehicle;
+                                                $vehicle->user_id = $user->id;
+                                                $vehicle->company_id = $user->company_id;
+                                            }
+                                            $vehicle->vehicle_name = $vehicle_name;
+                                            /* $vehicle->vehicle_number = $request->vehicle_number;
+                                            $vehicle->vehicle_id = $request->vehicle_type;
+                                            $vehicle->vehicle_type = CarType::find($request->vehicle_type)->car_name; */
+                                            $vehicle->status = 'Inactive';
+                                            $vehicle->save();
+
+                                            $driver_doc = DriverDocuments::where('user_id', $user->id)->first();
+                                            if ($driver_doc == null) {
+                                                $driver_doc = new DriverDocuments;
+                                                $driver_doc->user_id = $user->id;
+                                                $driver_doc->document_count = 0;
+                                                $driver_doc->save();
+                                            }
+
+                                            $data['country_code'] = $country_code;
+                                            $data['mobile_no'] = $mobile_number;
+
+                                            //$this->sendMailAndMessage($user, $data);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    //Send response
+                    $this->helper->flash_message('success', 'Succesfully imported: '.$users_inserted.' users'); // Call flash message function
+
+                    return redirect(LOGIN_USER_TYPE . '/import_drivers');
+                } else {
+                    //Send response
+                    $this->helper->flash_message('danger', 'Invalid file type'); // Call flash message function
+
+                    return redirect(LOGIN_USER_TYPE . '/import_drivers');
+                }
+            }
+        }
+    }
 
     public function sendMailAndMessage($user, $data) {
         // Send email  to user
