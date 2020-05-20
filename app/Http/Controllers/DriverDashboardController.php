@@ -462,15 +462,15 @@ class DriverDashboardController extends Controller
             $result['success'] = 'true';
             $profile_image_extension      =   $profile_image->getClientOriginalExtension();
             $profile_image_filename       =   'profile_image' . time() .  '.' . $profile_image_extension;
-            $profile_image_save_filename       =   'profile_image' . time() .  '_450x250.' . $profile_image_extension;
+            //$profile_image_save_filename       =   'profile_image' . time() .  '_450x250.' . $profile_image_extension;
             $success = $profile_image->move('images/users/'.$user->id, $profile_image_filename);
             if(!$success) {
                 return back()->withError(trans('messages.user.update_fail'));
             }
             else {
-                $this->helper->compress_image("images/users/".$user->id."/".$profile_image_filename, "images/users/".$user->id."/".$profile_image_filename, 80, 450, 250);
+                //$this->helper->compress_image("images/users/".$user->id."/".$profile_image_filename, "images/users/".$user->id."/".$profile_image_filename, 80, 450, 250);
             }
-            $user_profile_image->src   =url('images/users').'/'.$user->id.'/'.$profile_image_save_filename;
+            $user_profile_image->src   =url('images/users').'/'.$user->id.'/'.$profile_image_filename;
             $user_profile_image->save();
         }
 
