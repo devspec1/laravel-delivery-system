@@ -37,11 +37,11 @@
 		</ol>
 	</section>
     {!! Form::open(['method'=>'POST','url' => LOGIN_USER_TYPE.'/edit_home_delivery/'.$result->id, 'class' => 'form-horizontal delivery_adding','id'=>'delivery_order','name'=>'deliveryAddForm']) !!}
-    
+
     @if($result->merchant_id)
 
     {!! Form::hidden('merchant_id', $result->merchant_id, ['id' => 'merchant-id']) !!}
-    
+
     @endif
 
 	<section class="content">
@@ -164,7 +164,7 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
-	var REQUEST_URL = "{{url('/'.LOGIN_USER_TYPE)}}"; 
+	var REQUEST_URL = "{{url('/'.LOGIN_USER_TYPE)}}";
 	var old_edit_date = "{{''}}"
 	var page = "{{'new'}}"
 </script>
@@ -174,7 +174,7 @@
 		$('#input-merchant-id').selectize({
 		    plugins: ['remove_button'],
 		    maxItems: 1
-    		
+
 		});
 		init_user();
 	})
@@ -184,7 +184,7 @@
     var select = $("#input-merchant-id").selectize();
     var selectize = select[0].selectize;
     selectize.disable();
-    
+
     $.ajax({
       type: 'GET',
       url: APP_URL+'/{{LOGIN_USER_TYPE}}/get_send_merchants',

@@ -65,7 +65,7 @@
                                                                   
                                                                   We received a request to reset your {{$site_name}} password. Click the link below to choose a new one:<br><br> 
 
-                                                                  <a style="text-decoration:none;font-family:'ClanPro-Book','HelveticaNeue-Light','Helvetica Neue Light',Helvetica,Arial,sans-serif;font-size:16px;color:#12939a" href="{{ $content['url'].('reset_password?secret='.$content['token']) }}" target="_blank" data-saferedirecturl="{{ $content['url'].('reset_password?secret='.$content['token']) }}"> Reset Your Password</a>
+                                                                  <a style="text-decoration:none;font-family:'ClanPro-Book','HelveticaNeue-Light','Helvetica Neue Light',Helvetica,Arial,sans-serif;font-size:16px;color:#12939a" href="{{ $content['url'].('driver/reset_password?secret='.$content['token']) }}" target="_blank" data-saferedirecturl="{{ $content['url'].('driver/reset_password?secret='.$content['token']) }}"> Reset Your Password</a>
 
                                                                   </td>
                                                               </tr>

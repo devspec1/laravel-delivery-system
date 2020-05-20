@@ -100,7 +100,7 @@
 								<span class="text-danger">{{ $errors->first('work_location') }}</span>
 							</div>
 						</div>
-						{{-- <div class="form-group">
+						<div class="form-group">
 							<label for="input_password" class="col-sm-3 control-label">Used Referral Code</label>
 							<div class="col-sm-6">
 								<div class="autocomplete-input-container">
@@ -112,9 +112,9 @@
 								</div>
 								<span class="text-danger">{{ $errors->first('work_location') }}</span>
 							</div>
-						</div> --}}
+						</div>
 						 <div class="form-group" style="margin-bottom: 1em">
-                          	<label for="input-tags3" class="col-sm-3 control-label">Used Referral Code<em class="text-danger"></em></label>
+                          	<label for="input-tags3" class="col-sm-3 control-label">Referrer<em class="text-danger"></em></label>
                           	<div class="col-sm-6">
 	                    	<input type="text" id="input-tags3" name="referrer_id" value="" />
 	                    
@@ -164,7 +164,7 @@
         selectize.clear();
         selectize.clearOptions();
         $.each(resultData, function (key, value) {
-          selectize.addOption({value:value.id,text:value.first_name + ' ' +  value.last_name+' - ' + value.user_type + ' - ' + value.mobile_number + ' - ' + value.referral_code});
+          selectize.addOption({value:value.id,text:value.first_name + ' - ' +value.mobile_number});
         });
         selectize.enable();
 

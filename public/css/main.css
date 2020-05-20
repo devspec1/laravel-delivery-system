@@ -2621,7 +2621,7 @@ button:focus {
 }
 
 .page-lead {
-    padding: 15px 10px;
+    padding: 7px 5px;
 }
 
 .trip-details__breakdown {
@@ -2643,6 +2643,7 @@ button:focus {
     position: relative;
     box-shadow: -1px -0px rgba(0, 0, 0, .075);
     background: #fff;
+    width: 100%;
 }
 
 .flexbox,
@@ -2817,9 +2818,9 @@ button:focus {
 
 .img--bordered {
     border: 1px solid #c2c2c2;
-    border-radius: 100% !important;
-    height: 150px;
-    width: 150px;
+   
+    height: 78px;
+    width: 78px;
 }
 
 .head_profile {
@@ -2900,6 +2901,7 @@ button:focus {
 .site-nav>li>a {
     padding: 10px;
     border-bottom: 1px solid #efefef; 
+    padding-left: 3.8em;
 }
 
 .block-list>li>.trip-filter__origin-link.collapsed,
@@ -2915,9 +2917,8 @@ button:focus {
 
 .site-nav>li>.trip-filter__origin-link.collapsed:hover,
 .site-nav>li>a:hover {
-    background: #1fbad6;
-    border-color: #1fbad6;
-    color: #fff;
+   
+   
     text-decoration: none;
 }
 
@@ -3192,19 +3193,18 @@ button:focus {
 }
 
 .btn.btn--primary.btn-blue {
-    background: #1fbad6 !important;
-    border-color: #1fbad6 !important;
+    background: #3B5998 !important;
+    border-color: #3B5998!important;
     color: #fff !important;
     font-size: 16px !important;
     font-weight: normal;
     padding: 0px !important;
-    border-radius: 4px;
+    border-radius: 7px;
 }
 
 .btn.btn--primary.btn-blue:hover,
 .btn.btn--primary.btn-blue:focus {
-    background: #2ec5e1 !important;
-    border-color: #2ec5e1 !important;
+ 
     color: #fff !important;
 }
 
@@ -3440,9 +3440,7 @@ button:focus {
 }
 
 @media only screen and (max-width: 940px) {
-    .hide-sm-760 {
-        display: none !important;
-    }
+   
     .mar-zero {
         margin: 0px !important;
     }
@@ -3455,18 +3453,7 @@ button:focus {
     .soft--top.milli a {
         color: #fff;
     }
-    .site-nav>li,
-    .site-nav>li>.trip-filter__origin-link.collapsed,
-    .site-nav>li>a {
-        padding: 14px;
-        color: #fff;
-        border-bottom: 1px solid #555 !important;
-    }
-    .site-nav>li>.trip-filter__origin-link.collapsed,
-    .site-nav>li>a {
-        padding: 15px 15px 14px;
-        margin: -15px;
-    }
+  
 }
 
 @media(min-width: 300px) and (max-width: 1000px) {
@@ -4526,7 +4513,8 @@ a.driver-dashboard-side-menu_link {
 }
 
 .active > a {
-    background: #1fbad6;
+    font-family: 'MontserratBold';
+    color: #3B5998;
 }
 .active .driver-dashboard-treeview-menu {
     display: block !important;
@@ -4556,26 +4544,26 @@ ul.driver-nav > li:hover > a {
     color: #fff;
     font-weight: bold;
 }
-li.driver-dashboard-treeview {
-    padding: 0 !important;
-}
 
 ul.driver-dashboard-treeview-menu {
  
     list-style:none;
     padding-left: 0px;
+    padding-top: 0.5em;
 }
 
 ul.driver-dashboard-treeview-menu > li > a {
     display: block;
-    padding: 8px 12px 8px 30px;
-    font-size: 16px;
+    padding: 0.8em;
+
+    font-size: 12px;
     font-weight: 200;
 }
-
+.site-nav > .driver-dashboard-treeview li>a {
+    border-bottom: none;
+}
 ul.driver-dashboard-treeview-menu > li:hover > a {
-    color: #fff;
-    background-color: #333;
+    
 }
 ul.driver-dashboard-treeview-menu > li.active a {
     background-color: #444;
@@ -4590,12 +4578,43 @@ ul.driver-dashboard-treeview-menu > li.active a {
 .user-list {
     list-style: none;
     padding: 0px;
+    margin-left: 5em;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    font-family: 'MontserratReg';
 }
 .user-list li {
     padding: 20px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 .user-list li > span {
     padding: 5px;
+}
+.user-profile-image {
+    margin-right: 0.6em;
+}
+.user-list > li:first-child {
+    background: rgba(0, 0, 0, 0.07);
+    font-size: 110%;
+}
+.user-list > li:not(.user-list-header) {
+    font-weight: bold;
+}
+.user-list-active {
+    color: #149c1f;
+}
+.user-list-inactive {
+    opacity: 0.5;
+}
+.page-lead-custom {
+    margin-left: 5em;
+    margin-top: 2em;
+    margin-bottom: 1.1em;
+    font-family: "MontserratReg";
+    color: #1B187F;
+    font-weight: bold;
 }
 
 @media (max-width: 767px) {

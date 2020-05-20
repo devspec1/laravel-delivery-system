@@ -10,7 +10,9 @@ use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\Request as RideRequest;
 use App\Models\DriversSubscriptions;
+use App\Models\StripeSubscriptionsPlans;
 use App\Models\Trips;
+use App\Models\Payment;
 
 use Validator;
 use JWTAuth;
@@ -247,10 +249,6 @@ class HomeDeliveryController extends Controller
             $rider = User::where('id', $order->customer_id)->first();
             $ride_request = RideRequest::where('id',$order->ride_request)->first();
 
-            $subscription = DriversSubscriptions::where('user_id',$user->id)
-                ->whereNotIn('status', ['canceled'])
-                ->first();
-
             //Insert record in Trips table
             $trip = new Trips;
             $trip->user_id = $rider->id;
@@ -275,6 +273,10 @@ class HomeDeliveryController extends Controller
             $trip->arrive_time = $order->created_at;
             $trip->begin_trip = $order->updated_at;
 
+            $subscription = DriversSubscriptions::where('user_id',$user->id)
+                ->whereNotIn('status', ['canceled'])
+                ->first();
+
             if(!$subscription){
                 return response()->json([
                     'status_code' 		=> '0',
@@ -282,20 +284,24 @@ class HomeDeliveryController extends Controller
                 ]);
             }
             else{
-                if($subscription->plan == 2){
-                    $trip->driver_or_company_commission = 0.00;
-                    $trip->driver_payout = $order->fee;
-                }
-                else{
+                $plan = StripeSubscriptionsPlans::where('id',$subscription->plan)->first();
+                
+                if($plan->plan_name == 'Driver only'){
                     $commission = $order->fee * 0.1; //10% from non-members
                     $trip->driver_or_company_commission = $commission;
                     $trip->driver_payout = $order->fee - $commission;
+                }
+                else{
+                    $trip->driver_or_company_commission = 0.00;
+                    $trip->driver_payout = $order->fee;
                 }
             }
 
             $order->status = $order_status = 'delivered';
 
             $order->save();
+
+
 
             $assign_status_message = 'successfully delivered';
 
@@ -304,6 +310,14 @@ class HomeDeliveryController extends Controller
             $trip->end_trip = $order->updated_at;
 
             $trip->save();
+
+            $data = [
+                'trip_id' => $trip->id,
+                'correlation_id' => null,
+                'driver_payout_status' => ($trip->driver_payout) ? 'Pending' : 'Completed',
+            ];
+
+            Payment::updateOrCreate(['trip_id' => $trip->id], $data);
            
         }
         elseif ($order_status == 'delivered') {

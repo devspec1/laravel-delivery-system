@@ -8,8 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Start\Helpers;
 use App\Http\Helper\RequestHelper;
 use App\Models\DriversSubscriptions;
+use App\Models\PaymentMethod;
 use App\Models\StripeSubscriptionsPlans;
 use App\Models\User;
+use App\Http\Controllers\Api\ProfileController;
 use Auth;
 use App;
 use DateTime;
@@ -80,6 +82,20 @@ class SubscriptionController extends Controller
 
         $user_details = JWTAuth::parseToken()->authenticate();
 
+        $rules = array(
+			'country' => 'required',
+			'payment_method' => 'required',
+		);
+
+		$validator = Validator::make($request->all(), $rules);
+
+		if($validator->fails()) {
+            return response()->json([
+            	'status_code' => '0',
+            	'status_message' => $validator->messages()->first()
+            ]);
+        }
+
 		$user = User::where('id', $user_details->id)->first();
         
         if(!$user) {
@@ -107,7 +123,7 @@ class SubscriptionController extends Controller
                 ]
             ]);
 
-            $plan = StripeSubscriptionsPlans::where('plan_name','Founder')->first();
+            $plan = StripeSubscriptionsPlans::where('plan_name','Member Driver')->first();
 
             $subscription = \Stripe\Subscription::create([
                 'customer' => $customer->id,
@@ -128,10 +144,10 @@ class SubscriptionController extends Controller
             }
             $subscription_row->stripe_id    = $subscription->id;
             $subscription_row->status       = 'subscribed';
-            $subscription_row->email        = $request->email;
+            $subscription_row->email        = $user_details->email;
             $subscription_row->plan         = $plan->id;
             $subscription_row->country      = $country;
-            $subscription_row->card_name    = $card_name;   
+            $subscription_row->card_name    = $user_details->first_name . ' ' . $user_details->last_name;   
             $subscription_row->save();    
   
 
@@ -176,13 +192,23 @@ class SubscriptionController extends Controller
             $subscription = \Stripe\Subscription::retrieve($subscription_row->stripe_id);
             $subscription->cancel();
 
-            $subscription_row->status = 'canceled';
-            $subscription_row->save();
 
             if($subscription_row){
-                $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
-                $subscription_row['plan_id'] = $plan->plan_id;
-                $subscription_row['plan_name'] = $plan->plan_name;
+                $plan = StripeSubscriptionsPlans::where('id',3)->first();
+                $subscription_return['plan_id'] = $plan->plan_id;
+                $subscription_return['plan_name'] = $plan->plan_name;
+                $subscription_row->status = 'canceled';
+                $subscription_row->save();
+                $subscription_row = new DriversSubscriptions;
+                $subscription_row->user_id      = $user->id;
+                $subscription_row->plan = 3;
+                $subscription_row->save();
+            }
+            else{
+                $subscription_row = new DriversSubscriptions;
+                $subscription_row->user_id      = $user->id;
+                $subscription_row->plan = 3;
+                $subscription_row->save();
             }
 
             $sub_data = array(
@@ -441,8 +467,8 @@ class SubscriptionController extends Controller
     public function upgradeSubscription(Request $request) {
         $user_details = JWTAuth::parseToken()->authenticate();
 
-		$user = User::where('id', $user_details->id)->first();
-        
+        $user = User::where('id', $user_details->id)->first();
+                
         if(!$user) {
             return response()->json([
 				'status_code'		=> '0',
@@ -450,52 +476,147 @@ class SubscriptionController extends Controller
 			]);
         }
         else{
+            $stripe_payment = resolve('App\Repositories\StripePayment');
+
+            $payment_details = PaymentMethod::firstOrNew(['user_id' => $user_details->id]);
+    
+            if(!isset($payment_details->customer_id)) {
+                $stripe_customer = $stripe_payment->createCustomer($user_details->email);
+                if($stripe_customer->status == 'failed') {
+                    return response()->json([
+                        'status_code' 		=> "0",
+                        'status_message' 	=> $stripe_customer->status_message,
+                    ]);
+                }
+                $payment_details->customer_id = $stripe_customer->customer_id;
+                $payment_details->save();
+            }
+
             $subscription_row = DriversSubscriptions::where('user_id',$user->id)
-                ->whereNotIn('status', ['canceled'])
-                ->first();
-            
+            ->whereNotIn('status', ['canceled'])
+            ->first();
+
+            if(!$subscription_row){
+                $subscription_row = new DriversSubscriptions;
+                $subscription_row->user_id      = $user->id;
+                $subscription_row->plan = 3;
+                $subscription_row->save();
+            }
+
             $plan = StripeSubscriptionsPlans::where('id',$subscription_row->plan)->first();
             $type = $plan->plan_name;
-            if($type == "Founder"){
+
+            if($type == "Member Driver"){
                 return response()->json([
                     'status_code'		=> '0',
                     'status_message'	=> 'You are already a member.',
                 ]);
             }
             else{
-                $stripe_skey = payment_gateway('secret','Stripe');
-                $api_version = payment_gateway('api_version','Stripe');
-                \Stripe\Stripe::setApiKey($stripe_skey);
-                \Stripe\Stripe::setApiVersion($api_version);
-                
-                $subscription = \Stripe\Subscription::retrieve($subscription_row->stripe_id);
-                \Stripe\Subscription::update($subscription_row->stripe_id, [
-                    'cancel_at_period_end' => false,
-                    'items' => [
-                        [
-                            'id' => $subscription->items->data[0]->id,
-                            'plan' => $plan->plan_id,
-                        ],
-                    ],
-                ]);
-                
-                $subscription_row->plan     = $plan->id;
-                $subscription_row->save();
-                
-                if($subscription_row){
-                    $subscription_row['plan_id'] = $plan->plan_id;
-                    $subscription_row['plan_name'] = $plan->plan_name;
+                if(!$subscription_row->stripe_id){
+                    try{
+                        $plan = StripeSubscriptionsPlans::where('plan_name','Member Driver')->first();
+                        // $payment_method = \Stripe\PaymentMethod::create([
+                        //     'type' => 'card',
+                        //     'card' => [
+                        //     'number' => '4242424242424242',
+                        //     'exp_month' => 5,
+                        //     'exp_year' => 2021,
+                        //     'cvc' => '314',
+                        //     ],
+                        // ]);
+                        // $setup_intent = \Stripe\SetupIntent::create([
+                        //     'payment_method_types' 	=> ['card'],
+                        //     'customer'				=> $payment_details->customer_id,
+                        //     'usage'					=> 'off_session',
+                        // ]);
+                        // $setup_intent = \Stripe\SetupIntent::update(
+                        //     $setup_intent->id,
+                        //     ['payment_method' => $payment_method],
+                        // );
+                        // $setup_intent->confirm([
+                        //     'payment_method' => $payment_method->id,
+                        // ]);
+                        $payment = resolve('App\Http\Controllers\Api\ProfileController');
+                        $request->request->add(['intent_id' => $request->payment_method]);
+                        $setup_intent = \Stripe\SetupIntent::retrieve(
+                            $request->payment_method
+                        );
+                        $payment->add_card_details($request);
+                    
+                        $subscription = \Stripe\Subscription::create([
+                            'customer' => $payment_details->customer_id,
+                            'items' => [
+                                [
+                                    'plan' =>  $plan->plan_id,
+                                ],
+                            ],
+                            'expand' => ['latest_invoice.payment_intent'],
+                            'default_payment_method' => $setup_intent->payment_method
+                        ]);
+                    }
+                    catch(\Exception $e){
+                        return response()->json([
+                            'status_code'		=> '0',
+                            'status_message'	=> $e->getMessage(),
+                        ]);
+                    }
+
+                    $subscription_row->stripe_id    = $subscription->id;
+                    $subscription_row->status       = 'subscribed';
+                    $subscription_row->email        = $user_details->email;
+                    $subscription_row->plan         = $plan->id;
+                    $subscription_row->country      = $request->country;
+                    $subscription_row->card_name    = $user_details->first_name . ' ' . $user_details->last_name;   
+                    $subscription_row->save();
+                    
+                    if($subscription_row){
+                        $subscription_row['plan_id'] = $plan->plan_id;
+                        $subscription_row['plan_name'] = $plan->plan_name;
+                    }
+                    
+                    $sub_data = array(
+                        'status_code'		=> '1',
+                        'status_message'	=> trans('messages.subscriptions.upgraded'),
+                        'subscription'      => $subscription_row, 
+                    );
+
+                    return response()->json($sub_data);
                 }
-                
-                $sub_data = array(
-                    'status_code'		=> '1',
-                    'status_message'	=> trans('messages.subscriptions.upgraded'),
-                    'subscription'      => $subscription_row, 
-                );
+                else{
+                    $stripe_skey = payment_gateway('secret','Stripe');
+                    $api_version = payment_gateway('api_version','Stripe');
+                    \Stripe\Stripe::setApiKey($stripe_skey);
+                    \Stripe\Stripe::setApiVersion($api_version);
+                    
+                    $subscription = \Stripe\Subscription::retrieve($subscription_row->stripe_id);
+                    \Stripe\Subscription::update($subscription_row->stripe_id, [
+                        'cancel_at_period_end' => false,
+                        'items' => [
+                            [
+                                'id' => $subscription->items->data[0]->id,
+                                'plan' => $plan->plan_id,
+                            ],
+                        ],
+                    ]);
+                    
+                    $subscription_row->plan     = $plan->id;
+                    $subscription_row->save();
+                    
+                    if($subscription_row){
+                        $subscription_row['plan_id'] = $plan->plan_id;
+                        $subscription_row['plan_name'] = $plan->plan_name;
+                    }
+                    
+                    $sub_data = array(
+                        'status_code'		=> '1',
+                        'status_message'	=> trans('messages.subscriptions.upgraded'),
+                        'subscription'      => $subscription_row, 
+                    );
 
-                return response()->json($sub_data);
+                    return response()->json($sub_data);
+                }
             }
-
         }
     }
 }

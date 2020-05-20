@@ -1,7 +1,19 @@
 stages:
   - DEVDEPLOY-DEPLOY
   - PRODUCTION-DEPLOY 
+  - FEATUREDEPLOY-DEPLOY
+
   
+feature-deployment:
+    stage: FEATUREDEPLOY-DEPLOY
+    tags:
+        -  devwebserver
+    only:
+      refs:
+        - new-driver-dashboard
+    script:
+        - sudo docker exec -i devlaravel bash -c 'cd /var/www/html/; rm .env; git pull; cp .env.features .env'
+
 dev-deployment:
   stage: DEVDEPLOY-DEPLOY
   tags:

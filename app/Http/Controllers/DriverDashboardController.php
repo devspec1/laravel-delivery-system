@@ -14,6 +14,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Trips;
@@ -22,8 +23,10 @@ use App\Models\Request as RideRequest;
 use App\Models\ProfilePicture;
 use App\Models\DriverDocuments;
 use App\Models\Vehicle;
+use App\Models\PasswordResets;
 use Auth;
 use App;
+use DateTime;
 use DB;
 use Validator;
 use PDF;
@@ -42,12 +45,223 @@ class DriverDashboardController extends Controller
     /*
     * Driver Profile
     */
-	public function driver_profile()
+    public function driver_profile()
     {
         $data['result'] = User::find(@Auth::user()->id);
         return view('driver_dashboard.profile',$data);
     }
 
+    public function driver_home()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+
+        $data['driveteam'] = count(DB::select(DB::raw('SELECT * FROM users WHERE used_referral_code = ' . @Auth::user()->id . " OR id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")")));
+
+
+        $data['deliveries'] = count(DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR driver_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ") OR merchant_id IN (SELECT id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code =" . @Auth::user()->id . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . "))"));
+
+
+        $data['merchantCount'] = count(DB::select(DB::raw('SELECT DISTINCT user_id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")"));
+
+
+        return view('driver_dashboard.home',$data);
+    }
+
+        public function driver_new_dash()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.new_dash',$data);
+    }
+     public function driver_leaderboard()
+    {
+         $data['merchants'] = User::where("used_referral_code", @Auth::user()->id)->get();
+        
+        foreach($data['merchants'] as $k => $v) {
+
+            $add = DB::table('driver_address')->where('user_id', $v->id)->first();
+     
+         
+                $data['merchants'][$k]['address'] = $add ? $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code : "";
+            $data['merchants'][$k]['profile_picture'] = DB::table('profile_picture')->where('user_id', $v->id)->first();
+
+            $data['merchants'][$k]['since'] = date_format($v->created_at, "M Y");
+        }
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.leaderboard',$data);
+    }
+     public function driver_merchants()
+    {
+
+
+        $data['merchants'] = DB::select(DB::raw('SELECT * FROM users WHERE id IN (SELECT user_id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . "))");
+        
+        foreach($data['merchants'] as $k => $v) {
+
+            $add = DB::table('driver_address')->where('user_id', $v->id)->first();
+     
+            
+                $data['merchants'][$k]->address = $add ? $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code : "";
+            $data['merchants'][$k]->profile_picture = DB::table('profile_picture')->where('user_id', $v->id)->first();
+
+            
+            $data['merchants'][$k]->since = $v->created_at ? date_format(date_create($v->created_at), "M Y") : "";
+        }
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.merchants',$data);
+    }
+    public function driver_driver_team()
+    {
+        $data['merchants'] = DB::select(DB::raw('SELECT * FROM users WHERE id IN (SELECT user_id FROM referral_users WHERE referral_id = ' . @Auth::user()->id) . ") OR used_referral_code = " . @Auth::user()->id);
+        
+        foreach($data['merchants'] as $k => $v) {
+
+            $add = DB::table('driver_address')->where('user_id', $v->id)->first();
+     
+            
+                $data['merchants'][$k]->address = $add ?  $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code : "";
+            $data['merchants'][$k]->profile_picture = DB::table('profile_picture')->where('user_id', $v->id)->first();
+
+            $data['merchants'][$k]->since = date_format(date_create($v->created_at), "M Y");
+        }
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.driver_team',$data);
+    }
+    public function driver_payment()
+    {
+     
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.driver_payment',$data);
+    }
+    public function driver_password()
+    {
+
+
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.password',$data);
+    }
+    public function driver_membership()
+    {
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.membership',$data);
+    }
+     public function driver_delivery_orders()
+    {
+       $data['deliveries'] =  DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR driver_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ") OR merchant_id IN (SELECT id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code =" . @Auth::user()->id . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")) ORDER BY created_at DESC");
+
+       foreach($data['deliveries'] as $k => $v) {
+        $driver = User::find($v->driver_id);
+       
+        if($driver) {
+             $request = DB::table("request")->where('id', $v->ride_request)->first();
+            $data['deliveries'][$k]->driver_name = $driver->first_name . " " . $driver->last_name;
+            if($request) {
+            $data['deliveries'][$k]->pickup_loc = $request->pickup_location;
+            $data['deliveries'][$k]->drop_loc = $request->drop_location;
+            }
+                else
+                     unset($data['deliveries'][$k]);
+            
+        }
+        else
+            unset($data['deliveries'][$k]);
+        }
+
+        $data['result'] = User::find(@Auth::user()->id);
+        return view('driver_dashboard.delivery',$data);
+    }
+      public function driver_new_login()
+    {
+        return view('driver_dashboard.new_login');
+    }
+    public function driver_forget_password() {
+        return view('driver_dashboard.forget_password');
+    }
+    public function show_reset_password(Request $request) {
+        
+       
+        $password_resets = PasswordResets::whereToken($request->secret)->first();
+            $user = User::where('email', @$password_resets->email)->first();
+            if ($password_resets) {
+                $password_result = $password_resets;
+
+                $datetime1 = new DateTime();
+                $datetime2 = new DateTime($password_result->created_at);
+                $interval = $datetime1->diff($datetime2);
+                $hours = $interval->format('%h');
+
+                if ($hours >= 1) {
+                    // Delete used token from password_resets table
+                    PasswordResets::whereToken($request->secret)->delete();
+
+                     return redirect("driver/new_login")->withErrors(['error' => trans('messages.user.token')]);
+
+                }
+
+                $data['result'] = User::whereEmail($password_result->email)->first();
+                $data['token'] = $request->secret;
+                return view('driver_dashboard.reset_password', $data);
+            } else {
+               
+                return redirect("driver/new_login")->withErrors(['error' => trans('messages.user.invalid_token')]);
+            }
+    }
+    public function submit_password_reset(Request $request) {
+        $rules = array(
+                'new_password' => 'required|min:6|max:30',
+                'confirm_password' => 'required|same:new_password',
+            );
+
+            // Password validation custom Fields name
+            $niceNames = array(
+                'new_password' => trans('messages.user.new_paswrd'),
+                'confirm_password' => trans('messages.user.cnfrm_paswrd'),
+            );
+
+            $validator = Validator::make($request->all(), $rules);
+            $validator->setAttributeNames($niceNames);
+
+            if ($validator->fails()) {
+                return back()->withErrors($validator)->withInput(); // Form calling with Errors and Input values
+            } else {
+
+                // Delete used token from password_resets table
+                $password_resets = PasswordResets::whereToken($request->token)->delete();
+
+                $user = User::find($request->id);
+
+                $user->password = $request->new_password;
+
+                $user->save(); // Update Password in users table
+
+                Session::flash('success', trans('messages.user.pswrd_chnge'));
+                return redirect('driver/new_login');
+
+            }
+    }
+    public function driver_reset_password(Request $request, EmailController $email_controller) {
+            $user = User::whereEmail($request->email)->first();
+         
+
+            
+
+            if($user) {
+                
+                $email_controller->forgot_password_link($user);
+                Session::flash('success', trans('messages.user.link') . $user->email);
+                return redirect('driver/new_login');
+            }
+            else {
+               return back()->withErrors(["Email" => "Wrong email"]);
+            }
+                 
+
+
+    }
+     public function driver_new_signup()
+    
+    {
+        return view('driver_dashboard.new_signup');
+    }
     /**
      * Driver Download invoice Page
      */
@@ -79,6 +293,28 @@ class DriverDashboardController extends Controller
     /**
     *    Driver Profile update
     **/
+
+    public function driver_update_password(Request $request) {
+        $user = @Auth::user();
+
+        if(Hash::check($request->currPass, $user->password)) {
+
+            if($request->pass1 == $request->pass2) {
+                $user->password = $request->pass1;
+                //echo $user->password;
+                $user->save();
+                return redirect('driver/password');
+            }
+            else {
+                return back()->withErrors(["password" => "New passwords doesn't match"]);
+            }
+
+        }
+        else {
+               return back()->withErrors(["password" => "Incorrect current password"]);
+        }
+        
+    }
     public function driver_update_profile(Request $request)
     {
         $rules = array(
@@ -209,7 +445,7 @@ class DriverDashboardController extends Controller
 
         $user = User::find(@Auth::user()->id);
         $user_profile_image = ProfilePicture::find($user->id);
-
+        
         if(!$user_profile_image) {
             $user_profile_image = new ProfilePicture;
             $user_profile_image->user_id = $user->id;
@@ -218,21 +454,24 @@ class DriverDashboardController extends Controller
         $user_profile_image->photo_source = 'Local';
         $profile_image          =   $request->file('file');
         $path = dirname($_SERVER['SCRIPT_FILENAME']).'/images/users/'.$user->id;
-                            
+                                
         if(!file_exists($path)) {
             mkdir(dirname($_SERVER['SCRIPT_FILENAME']).'/images/users/'.$user->id, 0777, true);
         }
-
         if($profile_image) { 
-                $profile_image_extension      =   $profile_image->getClientOriginalExtension();
-                $profile_image_filename       =   'profile_image' . time() .  '.' . $profile_image_extension;
-
-                $success = $profile_image->move('images/users/'.$user->id, $profile_image_filename);
-                if(!$success) {
-                    return back()->withError('Could not upload profile Image');
-                }
-                $user_profile_image->src   =url('images/users').'/'.$user->id.'/'.$profile_image_filename;
-                $user_profile_image->save();
+            $result['success'] = 'true';
+            $profile_image_extension      =   $profile_image->getClientOriginalExtension();
+            $profile_image_filename       =   'profile_image' . time() .  '.' . $profile_image_extension;
+            $profile_image_save_filename       =   'profile_image' . time() .  '_450x250.' . $profile_image_extension;
+            $success = $profile_image->move('images/users/'.$user->id, $profile_image_filename);
+            if(!$success) {
+                return back()->withError(trans('messages.user.update_fail'));
+            }
+            else {
+                $this->helper->compress_image("images/users/".$user->id."/".$profile_image_filename, "images/users/".$user->id."/".$profile_image_filename, 80, 450, 250);
+            }
+            $user_profile_image->src   =url('images/users').'/'.$user->id.'/'.$profile_image_save_filename;
+            $user_profile_image->save();
         }
 
         return ['success' => 'true','profile_url' => $user_profile_image->src,'status_message'=>'Uploaded Successfully'];
@@ -373,7 +612,7 @@ class DriverDashboardController extends Controller
     /*
     * Driver payment page
     */
-    public function driver_payment()
+    /*public function driver_payment()
     {
         $data['total_earnings'] = Trips::where('driver_id',Auth::id())
                      ->where('status','Completed')
@@ -394,7 +633,7 @@ class DriverDashboardController extends Controller
         $data['all_trips'] = $data['all_trips']->paginate(4)->toJson();
         return view('driver_dashboard.payment',$data);
     }
-
+    */
     /*
     * Driver invoice page
     */
@@ -661,6 +900,8 @@ class DriverDashboardController extends Controller
     */
     public function show_help()
     {
+        $data['result'] = User::find(@Auth::user()->id);
+        
         $faq_array_1 = array("question" => "What is the booking commission for drivers?" ,
         "answer" => "Zero. Zip. Nada. Drivers earn a combination of fares, profit bonuses and residual income for their membership fee of $9.95 per week." );
 
@@ -705,14 +946,14 @@ class DriverDashboardController extends Controller
     */
     public function vehicle_view()
     {
-		$user = User::where('id', @Auth::user()->id)->first();
+        $user = User::where('id', @Auth::user()->id)->first();
 
         if ($user == '') {
-			abort(404);
-		}
+            abort(404);
+        }
         // $vehicle_details = array(
-    	//     ["key" => "car_id", "value" => @$user->driver_documents->vehicle_id ?: '1'],
-    	//     ["key" => "car_type", "value" => $user->car_type],
+        //     ["key" => "car_id", "value" => @$user->driver_documents->vehicle_id ?: '1'],
+        //     ["key" => "car_type", "value" => $user->car_type],
         //     ["key" => "car_image", "value" => @$user->driver_documents->car_type->vehicle_image],
         //     ["key" => "car_active_image", "value" => @$user->driver_documents->car_type->active_image],
         //     ["key" => "vehicle_name", "value" => @$user->driver_documents->vehicle_name ?? ''],
@@ -725,7 +966,7 @@ class DriverDashboardController extends Controller
         $vehicle_details['vehicle_name'] = @$user->driver_documents->vehicle_name ?? '';
         $vehicle_details['vehicle_number'] = @$user->driver_documents->vehicle_number ?? '';
         
-		//return response()->json($vehicle_details);
+        //return response()->json($vehicle_details);
         return view('driver_dashboard.vehicle_view', $vehicle_details);
     }
 

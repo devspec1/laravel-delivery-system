@@ -213,7 +213,7 @@ class UserController extends Controller
 		}
 
 		if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password, 'user_type' => 'Driver'])) {
-			return redirect()->intended('driver_profile');
+			return redirect()->intended('driver/home');
 		}
 		return back()->withErrors(['password' => 'Invalid credentials'])->withInput();
 	}
@@ -791,7 +791,7 @@ class UserController extends Controller
 						$driver_doc->save();
                     }
 
-                    $plan = StripeSubscriptionsPlans::where('plan_name','Regular')->first();
+                    $plan = StripeSubscriptionsPlans::where('plan_name','Driver Only')->first();
                     $subscription_row = new DriversSubscriptions;
                     $subscription_row->user_id      = $user->id;
                     $subscription_row->stripe_id    = '';
@@ -805,7 +805,7 @@ class UserController extends Controller
 					if (Auth::guard('web')->attempt(['email' => $user->email, 'password' => Session::get('password'), 'user_type' => 'Driver'])) {
 
 						flashMessage('success', trans('messages.user.register_successfully'));
-						return redirect()->intended('driver_profile'); // Redirect to dashboard page
+						return redirect()->intended('driver/new_dash'); // Redirect to dashboard page
 
 					} else {
 						return redirect('signup_driver');

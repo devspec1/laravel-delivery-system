@@ -14,6 +14,7 @@ use App\Models\HelpSubCategory;
 use App\Models\HelpTranslations;
 use App\Models\Currency;
 use App\Models\JoinUs;
+use App\Models\User;
 use Session;
 use Route;
 use DB;
@@ -23,7 +24,15 @@ class HomeController extends BaseController
     
 	public function index(){
 
-    	return view('home.home');
+        if (Auth::check()) {
+            $data['result'] = User::find(@Auth::user()->id);
+            return view('driver_dashboard.new_dash',$data);
+        }
+        else {
+             return view('driver_dashboard.new_login');
+        }
+
+    	
         
     }    	  
 

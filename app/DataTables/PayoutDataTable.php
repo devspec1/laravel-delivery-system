@@ -84,8 +84,7 @@ class PayoutDataTable extends DataTable
                         <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="hidden" name="driver_id" value="'.$trips->driver_id.'">
                         <input type="hidden" name="redirect_url" value="'.LOGIN_USER_TYPE.'/payout/overall">
-                        <button type="submit" class="btn btn-xs btn-primary" name="submit" value="submit"> '.$payout_text.' </button>
-                        
+                        <button type="submit" class="btn btn-xs btn-primary" name="submit" value="submit"> '.$payout_text.' </button>                      
                         </form>';
                 }
                 else if($this->filter_type == 'Weekly') {
@@ -122,13 +121,15 @@ class PayoutDataTable extends DataTable
 
         $trips = $model->DriverPayoutTripsOnly()->with(['currency','driver']);
 
+/*        dd($this->filter_type);*/
+
         if($this->filter_type == 'Weekly') {
             $trips = $trips->where('driver_id',$driver_id)->groupBy(DB::raw('WEEK(created_at,1)'));
         }
         else if($this->filter_type == 'OverAll') {
+
             $trips = $trips->groupBy('driver_id');
         }
-
         return $trips->get();
     }
 
