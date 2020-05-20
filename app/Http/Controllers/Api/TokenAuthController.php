@@ -1064,8 +1064,8 @@ class TokenAuthController extends Controller
     {
         if($request->isMethod("POST")) {
         // --------------------- Get order info by order_id ----------------
-            $order_id = $request->data['object']['order_updated']['order_id'];
-            $location_id = $request->data['object']['order_updated']['location_id'];
+            $order_id = $request->data['object']['order_created']['order_id'];
+            $location_id = $request->data['object']['order_created']['location_id'];
 
             $merchant = Merchant::where('integration_type', 2)->where('squareup_id', $request->merchant_id)->first();
             if (!$merchant)
@@ -1185,7 +1185,7 @@ class TokenAuthController extends Controller
             try {
                 if ($response["items"][0]["name"] == "DELIVERY_FEE"){
                     $data['delivery_fee'] = (float)100;
-                    // $data['delivery_fee'] = (float)$response["items"][0]["total_item_price"];
+                    $data['delivery_fee'] = (float)$response["items"][0]["total_item_price"];
                 }
             } 	catch (\Exception $e) {
                 logger('getting delivery fee error : '.$e->getMessage());
