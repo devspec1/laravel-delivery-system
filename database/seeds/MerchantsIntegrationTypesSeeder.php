@@ -14,7 +14,8 @@ class MerchantsIntegrationTypesSeeder extends Seeder
         DB::table('merchants_integration_types')->delete();
 
 		DB::table('merchants_integration_types')->insert([
-			['id' => '1', 'name' => 'Gloria Food', 'description' => 'Integration with Gloria Food', 'delivery_fee' => '8.95', 'delivery_fee_per_km' => '1.00', 'delivery_fee_base_distance' => 5.0],
+            ['id' => '1', 'name' => 'Gloria Food', 'description' => 'Integration with Gloria Food'],
+            ['id' => '2', 'name' => 'Square Up', 'description' => 'Integration with Square Up'],
 		]);
     }
 }

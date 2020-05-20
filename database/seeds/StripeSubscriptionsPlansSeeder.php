@@ -14,8 +14,11 @@ class StripeSubscriptionsPlansSeeder extends Seeder
         DB::table('stripe_subscription_plans')->delete();
 
 		DB::table('stripe_subscription_plans')->insert([
-			['id' => '1', 'plan_id' => 'plan_GQJRSjXx14TuLc', 'plan_name' => 'Regular'],
-			['id' => '2', 'plan_id' => 'plan_GQJPw5BNB3TXTP', 'plan_name' => 'Founder'],
+			['id' => '1', 'plan_id' => 'plan_none', 'plan_name' => 'Driver only'],
+            ['id' => '2', 'plan_id' => 'prod_GyPB2FCdoejCk6', 'plan_name' => 'Driver Member'],
+            ['id' => '3', 'plan_id' => 'plan_HF8wOsR0eoBLGw', 'plan_name' => 'Regular'],
+            ['id' => '4', 'plan_id' => 'plan_HF8wOsR0eoBLGw', 'plan_name' => 'Founder'],
+            ['id' => '5', 'plan_id' => 'plan_HF8wOsR0eoBLGw', 'plan_name' => 'Executive'],
 		]);
     }
 }
