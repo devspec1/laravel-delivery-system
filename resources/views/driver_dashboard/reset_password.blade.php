@@ -2,12 +2,12 @@
 @section('main')
 <style> body, html { height: 100%; }</style>
 <div id="newLoginWrp" style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center">
-    <form id="newLoginForm" action="{{ url('driver/submit_password_reset') }}" method="post" style="height: 80%; width: 40%; padding: 1em; padding-top: 4em; padding-bottom: 4em; display: flex; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); font-family: 'MontserratReg">
+    <form id="newLoginForm" action="{{ url('driver/submit_password_reset') }}" method="post" >
         <input type="hidden" name="id" value="{{ $result->id }}">
 
         @csrf
 
-        <img src="{{ asset('images/logos/logo.png') }}" style="height: 13em">
+        <img src="{{ asset('images/logos/logo.png') }}" id="logo1">
          <div style="display: flex; flex-direction: column; width: 100%; align-items: center">
         <h1 style="font-family: 'MontserratReg'; font-weight: bold; font-size: 170%">Reset password</h1>
         @if($errors->any())

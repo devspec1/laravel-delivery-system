@@ -193,7 +193,7 @@ class DriverDashboardController extends Controller
                     // Delete used token from password_resets table
                     PasswordResets::whereToken($request->secret)->delete();
 
-                     return redirect("driver/new_login")>withErrors(['error' => trans('messages.user.token')]);
+                     return redirect("driver/new_login")->withErrors(['error' => trans('messages.user.token')]);
 
                 }
 
@@ -202,7 +202,7 @@ class DriverDashboardController extends Controller
                 return view('driver_dashboard.reset_password', $data);
             } else {
                
-                return redirect("driver/new_login")>withErrors(['error' => trans('messages.user.invalid_token')]);
+                return redirect("driver/new_login")->withErrors(['error' => trans('messages.user.invalid_token')]);
             }
     }
     public function submit_password_reset(Request $request) {
@@ -239,11 +239,22 @@ class DriverDashboardController extends Controller
             }
     }
     public function driver_reset_password(Request $request, EmailController $email_controller) {
-         $user = User::whereEmail($request->email)->first();
+            $user = User::whereEmail($request->email)->first();
+         
+
             
-            $email_controller->forgot_password_link($user);
-            Session::flash('success', trans('messages.user.link') . $user->email);
-            return redirect('driver/new_login');
+
+            if($user) {
+                
+                $email_controller->forgot_password_link($user);
+                Session::flash('success', trans('messages.user.link') . $user->email);
+                return redirect('driver/new_login');
+            }
+            else {
+               return back()->withErrors(["Email" => "Wrong email"]);
+            }
+                 
+
 
     }
      public function driver_new_signup()
