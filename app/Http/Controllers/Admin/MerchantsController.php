@@ -74,7 +74,6 @@ class MerchantsController extends Controller
         }
 
         if($request->isMethod("POST")) {
-
             // Add Merchant Validation Rules
             $rules = array(
                 'name'              => 'required',
@@ -92,6 +91,9 @@ class MerchantsController extends Controller
                 'country_code'  => 'required',
             );
             
+            if ($request->integration_type == 2)
+                $rules['shared_secret'] = 'required';
+                
             // Add Merchant Validation Custom Names
             $attributes = array(
                 'name'              => 'Merchant Name',
@@ -171,7 +173,37 @@ class MerchantsController extends Controller
             $merchant->delivery_fee  = $request->base_fee;
             $merchant->delivery_fee_per_km = $request->surchange_fee;
             $merchant->delivery_fee_base_distance = $request->base_distance;
-            $merchant->shared_secret = Str::uuid();
+            if ($request->integration_type == 1)
+                $merchant->shared_secret = Str::uuid();
+            else
+            {
+                // curl initiate
+                $ch = curl_init();
+
+                // API URL to send data
+                $url = 'https://connect.squareupsandbox.com/v2/merchants';
+                curl_setopt($ch, CURLOPT_URL, $url);
+
+                // SET Header
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Square-Version: 2020-04-22',
+                    'Authorization: Bearer ' . $request->shared_secret,
+                    'Content-Type: application/json'));
+
+                // SET Method as a POST
+                curl_setopt($ch, CURLOPT_POST, false);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                // Execute curl and assign returned data
+                $response  = curl_exec($ch);
+                $tmp = json_decode($response);
+                $square_merchant = $tmp->merchant[0];
+                $merchant->squareup_id = $square_merchant->id;
+                $merchant->shared_secret = $request->shared_secret;
+
+                // Close curl
+                curl_close($ch);
+            }
             $merchant->save();
 
             flashMessage('success', 'Merchant created');
@@ -216,7 +248,7 @@ class MerchantsController extends Controller
                 else{
                     $data['referrer_id'] = null;
                 }
-    
+                
                 return view('admin.merchant.edit', $data);
             }
 
@@ -241,6 +273,9 @@ class MerchantsController extends Controller
                 'country_code'  => 'required',
             );
             
+            if ($request->integration_type == 2)
+                $rules['shared_secret'] = 'required';
+
             // Edit Driver Validation Custom Names
             $attributes = array(
                 'name'              => 'Name',
@@ -275,7 +310,6 @@ class MerchantsController extends Controller
                 if($referral_c){
                     $validator->errors()->add('referral_code',trans('messages.referrals.referral_exists'));
                 }
-
             });
 
             if ($validator->fails()) {
@@ -291,7 +325,35 @@ class MerchantsController extends Controller
             $merchant->delivery_fee  = $request->base_fee;
             $merchant->delivery_fee_per_km = $request->surchange_fee;
             $merchant->delivery_fee_base_distance = $request->base_distance;
+            if ($request->integration_type == 2)
+            {
+                // curl initiate
+                $ch = curl_init();
 
+                // API URL to send data
+                $url = 'https://connect.squareupsandbox.com/v2/merchants';
+                curl_setopt($ch, CURLOPT_URL, $url);
+
+                // SET Header
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Square-Version: 2020-04-22',
+                    'Authorization: Bearer ' . $request->shared_secret,
+                    'Content-Type: application/json'));
+
+                // SET Method as a POST
+                curl_setopt($ch, CURLOPT_POST, false);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                // Execute curl and assign returned data
+                $response  = curl_exec($ch);
+                $tmp = json_decode($response);
+                $square_merchant = $tmp->merchant[0];
+                $merchant->squareup_id = $square_merchant->id;
+                $merchant->shared_secret = $request->shared_secret;
+
+                // Close curl
+                curl_close($ch);
+            }
             $merchant->save();          
             
 

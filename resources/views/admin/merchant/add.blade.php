@@ -70,8 +70,15 @@
                             <div class="col-sm-6">
                                 {!! Form::select('integration_type', $integrations, '1', ['class'=>'form-control', 'id' => 'input_integration_type']) !!}
                                 <span class="text-danger">{{ $errors->first('integration_type') }}</span>
-                           </div>	
-						</div>						
+                           </div>
+						</div>
+						<div class="form-group" id="shared_secret_section" style="display:none">
+							<label for="input_cuisine_type" class="col-sm-3 control-label">Shared Secret<em class="text-danger">*</em></label>
+							<div class="col-sm-6">
+								{!! Form::text('shared_secret', '', ['class' => 'form-control', 'id' => 'input_shared_secret', 'placeholder' => 'Shared Secret']) !!}
+								<span class="text-danger">{{ $errors->first('shared_secret') }}</span>
+							</div>
+						</div>
 						<div class="form-group">
 							<label for="input_status" class="col-sm-3 control-label">Country Code<em class="text-danger">*</em></label>
 							<div class="col-sm-4">
@@ -177,8 +184,20 @@
 	var REQUEST_URL = "{{url('/'.LOGIN_USER_TYPE)}}"; 
 </script>
 <script src="{{ url('js/selectize.js') }}"></script>
-<script>
+<script>	
+	$('#input_integration_type').change(function() {
+		if ($(this).val() == 1)
+			$('#shared_secret_section').hide();
+		else
+			$('#shared_secret_section').show();
+	});
+
 	$(function() {
+		if ($('#input_integration_type').val() == 1)
+			$('#shared_secret_section').hide();
+		else
+			$('#shared_secret_section').show();
+			
 		$('#input-tags3').selectize({
 		    plugins: ['remove_button'],
 		    maxItems: 1
