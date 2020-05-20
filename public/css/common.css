@@ -2975,6 +2975,9 @@ i.google-ride {
 #newLoginWrp #logo1 {
     height: 13em;
 }
+#newLoginWrp #logo2{
+    height: 13em;
+}
 #newSignupWrp #logo1 {
     height: 8em;
 }
@@ -3001,7 +3004,18 @@ height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; di
 #spanMainTitle1 {
     font-size: 200%; color: #1B187F;opacity: 0.8; font-weight: bold; font-family:'MontserratReg';
 }
+.newResetPass .inputWrp {
+    width: 65%;
+}
 @media (max-width: 1024px) {
+    .newResetPass .inputWrp {
+        width: 75%;
+    }
+    #newLoginWrp .spanB1 {
+    cursor: pointer;
+    width: 75%; border-radius: 6px; padding: 0.8em; font-size: 110%; color: white;
+      font-weight: bold; font-family: 'MontserratReg'; text-align: center
+}
     #spanMainTitle1 {
         font-size: 130%;
     }
@@ -3085,6 +3099,10 @@ height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; di
     height: 6em;
 
 }
+#newLoginWrp #logo2 {
+    height: 9em;
+
+}
     #newLoginForm {
         height: 90%;
         width: 100%;
@@ -3124,11 +3142,7 @@ height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; di
 }
 
 
-#newLoginWrp .spanB1 {
-    cursor: pointer;
-    width: 65%; border-radius: 6px; padding: 0.8em; font-size: 110%; color: white;
-      font-weight: bold; font-family: 'MontserratReg'; text-align: center
-}
+
 .newSignupWrp1 .spanB1 {
     cursor: pointer;
     width: 75%; border-radius: 6px; padding: 0.4em; font-size: 140%; color: white;
@@ -3188,7 +3202,13 @@ height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; di
     color: #17609c; font-size: 90%; font-family: 'MontserratReg'; font-weight: bold;
 }
 
+
 @media (min-width: 1024px) {
+    #newLoginWrp .spanB1 {
+    cursor: pointer;
+    width: 65%; border-radius: 6px; padding: 0.8em; font-size: 110%; color: white;
+      font-weight: bold; font-family: 'MontserratReg'; text-align: center
+}
     #merchantsSub {
          width: 70%
     }
