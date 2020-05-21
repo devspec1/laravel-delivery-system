@@ -213,7 +213,7 @@ class UserController extends Controller
 			return back()->withErrors($validator)->withInput(); // Form calling with
 		}
 
-		$user = User::where("email", $request->email)->first();
+		$user = User::where("email", $request->email)->where('user_type','Driver')->first();
 
 
 
