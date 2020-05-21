@@ -62,11 +62,6 @@ class DriverDashboardController extends Controller
     {
         $data['result'] = User::find(@Auth::user()->id);
 
-        //$data['driveteam'] = count(DB::select(DB::raw('SELECT * FROM users WHERE used_referral_code = ' . @Auth::user()->id . " OR id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")")));
-
-        //$data['deliveries'] = count(DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR driver_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ") OR merchant_id IN (SELECT id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code =" . @Auth::user()->id . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . "))"));
-
-        //$data['merchantCount'] = count(DB::select(DB::raw('SELECT DISTINCT user_id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE id = ' . @Auth::user()->id) . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")"));
 
         //Loking for drivers referrals
         $data['driveteam'] = User::where('used_referral_code', @Auth::user()->referral_code)
@@ -101,9 +96,7 @@ class DriverDashboardController extends Controller
 
      public function driver_leaderboard()
     {
-        //$data['merchants'] = User::where("used_referral_code", @Auth::user()->id)->get();
-
-        //Looking for referrals drivers (NEED TO CHECK SUBSCRIPTION IN CASE OF COMMUNITY LEADERS)
+      
         $data['merchants'] = User::where('used_referral_code', @Auth::user()->referral_code)->where('user_type', 'Driver')->get();
         
         foreach($data['merchants'] as $k => $v) {
@@ -123,7 +116,6 @@ class DriverDashboardController extends Controller
      public function driver_merchants()
     {
 
-        // $data['merchants'] = DB::select(DB::raw('SELECT * FROM users WHERE id IN (SELECT user_id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . "))");
 
         $data['merchants'] = User::where('used_referral_code', @Auth::user()->referral_code)->where('user_type', 'Merchant')->get();
         
@@ -147,7 +139,7 @@ class DriverDashboardController extends Controller
 
     public function driver_driver_team()
     {
-        //$data['merchants'] = DB::select(DB::raw('SELECT * FROM users WHERE id IN (SELECT user_id FROM referral_users WHERE referral_id = ' . @Auth::user()->id) . ") OR used_referral_code = " . @Auth::user()->id);
+    
 
         //Looking for referrals drivers
         $data['merchants'] = User::where('used_referral_code', @Auth::user()->referral_code)->where('user_type', 'Driver')->get();
