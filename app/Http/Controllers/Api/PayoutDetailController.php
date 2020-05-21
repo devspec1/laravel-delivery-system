@@ -424,8 +424,8 @@ class PayoutDetailController extends Controller
         $country = $request->country;
 
         //checking phone number
-        if(strlen($request->phone_number) < 9){
-            $phone = str_repeat("0", (9 - strlen( $request->phone_number ))) . $request->phone_number;
+        if(strlen($request->phone_number) < 10){
+            $phone = str_repeat("0", (10 - strlen( $request->phone_number ))) . $request->phone_number;
             $request->merge(['phone_number' => $phone]);
         }
 
