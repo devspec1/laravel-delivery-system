@@ -91,8 +91,13 @@ class MerchantsController extends Controller
                 'country_code'  => 'required',
             );
             
-            if ($request->integration_type == 2)
-                $rules['shared_secret'] = 'required';
+            switch ($request->integration_type)
+            {
+                case 2:     // Square Up
+                case 3:     // Shopify
+                    $rules['shared_secret'] = 'required';
+                    break;
+            }
                 
             // Add Merchant Validation Custom Names
             $attributes = array(
@@ -173,36 +178,42 @@ class MerchantsController extends Controller
             $merchant->delivery_fee  = $request->base_fee;
             $merchant->delivery_fee_per_km = $request->surchange_fee;
             $merchant->delivery_fee_base_distance = $request->base_distance;
-            if ($request->integration_type == 1)
-                $merchant->shared_secret = Str::uuid();
-            else
+            switch ($request->integration_type)
             {
-                // curl initiate
-                $ch = curl_init();
+                case 1: // Gloria Food
+                    $merchant->shared_secret = Str::uuid();
+                    break;
+                case 2: // Square Up
+                    // curl initiate
+                    $ch = curl_init();
 
-                // API URL to send data
-                $url = 'https://connect.squareupsandbox.com/v2/merchants';
-                curl_setopt($ch, CURLOPT_URL, $url);
+                    // API URL to send data
+                    $url = 'https://connect.squareupsandbox.com/v2/merchants';
+                    curl_setopt($ch, CURLOPT_URL, $url);
 
-                // SET Header
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                    'Square-Version: 2020-04-22',
-                    'Authorization: Bearer ' . $request->shared_secret,
-                    'Content-Type: application/json'));
+                    // SET Header
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        'Square-Version: 2020-04-22',
+                        'Authorization: Bearer ' . $request->shared_secret,
+                        'Content-Type: application/json'));
 
-                // SET Method as a POST
-                curl_setopt($ch, CURLOPT_POST, false);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    // SET Method as a POST
+                    curl_setopt($ch, CURLOPT_POST, false);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-                // Execute curl and assign returned data
-                $response  = curl_exec($ch);
-                $tmp = json_decode($response);
-                $square_merchant = $tmp->merchant[0];
-                $merchant->squareup_id = $square_merchant->id;
-                $merchant->shared_secret = $request->shared_secret;
+                    // Execute curl and assign returned data
+                    $response  = curl_exec($ch);
+                    $tmp = json_decode($response);
+                    $square_merchant = $tmp->merchant[0];
+                    $merchant->squareup_id = $square_merchant->id;
+                    $merchant->shared_secret = $request->shared_secret;
 
-                // Close curl
-                curl_close($ch);
+                    // Close curl
+                    curl_close($ch);
+                    break;
+                case 3: // Shopify
+                    $merchant->shared_secret = $request->shared_secret;
+                    break;
             }
             $merchant->save();
 
@@ -273,8 +284,13 @@ class MerchantsController extends Controller
                 'country_code'  => 'required',
             );
             
-            if ($request->integration_type == 2)
-                $rules['shared_secret'] = 'required';
+            switch ($request->integration_type)
+            {
+                case 2:     // Square Up
+                case 3:     // Shopify
+                    $rules['shared_secret'] = 'required';
+                    break;
+            }
 
             // Edit Driver Validation Custom Names
             $attributes = array(
@@ -325,34 +341,39 @@ class MerchantsController extends Controller
             $merchant->delivery_fee  = $request->base_fee;
             $merchant->delivery_fee_per_km = $request->surchange_fee;
             $merchant->delivery_fee_base_distance = $request->base_distance;
-            if ($request->integration_type == 2)
+            switch ($request->integration_type)
             {
-                // curl initiate
-                $ch = curl_init();
+                case 2: // Square Up
+                    // curl initiate
+                    $ch = curl_init();
 
-                // API URL to send data
-                $url = 'https://connect.squareupsandbox.com/v2/merchants';
-                curl_setopt($ch, CURLOPT_URL, $url);
+                    // API URL to send data
+                    $url = 'https://connect.squareupsandbox.com/v2/merchants';
+                    curl_setopt($ch, CURLOPT_URL, $url);
 
-                // SET Header
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                    'Square-Version: 2020-04-22',
-                    'Authorization: Bearer ' . $request->shared_secret,
-                    'Content-Type: application/json'));
+                    // SET Header
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        'Square-Version: 2020-04-22',
+                        'Authorization: Bearer ' . $request->shared_secret,
+                        'Content-Type: application/json'));
 
-                // SET Method as a POST
-                curl_setopt($ch, CURLOPT_POST, false);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    // SET Method as a POST
+                    curl_setopt($ch, CURLOPT_POST, false);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-                // Execute curl and assign returned data
-                $response  = curl_exec($ch);
-                $tmp = json_decode($response);
-                $square_merchant = $tmp->merchant[0];
-                $merchant->squareup_id = $square_merchant->id;
-                $merchant->shared_secret = $request->shared_secret;
+                    // Execute curl and assign returned data
+                    $response  = curl_exec($ch);
+                    $tmp = json_decode($response);
+                    $square_merchant = $tmp->merchant[0];
+                    $merchant->squareup_id = $square_merchant->id;
+                    $merchant->shared_secret = $request->shared_secret;
 
-                // Close curl
-                curl_close($ch);
+                    // Close curl
+                    curl_close($ch);
+                    break;
+                case 3: // Shopify
+                    $merchant->shared_secret = $request->shared_secret;
+                    break;
             }
             $merchant->save();          
             

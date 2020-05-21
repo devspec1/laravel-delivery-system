@@ -73,7 +73,7 @@
                            </div>	
 						</div>
 						<div class="form-group" id="shared_secret_section" style="display:none">
-							<label for="input_cuisine_type" class="col-sm-3 control-label">Shared Secret<em class="text-danger">*</em></label>
+							<label for="input_shared_secret" class="col-sm-3 control-label">Shared Secret<em class="text-danger">*</em></label>
 							<div class="col-sm-6">
 								{!! Form::text('shared_secret', $result->shared_secret, ['class' => 'form-control', 'id' => 'input_shared_secret', 'placeholder' => 'Shared Secret']) !!}
 								<span class="text-danger">{{ $errors->first('shared_secret') }}</span>
@@ -200,19 +200,28 @@
 </script>
 <script src="{{ url('js/selectize.js') }}"></script>
 <script>
+	function OperationWithIntegrationType(integration_type) 
+	{
+		switch (integration_type)
+		{
+			case '1': // Gloria Food
+				$('#shared_secret_section').hide();
+				break;
+			case '2': // Square Up
+				$('#shared_secret_section').show();
+				break;
+			case '3': // Shopify
+				$('#shared_secret_section').show();
+				break;
+		}
+	}
 
 	$('#input_integration_type').change(function() {
-		if ($(this).val() == 1)
-			$('#shared_secret_section').hide();
-		else
-			$('#shared_secret_section').show();
+		OperationWithIntegrationType($(this).val());
 	});
 
 	$(function() {			
-		if ($('#input_integration_type').val() == 1)
-			$('#shared_secret_section').hide();
-		else
-			$('#shared_secret_section').show();
+		OperationWithIntegrationType($('#input_integration_type').val());
 			
 		$('#input-tags3').selectize({
 		    plugins: ['remove_button'],
