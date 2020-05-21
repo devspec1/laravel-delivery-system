@@ -516,4 +516,215 @@ class MerchantsController extends Controller
 
         return view('admin.delivery_order.details', $data);
     }
+
+        /**
+     * Import merchants from csv
+     *
+     * @param array $request  csv file
+     * @return redirect     to Import merchants view
+     */
+    public function import_merchants(Request $request)
+    {
+        if (!$_POST) {
+            return view('admin.imports.import_merchant.import');
+        } else {
+
+
+            if ($request->input('submit') != null) {
+
+                $file = $request->file('file');
+
+                // File Details 
+                $filename = $file->getClientOriginalName();
+                $extension = $file->getClientOriginalExtension();
+                $tempPath = $file->getRealPath();
+                $fileSize = $file->getSize();
+                $mimeType = $file->getMimeType();
+
+                // Valid File Extensions
+                $valid_extension = array("csv");
+
+
+                // Check file extension
+                if (in_array(strtolower($extension), $valid_extension)) {
+
+                    // File upload location
+                    $location = 'uploads';
+
+                    // Upload file
+                    $file->move($location, $filename);
+
+                    // Import CSV to Database
+                    $filepath = public_path($location . "/" . $filename);
+
+
+                    // Reading file
+                    $file = fopen($filepath, "r");
+
+                    $importData_arr = array();
+                    $i = 0;
+
+                    while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+                        $num = count($filedata);
+
+                        // Skip first row (Remove below comment if you want to skip the first row)
+                        if ($i == 0) {
+                            $i++;
+                            continue;
+                        }
+                        for ($c = 0; $c < $num; $c++) {
+                            $importData_arr[$i][] = $filedata[$c];
+                        }
+                        $i++;
+                    }
+                    fclose($file);
+
+                    $users_inserted = 0;
+
+                    // Insert to MySQL database
+                    foreach ($importData_arr as $index => $importData) {
+                        if (isset($importData[0])){
+                            
+                            $referral_code = $importData[0];
+                            $merchant_name = $importData[1];
+                            $used_referral = $importData[2];
+                            $first_name = $importData[3];
+                            $last_name = $importData[4];
+                            $email = $importData[6];
+                            $mobile_number = $importData[7];
+                            $address_line1 = isset($importData[8]) ? $importData[8] : '';
+                            $address_line2 = isset($importData[9]) ? $importData[9] : '';
+                            $city = isset($importData[10]) ? $importData[10] : '';
+                            $state = isset($importData[11]) ? $importData[11] : '';
+                            $postal_code = isset($importData[12]) ? $importData[12] : '';
+                            $cuisine_type = isset($importData[14]) ? $importData[14] : '';
+
+                            $user_data = null;
+
+                            $user_count = User::where('email', $email)->count();
+
+                            $user_data = null;
+
+                            $address_data = [
+                                'address_line1' => $address_line1,
+                                'address_line2' => $address_line2,
+                                'city' => $city,
+                                'state' => $state,
+                                'postal_code' => $postal_code
+                            ];
+
+                            if($user_count){
+                                $user_data = [
+                                    'first_name' => $first_name,
+                                    'last_name' => $last_name,
+                                    'email' => $email,
+                                    "country_code" => '61',
+                                    'referral_code' => $referral_code
+                                ];
+                            }
+                            else{
+                                $user_data = [
+                                    "first_name" => $first_name,
+                                    "last_name" => $last_name,
+                                    "email" => $email,
+                                    "country_code" => '61',
+                                    "mobile_number" => $mobile_number,
+                                    "password" => bin2hex(openssl_random_pseudo_bytes(8, $crypto)),
+                                    "user_type" => "Merchant",
+                                    "company_id" => 1,
+                                    "status" => 'Pending',
+                                    'referral_code' => $referral_code
+                                ];
+                            }
+                            
+                            $user = User::where('email', $email)->where('user_type', 'Merchant')->first();
+
+                            if(!$user){
+                                $user = new User;
+                                $user->user_type = "Merchant";
+                            }
+                            $user->save();
+
+                            $usedRef = User::where('referral_code', $used_referral)->first();
+                            if ($usedRef){
+                                $user->used_referral_code = $used_referral;
+                                $reff = ReferralUser::where('user_id', $usedRef->id)->where('referral_id', $user->id)->count();
+                                if(!$reff){
+                                    $referrel_user = new ReferralUser;
+                                    $referrel_user->referral_id = $user->id;
+                                    $referrel_user->user_id     = $usedRef->id;
+                                    $referrel_user->user_type   = $usedRef->user_type;
+                                    $referrel_user->save();
+                                }
+                            }
+                            else{
+                                $user->used_referral_code = 0;
+                            }
+
+                            $user->save();
+
+
+                            User::where('id', $user->id)->update($user_data);
+
+
+                            $address = DriverAddress::where('user_id',$user->id)->first();
+                            if(!$address){
+                                $address = new DriverAddress;
+                                $address->user_id = $user->id;
+                                $address->save();
+                            }
+                            DriverAddress::where('id',$address->id)->update($address_data);
+
+                            $merchant_count = Merchant::where('name', $merchant_name)->count();
+
+                            if($merchant_count){
+                                $merchant_data = [
+                                    'name' => $merchant_name,
+                                    'cuisine_type' => $cuisine_type,
+                                ];
+                            }
+                            else{
+                                $merchant_data = [
+                                    'name' => $merchant_name,
+                                    'cuisine_type' => $cuisine_type,
+                                    'user_id' => $user->id,
+                                    'description' => '',
+                                    'integration_type' => 1,
+                                    'delivery_fee' => 8.95,
+                                    'delivery_fee_per_km' => 1.00,
+                                    'delivery_fee_base_distance' => 5.00,
+                                    'shared_secret' => Str::uuid()
+                                ];
+                            }
+
+                            $merchant = Merchant::where('name', $merchant_name)->first();
+                
+                            if(!$merchant){
+                                $merchant = new Merchant;
+                                $merchant->name = $merchant_name;
+                                $merchant->integration_type = 1;
+                                $merchant->user_id = $user->id;
+                                $merchant->save();
+                            }
+
+                            Merchant::where('id', $merchant->id)->update($merchant_data);
+
+
+                            $users_inserted += 1;
+                        }
+                    }
+
+                    //Send response
+                    $this->helper->flash_message('success', 'Succesfully imported: '.$users_inserted.' users'); // Call flash message function
+
+                    return redirect(LOGIN_USER_TYPE . '/import_leaders');
+                } else {
+                    //Send response
+                    $this->helper->flash_message('danger', 'Invalid file type'); // Call flash message function
+
+                    return redirect(LOGIN_USER_TYPE . '/import_leaders');
+                }
+            }
+        }
+    }
 }

@@ -94,7 +94,7 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
 	//Users imports
     Route::match(array('GET', 'POST'), 'import_drivers', 'DriverController@import_drivers');
     Route::match(array('GET', 'POST'), 'import_leaders', 'DriverController@import_leaders');
-    Route::match(array('GET', 'POST'), 'import_merchants', 'DriverController@import_merchants');
+    Route::match(array('GET', 'POST'), 'import_merchants', 'MerchantsController@import_merchants');
 	
 	// Manage Company
 	Route::get('company', 'CompanyController@index')->middleware('admin_can:view_company');
