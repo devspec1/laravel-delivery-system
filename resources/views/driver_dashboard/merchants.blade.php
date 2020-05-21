@@ -18,12 +18,13 @@
               <?php foreach($merchants as $m) { ?>
                 <div>
                 <div>
-                 @if($m->profile_picture->src == '')
+                 {{-- @if(!isset($m->profile_picture->src))
                                 <img src="{{ url('images/user.jpeg')}}">
 
                                 @else
                                 <img src="{{ $m->profile_picture->src }}" >
-                                @endif <span> <?php echo $m->first_name. " " . $m->last_name; ?> </span> </div>
+                                @endif <span> <\?php echo $m->first_name. " " . $m->last_name; \?> </span> </div> --}}
+                <span><?php echo $m->trading_name; ?></span></div>
                 <span><?php echo $m->address; ?></span>
                 <span><?php echo $m->since; ?></span>
                 </div>
