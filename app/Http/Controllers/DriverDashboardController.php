@@ -68,22 +68,27 @@ class DriverDashboardController extends Controller
 
         //$data['merchantCount'] = count(DB::select(DB::raw('SELECT DISTINCT user_id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE id = ' . @Auth::user()->id) . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")"));
 
-        //Looking for referrals (drivers, riders, merchants)
-        $referrals = User::where('used_referral_code', @Auth::user()->referral_code);
-
         //Loking for drivers referrals
-        $driveteam = $referrals->where('user_type', 'Driver');
-        $data['driveteam'] = $driveteam->count();
+        $data['driveteam'] = User::where('used_referral_code', @Auth::user()->referral_code)
+            ->where('user_type', 'Driver')
+            ->count();
 
         //Push current user to team (in case he makes deliveries too)
-        $driveteam = $driveteam->orWhere('id', @Auth::user()->id)->pluck('id')->toArray();
+        $driveteam = User::where('used_referral_code', @Auth::user()->referral_code)
+            ->where('user_type', 'Driver')
+            ->orWhere('id', @Auth::user()->id)
+            ->pluck('id')
+            ->toArray();
 
         //Search for deliveries of current user and his drivers referrals
-        $data['deliveries'] = HomeDeliveryOrder::whereIn('driver_id', $driveteam)->where('status','delivered')->count();
+        $data['deliveries'] = HomeDeliveryOrder::whereIn('driver_id', $driveteam)
+            ->where('status','delivered')
+            ->count();
 
         //Search for merchants referrals
-        $data['merchantCount'] = $referrals->where('user_type', 'Merchant')->count();
-
+        $data['merchantCount'] = User::where('used_referral_code', @Auth::user()->referral_code)
+            ->where('user_type', 'Merchant')
+            ->count();
 
         return view('driver_dashboard.home',$data);
     }
