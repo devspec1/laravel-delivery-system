@@ -178,7 +178,7 @@
        <div style=" display: flex; flex-direction: column;padding: 15px 10px;margin-right: 2.5em">
             <span style="font-size: 105%; color: #1B187F;font-weight: bold; margin-bottom: 0.4em; font-family:'MontserratReg'">Membership</span>
               <div style="display: flex; flex-direction: row; align-items: center ">
-                <span style="font-size: 90%; font-weight: bold">Executive</span>
+                <span style="font-size: 90%; font-weight: bold"><?php echo $sub_name; ?></span>
               <span style="font-size: 85%; margin-left: 1.5em; color: #8f2a06; font-weight: bold">Cancel</span>
             </div>
            </div>

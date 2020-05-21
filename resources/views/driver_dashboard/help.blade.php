@@ -24,33 +24,19 @@
       </div>
       <div class="current" style=" width: 100%; flex-direction: column; height: 35em" id="helpFaqWrp" data-tab="faq">
         <span style="font-size: 135%;  margin-bottom: 0.75em;margin-top: 0.75em; font-family: 'MontserratReg'; font-weight: bold"> FAQ's</span>
-        <div class="current">
-          <span>Lorem ipsum</span>
-          <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. <br><br>Fusce commodo convallis lorem, eget laoreet nisl tempor non.Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
-          </span>
+
+        <?php $faqc= 0; foreach($faq_array as $fq) { ?>
+        <div <?php if($faqc == 0) echo 'class="current"'; ?>>
+          <span> {{ $fq['question'] }}</span>
+          <span> {{ $fq['answer'] }} </span>
+        <?php $faqc++;?>
+        </div>
+        <?php 
+
+         } ?>
 
 
-        </div>
-         <div>
-          <span>Lorem ipsum</span>
-           <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. <br><br>Fusce commodo convallis lorem, eget laoreet nisl tempor non.Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
-          </span>
-        </div>
-         <div>
-          <span>Lorem ipsum</span>
-            <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. <br><br>Fusce commodo convallis lorem, eget laoreet nisl tempor non.Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
-          </span>
-        </div>
-         <div>
-          <span>Lorem ipsum</span>
-            <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. <br><br>Fusce commodo convallis lorem, eget laoreet nisl tempor non.Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
-          </span>
-        </div>
-         <div>
-          <span>Lorem ipsum</span>
-            <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. Fusce commodo convallis lorem, eget laoreet nisl tempor non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet sollicitudin diam. Phasellus malesuada in ante sit amet accumsan. <br><br>Fusce commodo convallis lorem, eget laoreet nisl tempor non.Nulla ac diam a purus dictum pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eget mollis nisl. Sed nisi augue, viverra quis condimentum ac, accumsan ut orci.
-          </span>
-        </div>
+      
       </div>
       <div  style=" width: 100%; flex-direction: column" id="helpFaqWrp" data-tab="callsupp">
         <h3 style="font-size: 130%; color: #3B5998; margin-bottom: 1.5em; font-family: 'MontserratBold'"> Call support</h3>

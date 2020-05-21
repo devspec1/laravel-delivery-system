@@ -24,6 +24,8 @@ use App\Models\ProfilePicture;
 use App\Models\DriverDocuments;
 use App\Models\Vehicle;
 use App\Models\PasswordResets;
+use App\Models\DriversSubscriptions;
+use App\Models\StripeSubscriptionsPlans;
 use Auth;
 use App;
 use DateTime;
@@ -48,6 +50,8 @@ class DriverDashboardController extends Controller
     public function driver_profile()
     {
         $data['result'] = User::find(@Auth::user()->id);
+
+        $data['sub_name'] = StripeSubscriptionsPlans::where('id',DriversSubscriptions::where('user_id',@Auth::user()->id)->first()->plan)->first()->plan_name;
         return view('driver_dashboard.profile',$data);
     }
 
