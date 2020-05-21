@@ -26,6 +26,9 @@ use App\Models\Vehicle;
 use App\Models\PasswordResets;
 use App\Models\DriversSubscriptions;
 use App\Models\StripeSubscriptionsPlans;
+use App\Models\Merchant;
+use App\Models\ReferralUser;
+use App\Models\HomeDeliveryOrder;
 use Auth;
 use App;
 use DateTime;
@@ -59,13 +62,27 @@ class DriverDashboardController extends Controller
     {
         $data['result'] = User::find(@Auth::user()->id);
 
-        $data['driveteam'] = count(DB::select(DB::raw('SELECT * FROM users WHERE used_referral_code = ' . @Auth::user()->id . " OR id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")")));
+        //$data['driveteam'] = count(DB::select(DB::raw('SELECT * FROM users WHERE used_referral_code = ' . @Auth::user()->id . " OR id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")")));
 
+        //$data['deliveries'] = count(DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR driver_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ") OR merchant_id IN (SELECT id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code =" . @Auth::user()->id . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . "))"));
 
-        $data['deliveries'] = count(DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR driver_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ") OR merchant_id IN (SELECT id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code =" . @Auth::user()->id . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . "))"));
+        //$data['merchantCount'] = count(DB::select(DB::raw('SELECT DISTINCT user_id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE id = ' . @Auth::user()->id) . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")"));
 
+        //Looking for referrals (drivers, riders, merchants)
+        $referrals = User::where('used_referral_code', @Auth::user()->referral_code);
 
-        $data['merchantCount'] = count(DB::select(DB::raw('SELECT DISTINCT user_id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")"));
+        //Loking for drivers referrals
+        $driveteam = $referrals->where('user_type', 'Driver');
+        $data['driveteam'] = $driveteam->count();
+
+        //Push current user to team (in case he makes deliveries too)
+        $driveteam = $driveteam->orWhere('id', @Auth::user()->id)->pluck('id')->toArray();
+
+        //Search for deliveries of current user and his drivers referrals
+        $data['deliveries'] = HomeDeliveryOrder::whereIn('driver_id', $driveteam)->where('status','delivered')->count();
+
+        //Search for merchants referrals
+        $data['merchantCount'] = $referrals->where('user_type', 'Merchant')->count();
 
 
         return view('driver_dashboard.home',$data);
