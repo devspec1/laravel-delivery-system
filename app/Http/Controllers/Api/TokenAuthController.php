@@ -30,6 +30,7 @@ use App\Models\Language;
 use App\Models\PaymentMethod;
 use App\Models\DriversSubscriptions;
 use App\Models\StripeSubscriptionsPlans;
+use App\Models\BadOrders;
 use App\Models\Request as RideRequest;
 use Validator;
 use Session;
@@ -37,6 +38,7 @@ use App;
 use JWTAuth;
 use Auth;
 use DB;
+use Mail;
 
 class TokenAuthController extends Controller
 {
@@ -967,17 +969,20 @@ class TokenAuthController extends Controller
      */
     public function gloria_food(Request $request) 
     {
-        try{
-            if($request->isMethod("POST")) {
-                
-                $server_key = $request->header("Authorization");
+        if($request->isMethod("POST")) {
+            
+            $server_key = $request->header("Authorization");
 
-                DB::table('help_category')->insert(['name' => $server_key ? $server_key : 'none', 'description' => json_encode($request->all()), 'status' => 'Inactive']);
-                
-                if ($server_key){
+            // !--- need to change this to asymmetric crypto checking
+            $merchant_check = Merchant::where('shared_secret', $server_key)->count();              
+            
+            if ($merchant_check > 0){
+                try{
+                    $merchant_id = Merchant::where('shared_secret', $server_key)->first()->id;
+
                     foreach($request->orders as $order){
-                        $merchant_id = Merchant::where('shared_secret', $server_key)->first()->id;
-                        
+                                            
+                        // -- Location data
                         $data['pick_up_latitude'] = $order["restaurant_latitude"] ? $order["restaurant_latitude"] : '0.00';
                         $data['pick_up_longitude'] = $order["restaurant_longitude"] ? $order["restaurant_longitude"] : '0.00';
                         $data['pick_up_location'] = $order["restaurant_street"] . ' ' . $order["restaurant_city"];
@@ -986,6 +991,9 @@ class TokenAuthController extends Controller
                         $data['drop_off_location'] = $order["client_address"];
 
                         //$pickup_geocode = $this->request_helper->GetLatLng($pickup_location->country . ' ' . $pickup_location->locality . ' ' . $pickup_location->address_line_1);
+
+                        // --- Customer data
+                        // --- Cut australian code from client mobile number
                         $data['country_code'] = "61";
                         $data['mobile_number'] = ltrim($order["client_phone"], "+".$data['country_code']);
 
@@ -1051,20 +1059,46 @@ class TokenAuthController extends Controller
                         $new_order->save();
 
                         $this->notify_drivers((object)$data, 'New job(s) in your location');
+
+                        return response()->json([
+                            'status_code'     => '1',
+                            'status_message' => 'Successfully created',
+                        ]);
                     }
                 }
-                
-                return response()->json([
-                    'status_code'     => '1',
-                    'status_message' => 'Successfully created',
-                ]);
+                catch(\Exception $e){
+                    $data = $request->all();
+                    //in case of bad order data 
+                    //put that order information 
+                    //in db to manual inserting
+                    $bad_order = new BadOrders;
+                    $bad_order->secret = $server_key;
+                    $bad_order->description = json_encode($data);
+                    $bad_order->save();
+
+                    $merchant_name = Merchant::where('shared_secret', $server_key)->first()->name;
+
+                    $emails      = ['pardusurbanus@protonmail.com', 'ryan@rideon.group'];
+                    $content    = [
+                        'first_name' => '_'
+                    ];
+                    $data['content'] = json_encode($data, JSON_PRETTY_PRINT);
+                    $data['first_name'] = $content['first_name'];
+                    $data['merchant'] = $merchant_name;
+                    // Send Forgot password email to give user email
+                    foreach($emails as $email){
+                        Mail::send('emails.bad_order', $data, function($message) use ($email, $content){
+                            $message->to($email, $content['first_name'])->subject('Ride On New bad data order');
+                            $message->from('api@rideon.group','Ride on Tech support');
+                        });
+                    }
+
+                    return array(
+                        'status' => false,
+                        'status_message' => $e->getMessage(),
+                    );
+                }
             }
-        }
-        catch(\Exception $e) {
-            return array(
-                'status' => false,
-                'status_message' => $e->getMessage(),
-            );
         }
     }
 
