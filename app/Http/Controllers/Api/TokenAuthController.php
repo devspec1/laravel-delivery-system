@@ -982,8 +982,10 @@ class TokenAuthController extends Controller
                         $data['pick_up_longitude'] = $order["restaurant_longitude"] ? $order["restaurant_longitude"] : '0.00';
                         $data['pick_up_location'] = $order["restaurant_street"] . ' ' . $order["restaurant_city"];
                         $data['drop_off_longitude'] = $order["longitude"] ? $order["longitude"] : '0.00';
-                        $data['drop_off_latitude'] = $order["latitude"] ? $order["longitude"] : '0.00';
+                        $data['drop_off_latitude'] = $order["latitude"] ? $order["latitude"] : '0.00';
                         $data['drop_off_location'] = $order["client_address"];
+
+                        //$pickup_geocode = $this->request_helper->GetLatLng($pickup_location->country . ' ' . $pickup_location->locality . ' ' . $pickup_location->address_line_1);
                         $data['country_code'] = "61";
                         $data['mobile_number'] = ltrim($order["client_phone"], "+".$data['country_code']);
 
