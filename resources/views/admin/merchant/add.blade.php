@@ -73,7 +73,7 @@
                            </div>
 						</div>
 						<div class="form-group" id="shared_secret_section" style="display:none">
-							<label for="input_cuisine_type" class="col-sm-3 control-label">Shared Secret<em class="text-danger">*</em></label>
+							<label for="input_shared_secret" class="col-sm-3 control-label">Shared Secret<em class="text-danger">*</em></label>
 							<div class="col-sm-6">
 								{!! Form::text('shared_secret', '', ['class' => 'form-control', 'id' => 'input_shared_secret', 'placeholder' => 'Shared Secret']) !!}
 								<span class="text-danger">{{ $errors->first('shared_secret') }}</span>
@@ -185,55 +185,63 @@
 </script>
 <script src="{{ url('js/selectize.js') }}"></script>
 <script>	
+	function OperationWithIntegrationType(integration_type) 
+	{
+		switch (integration_type)
+		{
+			case '1': // Gloria Food
+				$('#shared_secret_section').hide();
+				break;
+			case '2': // Square Up
+				$('#shared_secret_section').show();
+				break;
+			case '3': // Shopify
+				$('#shared_secret_section').show();
+				break;
+		}
+	}
+
 	$('#input_integration_type').change(function() {
-		if ($(this).val() == 1)
-			$('#shared_secret_section').hide();
-		else
-			$('#shared_secret_section').show();
+		OperationWithIntegrationType($(this).val());
 	});
 
 	$(function() {
-		if ($('#input_integration_type').val() == 1)
-			$('#shared_secret_section').hide();
-		else
-			$('#shared_secret_section').show();
+		OperationWithIntegrationType($('#input_integration_type').val());
 			
 		$('#input-tags3').selectize({
 		    plugins: ['remove_button'],
-		    maxItems: 1
-    		
+		    maxItems: 1    		
 		});
 		init_user();
 	})
 	function init_user()
-{
-  var usertype= 'all';
-    var select = $("#input-tags3").selectize();
-    var selectize = select[0].selectize;
-    selectize.disable();
-    
-    $.ajax({
-      type: 'POST',
-      url: APP_URL+'/{{LOGIN_USER_TYPE}}/get_send_users',
-      data: "type="+usertype,
-      dataType: "json",
-      success: function(resultData) {
-        var select = $("#input-tags3").selectize();
-        var selectize = select[0].selectize;
-        selectize.clear();
-        selectize.clearOptions();
-        $.each(resultData, function (key, value) {
-		  if (value.user_type.toLowerCase() == 'driver')
-          	selectize.addOption({value:value.id,text:value.first_name + ' ' +  value.last_name+' - ' + value.user_type + ' - ' + value.mobile_number + ' - ' + value.referral_code});
-        });
-        selectize.enable();
+	{
+		var usertype= 'all';
+		var select = $("#input-tags3").selectize();
+		var selectize = select[0].selectize;
+		selectize.disable();
 		
-        if(v = $("#referrer_id").val())
-            selectize.setValue(v, false);
-
-      }
-    });
-  }
+		$.ajax({
+			type: 'POST',
+			url: APP_URL+'/{{LOGIN_USER_TYPE}}/get_send_users',
+			data: "type="+usertype,
+			dataType: "json",
+			success: function(resultData) {
+				var select = $("#input-tags3").selectize();
+				var selectize = select[0].selectize;
+				selectize.clear();
+				selectize.clearOptions();
+				$.each(resultData, function (key, value) {
+				if (value.user_type.toLowerCase() == 'driver')
+					selectize.addOption({value:value.id,text:value.first_name + ' ' +  value.last_name+' - ' + value.user_type + ' - ' + value.mobile_number + ' - ' + value.referral_code});
+				});
+				selectize.enable();
+				
+				if(v = $("#referrer_id").val())
+					selectize.setValue(v, false);
+			}
+		});
+	}
 
 </script>
 

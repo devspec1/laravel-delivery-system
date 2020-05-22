@@ -1261,6 +1261,112 @@ class TokenAuthController extends Controller
     }
 
     /**
+     * Webhook for integration with Shopify 
+     * @param Get method request inputs
+     *
+     * @return Response Json 
+     */
+    public function shopify(Request $request) 
+    {
+        if($request->isMethod("POST")) {
+
+            $shopify_merchants = Merchant::where('integration_type', 3)->get();
+
+            $merchant_id = 0;
+            $app_secret = '';
+            $hmac_header = $_SERVER['HTTP_X_SHOPIFY_HMAC_SHA256'];
+            $body = file_get_contents('php://input');
+
+            foreach ($shopify_merchants as $merchant)
+            {
+                $calculated_hmac = base64_encode(hash_hmac('sha256', $body, $merchant->shared_secret, true));
+                
+                if (hash_equals($hmac_header, $calculated_hmac))
+                {
+                    $merchant_id = $merchant->id;
+                    $app_secret = $merchant->shared_secret;
+                    break;
+                }
+            }
+
+            if ($merchant_id == 0)
+            {
+                return response()->json([
+                    'status_code'     => '1',
+                    'status_message' => 'Validation failed',
+                ]);
+            }
+
+            $data['pick_up_latitude'] = $request->billing_address['latitude'] ? $request->billing_address['latitude'] : 37.00;
+            $data['pick_up_longitude'] = $request->billing_address['longitude'] ? $request->billing_address['longitude'] : -87.00;
+            $data['pick_up_location'] = $request->billing_address['address1'] . ' ' . $request->billing_address['city'];
+            $data['drop_off_longitude'] = $request->shipping_address['longitude'] ? $request->shipping_address['longitude'] : -87.20;
+            $data['drop_off_latitude'] = $request->shipping_address['latitude'] ? $request->shipping_address['latitude'] : 37.20;
+            $data['drop_off_location'] = $request->shipping_address['address1'] . ' ' . $request->shipping_address['city'];
+            $data['country_code'] = "61";
+            $data['mobile_number'] = ltrim($request->customer['phone'], "+".$data['country_code']);
+
+            $data['first_name'] = $request->customer['first_name'];
+            $data['last_name'] = $request->customer['last_name'];
+            $data['email'] = $request->customer['email'];            
+            $data['delivery_fee'] = (float)$request->total_price;
+
+            $user = $this->get_or_create_rider((object)$data);
+
+            $ride_request = $this->create_ride_request((object)$data, $user);
+
+            //create order
+            $new_order = new HomeDeliveryOrder;
+
+            //$accepted_time = new \Carbon\Carbon($order["accepted_at"]);
+            //$fulfill_time = new \Carbon\Carbon($order["fulfill_at"]);
+
+            $get_fare_estimation = $this->request_helper->GetDrivingDistance($data['pick_up_latitude'], $data['drop_off_latitude'] ,$data['pick_up_longitude'], $data['drop_off_longitude']);
+
+            if ($get_fare_estimation['status'] == "success") {
+                if ($get_fare_estimation['distance'] == '') {
+                    $get_fare_estimation['distance'] = 0;
+                }
+            }
+            else{
+                $get_fare_estimation['distance'] = 0;
+            }
+
+            $new_order->distance                = $get_fare_estimation['distance'];
+            //$new_order->estimate_time           = $fulfill_time->diffInMinutes($accepted_time);
+            $new_order->fee                     = 0;
+            $new_order->customer_id             = $user->id;
+            $new_order->ride_request            = $ride_request->id;
+            //$new_order->order_description       = $order["instructions"];
+            $new_order->merchant_id             = $merchant_id;
+
+            $merchant = Merchant::where('id', $merchant_id)->first();
+            $fee = 0.0;
+            if($data['delivery_fee']){
+                $fee = $data['delivery_fee'];
+            }
+            else{
+                if(($get_fare_estimation['distance']/1000) > $merchant->delivery_fee_base_distance){
+                    $fee = $merchant->delivery_fee + $merchant->delivery_fee_per_km * ($get_fare_estimation['distance']/1000 - $merchant->delivery_fee_base_distance);
+                }
+                else{
+                    $fee = $merchant->delivery_fee;
+                }
+            }
+            $new_order->fee                     = round($fee, 2);
+            
+            $new_order->save();
+
+            $this->notify_drivers((object)$data, 'New job(s) in your location');
+            
+            return response()->json([
+                'status_code'     => '1',
+                'status_message' => 'Successfully created',
+            ]);
+        }
+    }
+
+    /**
      * custom push notification
      *
      * @return success or fail
