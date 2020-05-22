@@ -823,7 +823,7 @@ class UserController extends Controller
 					if (Auth::guard('web')->attempt(['email' => $user->email, 'password' => Session::get('password'), 'user_type' => 'Driver'])) {
 
 						flashMessage('success', trans('messages.user.register_successfully'));
-						return redirect()->intended('driver/new_dash'); // Redirect to dashboard page
+						return redirect()->intended('driver/home'); // Redirect to dashboard page
 
 					} else {
 						return redirect('signup_driver');
