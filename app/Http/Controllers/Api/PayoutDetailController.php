@@ -423,12 +423,6 @@ class PayoutDetailController extends Controller
         $user_id = $user_details->id;
         $country = $request->country;
 
-        //checking phone number
-        if(strlen($request->phone_number) < 10){
-            $phone = str_repeat("0", (10 - strlen( $request->phone_number ))) . $request->phone_number;
-            $request->merge(['phone_number' => $phone]);
-        }
-
         $payout_default_count = PayoutCredentials::where('user_id', $user_id)->where('default', '=', 'yes');
         $account_holder_type = 'company';
         $payout_method = snakeToCamel($request->payout_method,true);
