@@ -587,9 +587,9 @@ app.controller('delivery_order', ['$scope', '$http', '$compile', '$filter', func
         $('#customer_phone_number').val($("#country_code_view").val() + $("#input_mobile_number").val());
         $('#customer_name').val($("#input_first_name").val() + ' ' + $("#input_last_name").val());
 
-        var today = new Date().toLocaleString("en-US", { timeZone: "Australia/Brisbane" });
+        var today = new Date(new Date().toLocaleString("en-US", { timeZone: "Australia/Brisbane" }));
         var alignFillDate = new Date($('#input_date_time').val());
-        var diff = 0 - Date.dateDiff('m', alignFillDate, today)
+        var diff = Date.dateDiff('m', today, alignFillDate);
         $('#input_date_time').val(diff);
 
         $("form[name='deliveryAddForm']").submit();
