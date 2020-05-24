@@ -75,6 +75,13 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
 	Route::match(array('GET', 'POST'), 'edit_driver/{id}', 'DriverController@update')->middleware('admin_can:update_driver');
     Route::match(array('GET', 'POST'), 'delete_driver/{id}', 'DriverController@delete')->middleware('admin_can:delete_driver');
     
+	// Manage Community Leader
+	Route::get('community_leader', 'CommunityLeaderController@index')->middleware('admin_can:view_driver');
+	Route::get('community_leader/{id}', 'CommunityLeaderController@detail')->middleware('admin_can:view_driver');
+	Route::match(array('GET', 'POST'), 'add_community_leader', 'CommunityLeaderController@add')->middleware('admin_can:create_driver');
+	Route::match(array('GET', 'POST'), 'edit_community_leader/{id}', 'CommunityLeaderController@update')->middleware('admin_can:update_driver');
+	Route::match(array('GET', 'POST'), 'delete_community_leader/{id}', 'CommunityLeaderController@delete')->middleware('admin_can:delete_driver');
+	
     //Manage Home Delivery
     Route::get('home_delivery', 'HomeDeliveryController@index');
     Route::get('home_delivery_orders/{id}', 'HomeDeliveryController@home_delivery_order_details');
