@@ -138,9 +138,9 @@ class CommunityLeaderDataTable extends DataTable
             ['data' => 'status', 'name' => 'users.status', 'title' => 'Status'],
             ['data' => $mobile_number_column, 'name' => 'users.mobile_number', 'title' => 'Mobile Number'],
             ['data' => 'plan_name', 'name' => 'stripe_subscription_plans.plan_name', 'title' => 'Subscription Name'],
-            ['data' => 'merchants_count', 'name' => 'merchants_count', 'title' => 'Merchants Count'],
-            ['data' => 'drivers_count', 'name' => 'drivers_count', 'title' => 'Drivers Count'],
-            ['data' => 'deliveries_count', 'name' => 'deliveries_count', 'title' => 'Deliveries Count'],
+            ['data' => 'merchants_count', 'name' => 'users.id', 'title' => 'Merchants Count'],
+            ['data' => 'drivers_count', 'name' => 'users.id', 'title' => 'Drivers Count'],
+            ['data' => 'deliveries_count', 'name' => 'users.id', 'title' => 'Deliveries Count'],
             ['data' => 'created_at', 'name' => 'users.created_at', 'title' => 'Created At'],
             ['data' => 'action', 'name' => 'action', 'class' => 'text-center', 'title' => 'Action', 'orderable' => false, 'searchable' => false, 'exportable' => false],
         ];

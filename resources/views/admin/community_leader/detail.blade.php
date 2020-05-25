@@ -50,7 +50,7 @@
 
         <div class="box">
             <div class="box-header with-border">
-                <h4 class="box-title">Referred Merchants Data</h4>
+                <h4 class="box-title">Last 10 Referred Merchants Data</h4>
             </div>
             <div class="box-body">
                 <?php 
@@ -83,7 +83,7 @@
 
         <div class="box">
             <div class="box-header with-border">
-                <h4 class="box-title">Referred Drivers Data</h4>
+                <h4 class="box-title">Last 10 Referred Drivers Data</h4>
             </div>
             <div class="box-body">
                 <?php 
@@ -118,7 +118,7 @@
 
         <div class="box">
             <div class="box-header with-border">
-                <h4 class="box-title">Deliveries Data</h4>
+                <h4 class="box-title">Last 10 Deliveries Data</h4>
             </div>
             <div class="box-body">
                 <?php 
