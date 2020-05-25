@@ -32,36 +32,36 @@ class CommunityLeaderDataTable extends DataTable
             ->addColumn('email', function ($user) {
                 return protectedString($user->email);
             })
-            ->addColumn('merchants_count', function ($user) {
-                return DB::table('merchants')->select('merchants.id as id', 'users.used_referral_code')
-                    ->leftJoin('users', 'merchants.user_id', '=', 'users.id')
-                    ->where('used_referral_code', $user->referral_code)
-                    ->get()
-                    ->count();
-            })
-            ->addColumn('drivers_count', function ($user) {
-                return DB::table('users')
-                    ->where('user_type', 'Driver')
-                    ->where('used_referral_code', $user->referral_code)
-                    ->get()
-                    ->count();
-            })
-            ->addColumn('deliveries_count', function ($user) {
-                $drivers = DB::table('users')
-                    ->where('user_type', 'Driver')
-                    ->where('used_referral_code', $user->referral_code)
-                    ->get();
-                $driver_ids = array();
-                foreach ($drivers as $driver)
-                {
-                    $driver_ids[] = $driver->id;
-                }
-                return DB::table('delivery_orders')
-                    ->whereIn('driver_id', $driver_ids)
-                    ->where('status', 'delivered')
-                    ->get()
-                    ->count();
-            })
+            // ->addColumn('merchants_count', function ($user) {
+            //     return DB::table('merchants')->select('merchants.id as id', 'users.used_referral_code')
+            //         ->leftJoin('users', 'merchants.user_id', '=', 'users.id')
+            //         ->where('used_referral_code', $user->referral_code)
+            //         ->get()
+            //         ->count();
+            // })
+            // ->addColumn('drivers_count', function ($user) {
+            //     return DB::table('users')
+            //         ->where('user_type', 'Driver')
+            //         ->where('used_referral_code', $user->referral_code)
+            //         ->get()
+            //         ->count();
+            // })
+            // ->addColumn('deliveries_count', function ($user) {
+            //     $drivers = DB::table('users')
+            //         ->where('user_type', 'Driver')
+            //         ->where('used_referral_code', $user->referral_code)
+            //         ->get();
+            //     $driver_ids = array();
+            //     foreach ($drivers as $driver)
+            //     {
+            //         $driver_ids[] = $driver->id;
+            //     }
+            //     return DB::table('delivery_orders')
+            //         ->whereIn('driver_id', $driver_ids)
+            //         ->where('status', 'delivered')
+            //         ->get()
+            //         ->count();
+            // })
             ->addColumn('action', function ($user) {
                 $detail = '<a href="'.url(LOGIN_USER_TYPE.'/community_leader/'.$user->id).'" class="btn btn-xs btn-primary"><i class="fa fa-eye" ></i></a>&nbsp;';
                 $edit = (LOGIN_USER_TYPE=='company' || auth('admin')->user()->can('update_driver')) ? '<a href="'.url(LOGIN_USER_TYPE.'/edit_community_leader/'.$user->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;' : '';
@@ -83,8 +83,24 @@ class CommunityLeaderDataTable extends DataTable
             ->leftJoin('companies', function($join) {
                 $join->on('users.company_id', '=', 'companies.id');
             })->where('user_type','Driver')->groupBy('id');*/
-
-        $users = DB::Table('users')->select('users.id as id', 'users.first_name', 'users.last_name','users.email','users.country_code','users.mobile_number', 'users.status', 'users.referral_code', 'companies.name as company_name', 'stripe_subscription_plans.plan_name', 'users.created_at',DB::raw('CONCAT("XXXXXX",Right(users.mobile_number,4)) AS hidden_mobile'))
+            
+        $users = DB::Table('users')
+            ->select(
+                'users.id as id', 
+                'users.first_name', 
+                'users.last_name',
+                'users.email',
+                'users.country_code',
+                'users.mobile_number', 
+                'users.status', 
+                'users.referral_code', 
+                'companies.name as company_name', 
+                'stripe_subscription_plans.plan_name', 
+                'users.created_at',
+                DB::raw('CONCAT("XXXXXX",Right(users.mobile_number,4)) AS hidden_mobile'),
+                DB::raw('(SELECT COUNT(u2.id) FROM users AS u2 WHERE u2.used_referral_code = users.referral_code AND u2.user_type = "Merchant") as merchants_count'),
+                DB::raw('(SELECT COUNT(u2.id) FROM users AS u2 WHERE u2.used_referral_code = users.referral_code AND u2.user_type = "Driver") as drivers_count'),
+                DB::raw('(SELECT COUNT(o2.id) FROM delivery_orders AS o2 WHERE o2.driver_id IN (SELECT u2.id FROM users AS u2 WHERE u2.used_referral_code = users.referral_code AND u2.user_type = "Driver") AND o2.status = "delivered") as deliveries_count'))
             ->leftJoin('companies', function($join) {
                 $join->on('users.company_id', '=', 'companies.id');
             })->leftJoin('stripe_subscriptions', function($join) {
@@ -138,9 +154,9 @@ class CommunityLeaderDataTable extends DataTable
             ['data' => 'status', 'name' => 'users.status', 'title' => 'Status'],
             ['data' => $mobile_number_column, 'name' => 'users.mobile_number', 'title' => 'Mobile Number'],
             ['data' => 'plan_name', 'name' => 'stripe_subscription_plans.plan_name', 'title' => 'Subscription Name'],
-            ['data' => 'merchants_count', 'name' => 'users.id', 'title' => 'Merchants Count'],
-            ['data' => 'drivers_count', 'name' => 'users.id', 'title' => 'Drivers Count'],
-            ['data' => 'deliveries_count', 'name' => 'users.id', 'title' => 'Deliveries Count'],
+            ['data' => 'merchants_count', 'name' => 'merchants_count', 'title' => 'Merchants Count'],
+            ['data' => 'drivers_count', 'name' => 'drivers_count', 'title' => 'Drivers Count'],
+            ['data' => 'deliveries_count', 'name' => 'deliveries_count', 'title' => 'Deliveries Count'],
             ['data' => 'created_at', 'name' => 'users.created_at', 'title' => 'Created At'],
             ['data' => 'action', 'name' => 'action', 'class' => 'text-center', 'title' => 'Action', 'orderable' => false, 'searchable' => false, 'exportable' => false],
         ];
