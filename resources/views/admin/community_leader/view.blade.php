@@ -6,7 +6,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Manage Drivers
+        Manage Community Leaders
         <small>Control panel</small>
       </h1>
       <ol class="breadcrumb">
@@ -22,7 +22,7 @@
 
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Manage Drivers</h3>
+              <h3 class="box-title">Manage Community Leaders</h3>
               @if((LOGIN_USER_TYPE=='company' && Auth::guard('company')->user()->status == 'Active') || (LOGIN_USER_TYPE=='admin' && Auth::guard('admin')->user()->can('create_driver')))
                 <div style="float:right;"><a class="btn btn-success" href="{{ url(LOGIN_USER_TYPE.'/add_community_leader') }}">Add Community Leader</a></div>
               @endif
