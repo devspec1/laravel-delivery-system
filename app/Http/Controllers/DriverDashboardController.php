@@ -25,6 +25,7 @@ use App\Models\DriverDocuments;
 use App\Models\Vehicle;
 use App\Models\PasswordResets;
 use App\Models\DriversSubscriptions;
+use App\Models\PayoutPreference;
 use App\Models\StripeSubscriptionsPlans;
 use App\Models\Merchant;
 use App\Models\ReferralUser;
@@ -161,6 +162,8 @@ class DriverDashboardController extends Controller
     {
      
         $data['result'] = User::find(@Auth::user()->id);
+        $data['payout'] = PayoutPreference::where("user_id", @Auth::user()->id)->first();
+
         return view('driver_dashboard.driver_payment',$data);
     }
     public function driver_password()
@@ -356,6 +359,27 @@ class DriverDashboardController extends Controller
         }
         
     }
+    public function driver_update_payment(Request $request) {
+        $user = @Auth::user();
+
+        $payment = PayoutPreference::where("user_id", $user->id)->where("payout_method", "BankTransfer")->first();
+
+        if(!$payment) {
+            $payment = new PayoutPreference;
+            $payment->user_id = $user->id;
+            $payment->payout_method = "BankTransfer";
+        }
+        $payment->bank_name = $request->bank_name;
+        $payment->branch_name = $request->branch;
+        $payment->branch_code = $request->bsb;
+
+        $payment->save();
+
+        $this->helper->flash_message('success', trans('messages.user.update_success')); // Call flash message function
+        return redirect('driver/driver_payment');
+        
+    }
+
     public function driver_update_profile(Request $request)
     {
         $rules = array(
