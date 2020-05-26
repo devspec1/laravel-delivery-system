@@ -60,7 +60,7 @@ class DriverDataTable extends DataTable
                 $join->on('users.id', '=', 'stripe_subscriptions.user_id');
             })->leftJoin('stripe_subscription_plans', function($join) {
                 $join->on('stripe_subscriptions.plan', '=', 'stripe_subscription_plans.id');
-            })->where('user_type','Driver')->groupBy('id');
+            })->where('user_type','Driver')->whereIn('plan_name', ['Driver Only', 'Member Driver'])->groupBy('id');
 
         //If login user is company then get that company drivers only
         if (LOGIN_USER_TYPE=='company') {
