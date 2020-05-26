@@ -52,7 +52,65 @@
 				</ul>
 			</li>
             @endif
-
+            @if($company_user || @$user->can('view_driver'))
+			<li class="{{ (Route::current()->uri() == $first_segment.'/driver') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/driver') }}"><i class="fa  fa-drivers-license-o"></i><span>Manage Drivers</span></a></li>
+			@endif
+			@if($company_user || @$user->can('view_driver'))
+			<li class="{{ (Route::current()->uri() == $first_segment.'/community_leader') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/community_leader') }}"><i class="fa fa-users"></i><span>Manage Community Leaders</span></a></li>
+            @endif
+            @if(@$user->can('view_rider'))
+			<li class="{{ (Route::current()->uri() == 'admin/rider') ? 'active' : ''  }}"><a href="{{ url('admin/rider') }}"><i class="fa fa-user-o"></i><span>Manage Riders</span></a></li>
+			@endif
+            @if($company_user || @$user->can('manage_driver_payments') || @$user->can('manage_company_payments'))
+			<li class="treeview {{ (Route::current()->uri() == 'admin/payout/overall' || Route::current()->uri() == 'admin/payout/company/overall' || Route::current()->uri() == 'company/payout/overall') ? 'active' : ''  }}">
+				<a href="#">
+					<i class="fa fa-dollar" aria-hidden="true"></i> <span>Manage Payouts</span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					{{-- @if(@$user->can('manage_company_payment'))
+					<li class="{{ (Route::current()->uri() == 'admin/payout/company/overall') ? 'active' : ''  }}"><a href="{{ url('admin/payout/company/overall') }}"><i class="fa fa-circle-o"></i><span>Company Payouts</span></a></li>
+					@endif --}}
+					@if($company_user || @$user->can('manage_driver_payments'))
+					<li class="{{ (Route::current()->uri() == $first_segment.'/payout/overall') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/payout/overall') }}"><i class="fa fa-circle-o"></i><span>Driver Payouts</span></a></li>
+					@endif
+				</ul>
+			</li>
+            @endif
+            @if(@$user->can('manage_rider_referrals') || @$user->can('manage_driver_referrals'))
+			<li class="treeview {{ (Route::current()->uri() == 'admin/referrals/rider' || Route::current()->uri() == 'admin/referrals/driver') ? 'active' : ''  }}">
+				<a href="#">
+					<i class="fa fa-users"></i>
+					<span>Referrals</span><i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					@if(@$user->can('manage_rider_referrals'))
+					<li class="{{ (Route::current()->uri() == 'admin/referrals/rider') ? 'active' : ''  }}">
+						<a href="{{ url('admin/referrals/rider') }}"><i class="fa fa-circle-o"></i>
+							<span> Riders </span>
+						</a>
+					</li>
+					@endif
+					@if(@$user->can('manage_driver_referrals'))
+					<li class="{{ (Route::current()->uri() == 'admin/referrals/driver') ? 'active' : ''  }}">
+						<a href="{{ url('admin/referrals/driver') }}"><i class="fa fa-circle-o"></i>
+							<span> Drivers </span>
+						</a>
+					</li>
+					@endif
+				</ul>
+			</li>
+            @endif
+            @if(@$user->can('manage_admin'))
+			<li class="treeview {{ (Route::current()->uri() == 'admin/subscriptions/driver' || Route::current()->uri() == 'admin/subscriptions/plan') ? 'active' : ''  }}">
+				<a href="#">
+					<i class="fa fa-handshake-o"></i> <span>Manage Subscriptions</span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					<li class="{{ (Route::current()->uri() == 'admin/subscriptions/driver') ? 'active' : ''  }}"><a href="{{ url('admin/subscriptions/driver') }}"><i class="fa fa-circle-o"></i><span>Subscribed drivers</span></a></li>
+					<li class="{{ (Route::current()->uri() == 'admin/subscriptions/plan') ? 'active' : ''  }}"><a href="{{ url('admin/subscriptions/plan') }}"><i class="fa fa-circle-o"></i><span>Subscription plans</span></a></li>
+				</ul>
+			</li>
+			@endif
 			@if(@$user->can('manage_admin'))
 			<li class="treeview {{ (Route::current()->uri() == 'admin/admin_users') ? 'active' : ''  }}">
 				<a href="#">
@@ -95,49 +153,15 @@
 				</ul>
 			</li>
 			@endif
-			@if(@$user->can('view_rider'))
-			<li class="{{ (Route::current()->uri() == 'admin/rider') ? 'active' : ''  }}"><a href="{{ url('admin/rider') }}"><i class="fa fa-users"></i><span>Manage Riders</span></a></li>
-			@endif
 			@if(@$user->can('view_company'))
 			<li class="{{ (Route::current()->uri() == 'admin/company') ? 'active' : ''  }}"><a href="{{ url('admin/company') }}"><i class="fa fa-building"></i><span>Manage Company</span></a></li>
-			@endif
-			@if($company_user || @$user->can('view_driver'))
-			<li class="{{ (Route::current()->uri() == $first_segment.'/driver') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/driver') }}"><i class="fa fa-dribbble"></i><span>Manage Driver</span></a></li>
-			@endif
-			@if($company_user || @$user->can('view_driver'))
-			<li class="{{ (Route::current()->uri() == $first_segment.'/community_leader') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/community_leader') }}"><i class="fa fa-dribbble"></i><span>Manage Community Leader</span></a></li>
 			@endif
 			@if($company_user || @$user->can('manage_vehicle'))
 			<li class="{{ (Route::current()->uri() == $first_segment.'/vehicle') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/vehicle') }}"><i class="fa fa-taxi"></i><span>Manage Vehicles</span></a></li>
 			@endif
 			@if(@$user->can('manage_vehicle_type'))
 			<li class="{{ (Route::current()->uri() == 'admin/vehicle_type') ? 'active' : ''  }}"><a href="{{ url('admin/vehicle_type') }}"><i class="fa fa-car"></i><span>Manage Vehicles Type</span></a></li>
-			@endif
-			@if(@$user->can('manage_rider_referrals') || @$user->can('manage_driver_referrals'))
-			<li class="treeview {{ (Route::current()->uri() == 'admin/referrals/rider' || Route::current()->uri() == 'admin/referrals/driver') ? 'active' : ''  }}">
-				<a href="#">
-					<i class="fa fa-users"></i>
-					<span>Referrals</span><i class="fa fa-angle-left pull-right"></i>
-				</a>
-				<ul class="treeview-menu">
-					@if(@$user->can('manage_rider_referrals'))
-					<li class="{{ (Route::current()->uri() == 'admin/referrals/rider') ? 'active' : ''  }}">
-						<a href="{{ url('admin/referrals/rider') }}"><i class="fa fa-circle-o"></i>
-							<span> Riders </span>
-						</a>
-					</li>
-					@endif
-					@if(@$user->can('manage_driver_referrals'))
-					<li class="{{ (Route::current()->uri() == 'admin/referrals/driver') ? 'active' : ''  }}">
-						<a href="{{ url('admin/referrals/driver') }}"><i class="fa fa-circle-o"></i>
-							<span> Drivers </span>
-						</a>
-					</li>
-					@endif
-				</ul>
-			</li>
-			@endif
-			
+			@endif		
 			@if(@$user->can('manage_locations'))
 			<li class="{{ (Route::current()->uri() == 'admin/locations') ? 'active' : ''  }}"><a href="{{ url('admin/locations') }}"><i class="fa fa-map-o"></i><span>Manage Locations</span></a></li>
 			@endif
@@ -166,32 +190,6 @@
 			@endif
 			@if($company_user || @$user->can('manage_trips'))
 			<li class="{{ (Route::current()->uri() == $first_segment.'/trips') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/trips') }}"><i class="fa fa-taxi"></i><span> Manage Trips</span></a></li>
-			@endif
-			@if($company_user || @$user->can('manage_driver_payments') || @$user->can('manage_company_payments'))
-			<li class="treeview {{ (Route::current()->uri() == 'admin/payout/overall' || Route::current()->uri() == 'admin/payout/company/overall' || Route::current()->uri() == 'company/payout/overall') ? 'active' : ''  }}">
-				<a href="#">
-					<i class="fa fa-dollar" aria-hidden="true"></i> <span>Manage Payouts</span> <i class="fa fa-angle-left pull-right"></i>
-				</a>
-				<ul class="treeview-menu">
-					@if(@$user->can('manage_company_payment'))
-					<li class="{{ (Route::current()->uri() == 'admin/payout/company/overall') ? 'active' : ''  }}"><a href="{{ url('admin/payout/company/overall') }}"><i class="fa fa-circle-o"></i><span>Company Payouts</span></a></li>
-					@endif
-					@if($company_user || @$user->can('manage_driver_payments'))
-					<li class="{{ (Route::current()->uri() == $first_segment.'/payout/overall') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/payout/overall') }}"><i class="fa fa-circle-o"></i><span>Driver Payouts</span></a></li>
-					@endif
-				</ul>
-			</li>
-            @endif
-            @if(@$user->can('manage_admin'))
-			<li class="treeview {{ (Route::current()->uri() == 'admin/subscriptions/driver' || Route::current()->uri() == 'admin/subscriptions/plan') ? 'active' : ''  }}">
-				<a href="#">
-					<i class="fa fa-handshake-o"></i> <span>Manage Subscriptions</span> <i class="fa fa-angle-left pull-right"></i>
-				</a>
-				<ul class="treeview-menu">
-					<li class="{{ (Route::current()->uri() == 'admin/subscriptions/driver') ? 'active' : ''  }}"><a href="{{ url('admin/subscriptions/driver') }}"><i class="fa fa-circle-o"></i><span>Subscribed drivers</span></a></li>
-					<li class="{{ (Route::current()->uri() == 'admin/subscriptions/plan') ? 'active' : ''  }}"><a href="{{ url('admin/subscriptions/plan') }}"><i class="fa fa-circle-o"></i><span>Subscription plans</span></a></li>
-				</ul>
-			</li>
 			@endif
 			@if($company_user ||  @$user->can('manage_statements'))
 			<li class="treeview {{ (Route::current()->uri() == $first_segment.'/statements/{type}') ? 'active' : ''  }}">
