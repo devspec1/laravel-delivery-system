@@ -104,6 +104,9 @@
 			@if($company_user || @$user->can('view_driver'))
 			<li class="{{ (Route::current()->uri() == $first_segment.'/driver') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/driver') }}"><i class="fa fa-dribbble"></i><span>Manage Driver</span></a></li>
 			@endif
+			@if($company_user || @$user->can('view_driver'))
+			<li class="{{ (Route::current()->uri() == $first_segment.'/community_leader') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/community_leader') }}"><i class="fa fa-dribbble"></i><span>Manage Community Leader</span></a></li>
+			@endif
 			@if($company_user || @$user->can('manage_vehicle'))
 			<li class="{{ (Route::current()->uri() == $first_segment.'/vehicle') ? 'active' : ''  }}"><a href="{{ url($first_segment.'/vehicle') }}"><i class="fa fa-taxi"></i><span>Manage Vehicles</span></a></li>
 			@endif
