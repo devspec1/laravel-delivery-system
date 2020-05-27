@@ -91,8 +91,8 @@ class DriverDashboardController extends Controller
 
         public function driver_new_dash()
     {
-        $data['result'] = User::find(@Auth::user()->id);
-        return view('driver_dashboard.new_dash',$data);
+        //$data['result'] = User::find(@Auth::user()->id);
+        return redirect("driver/home");
     }
 
      public function driver_leaderboard()

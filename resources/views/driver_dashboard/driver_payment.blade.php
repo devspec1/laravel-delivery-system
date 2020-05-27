@@ -37,7 +37,7 @@
                     <span class="text-danger"> {{ $errors->first('email') }} </span>
                   </div>
                   <div  style="padding:2px 0px;">
-                    <input class="_style_3vhmZK" name="bank" style="background: white"value="@if(isset($payout->bank_name)) {{ $payout->bank_name }} @endif" placeholder="Bank">
+                    <input class="_style_3vhmZK" name="bank" style="background: white"value="@if(isset($payout->bank_name)) {{ $payout->bank }} @endif" placeholder="Bank">
                     <span class="text-danger"> {{ $errors->first('email') }} </span>
                   </div>
                 </div>
