@@ -255,8 +255,14 @@ class HomeDeliveryController extends Controller
             $trip->otp = mt_rand(1000, 9999);
             $trip->pickup_latitude = $ride_request->pickup_latitude;
             $trip->pickup_longitude = $ride_request->pickup_longitude;
-            $trip->drop_latitude = $ride_request->drop_latitude;
-            $trip->drop_longitude = $ride_request->drop_longitude;
+            try{
+                $trip->drop_latitude = $request->latitude;
+                $trip->drop_longitude = $request->longitude;
+            }
+            catch(\Exception $e){
+                $trip->drop_latitude = $ride_request->drop_latitude;
+                $trip->drop_longitude = $ride_request->drop_longitude;
+            }
             $trip->driver_id = $user->id;
             $trip->car_id = $ride_request->car_id;
             $trip->pickup_location = $ride_request->pickup_location;
