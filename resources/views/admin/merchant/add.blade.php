@@ -81,8 +81,8 @@
 						</div>
 						<div class="form-group">
 							<label for="input_status" class="col-sm-3 control-label">Country Code<em class="text-danger">*</em></label>
-							<div class="col-sm-4">
-								<select class ='form-control' id = 'input_country_code' name='country_code'>
+							<div class="col-sm-4" ng-init="country_code={{($country_code_option[12]->phone_code)}}">
+								<select class ='form-control' id = 'input_country_code' name='country_code' ng-model="country_code">
 									<option value="" disabled=""> Select </option>
 									@foreach($country_code_option as $country_code)
 									<option value="{{@$country_code->phone_code}}" <?php if (old('country_code') == $country_code->phone_code) echo 'selected'; ?>>{{$country_code->long_name}}</option>
