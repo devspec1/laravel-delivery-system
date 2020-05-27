@@ -1021,6 +1021,21 @@ class TokenAuthController extends Controller
 
                         $accepted_time = new \Carbon\Carbon($order["accepted_at"]);
                         $fulfill_time = new \Carbon\Carbon($order["fulfill_at"]);
+                        $est_time = $fulfill_time->diffInMinutes($accepted_time);
+                        try{
+                            if($est_time = 30){
+                                $est_time = 30;
+                            }
+                            else if($est_time > 45){
+                                $est_time = $est_time - 30;
+                            }
+                            else{
+                                $est_time = 45;
+                            }
+                        }
+                        catch(\Exception $e){
+                            //
+                        }
 
                         $get_fare_estimation = $this->request_helper->GetDrivingDistance($data['pick_up_latitude'], $data['drop_off_latitude'] ,$data['pick_up_longitude'], $data['drop_off_longitude']);
 
@@ -1034,7 +1049,7 @@ class TokenAuthController extends Controller
                         }
                         
                         $new_order->distance                = $get_fare_estimation['distance'];
-                        $new_order->estimate_time           = $fulfill_time->diffInMinutes($accepted_time);
+                        $new_order->estimate_time           = $est_time;
                         $new_order->fee                     = 0;
                         $new_order->customer_id             = $user->id;
                         $new_order->ride_request            = $ride_request->id;
