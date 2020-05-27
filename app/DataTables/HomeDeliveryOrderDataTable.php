@@ -37,10 +37,12 @@ class HomeDeliveryOrderDataTable extends DataTable
         return datatables()
             ->of($query)
             ->addColumn('action', function ($orders) {
-                $detail = '<a href="'.url(LOGIN_USER_TYPE.'/home_delivery_orders/'.$orders->id).'" class="btn btn-xs btn-primary"><i class="fa fa-eye" ></i></a>&nbsp;';
-                $edit = (LOGIN_USER_TYPE=='company' || auth('admin')->user()->can('update_driver')) ? '<a href="'.url(LOGIN_USER_TYPE.'/edit_home_delivery/'.$orders->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;' : '';
-                $delete = (auth()->guard('company')->user()!=null || auth('admin')->user()->can('delete_driver')) ? '<a data-href="'.url(LOGIN_USER_TYPE.'/delete_home_delivery/'.$orders->id).'" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#confirm-delete"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;':'';
-                return $detail.$edit.$delete;
+                $detail = '<a href="'.url(LOGIN_USER_TYPE.'/home_delivery_orders/'.$orders->id).'" class="btn btn-xs btn-info"><i class="fa fa-eye"></i></a>&nbsp;';
+                $edit = (LOGIN_USER_TYPE=='company' || auth('admin')->user()->can('update_driver')) ? '<a href="'.url(LOGIN_USER_TYPE.'/edit_home_delivery/'.$orders->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a><br>' : '';
+                $suspend = ( (auth()->guard('company')->user()!=null || auth('admin')->user()->can('delete_driver') ) && $orders->payout_status != 'Suspended') ? '<a data-href="'.url(LOGIN_USER_TYPE.'/suspend_home_delivery/'.$orders->id).'" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#confirm-suspend"><i class="glyphicon glyphicon-pause"></i></a>&nbsp;':'';
+                $resume = ( (auth()->guard('company')->user()!=null || auth('admin')->user()->can('delete_driver') ) && $orders->payout_status == 'Suspended') ? '<a data-href="'.url(LOGIN_USER_TYPE.'/resume_home_delivery/'.$orders->id).'" class="btn btn-xs btn-success" data-toggle="modal" data-target="#confirm-resume"><i class="glyphicon glyphicon-play"></i></a>&nbsp;':'';
+                $delete = (auth()->guard('company')->user()!=null || auth('admin')->user()->can('delete_driver')) ? '<a data-href="'.url(LOGIN_USER_TYPE.'/delete_home_delivery/'.$orders->id).'" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="glyphicon glyphicon-trash"></i></a>':'';
+                return $detail.$edit."<hr style='margin: 2px 0px; border: 0px;'>".$resume.$suspend.$delete;
             });
     }
 
@@ -62,10 +64,17 @@ class HomeDeliveryOrderDataTable extends DataTable
             ->join('merchants', function($join) {
                 $join->on('merchants.id', '=', 'delivery_orders.merchant_id');
             })
+            ->leftJoin('trips', function($join) {
+                $join->on('trips.request_id', '=', 'ride_request.id');
+            })
+            ->leftJoin('payment', function($join) {
+                $join->on('payment.trip_id', '=', 'trips.id');
+            })
             ->select([
                 'delivery_orders.id as id',
                 DB::raw('CONCAT(delivery_orders.estimate_time," mins") as estimate_time'),
                 'delivery_orders.driver_id as driver_id',
+                'payment.driver_payout_status as payout_status',
                 'delivery_orders.created_at as created_at',
                 'merchants.name as merchant_name',
                 'delivery_orders.order_description as order_description',
@@ -118,6 +127,9 @@ class HomeDeliveryOrderDataTable extends DataTable
                 ->title('Status'),
             Column::make('driver_id')
                 ->title('Assigned Driver'),
+            Column::make('payout_status')
+                ->title('Payout to driver status')
+                ->name('payment.driver_payout_status'),
             Column::make('estimate_time')
                 ->title('Estimate time'),
             Column::make('fee')
