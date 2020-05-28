@@ -990,6 +990,18 @@ class TokenAuthController extends Controller
                         $data['drop_off_latitude'] = $order["latitude"] ? $order["latitude"] : '0.00';
                         $data['drop_off_location'] = $order["client_address"];
 
+                        try{
+                            if($data['drop_off_latitude' == '0.00']){
+                                $dropoff_geocode = $this->request_helper->GetLatLng($order["client_address"]);
+                                $data['drop_off_longitude'] = $dropoff_geocode[1];
+                                $data['drop_off_latitude'] = $dropoff_geocode[0];
+                            }
+                        }
+                        catch(\Exception $e){
+                            $data['drop_off_longitude'] = '0.00';
+                            $data['drop_off_latitude'] = '0.00';
+                        }
+
                         //$pickup_geocode = $this->request_helper->GetLatLng($pickup_location->country . ' ' . $pickup_location->locality . ' ' . $pickup_location->address_line_1);
 
                         // --- Customer data
