@@ -644,6 +644,18 @@ class HomeDeliveryController extends Controller
         // This is for getting Location Result
         $data['location_result'] = RideRequest::where('id', $data['order_result']->ride_request)->get()->first();
         $data['location_result'] ->distance = $data['order_result']->distance/1000;
+        $trip = Trips::where('request_id', $data['location_result']->id)->first();
+        
+        $data['real_location_result'] = array(
+            'real_drop_location' => 'None',
+            'real_drop_latitude' => 'None',
+            'real_drop_longitude' => 'None'
+        );
+        if($trip){
+            $data['real_location_result']['real_drop_location'] = $trip->drop_location;
+            $data['real_location_result']['real_drop_latitude'] = $trip->drop_latitude;
+            $data['real_location_result']['real_drop_longitude'] = $trip->drop_longitude;
+        }
 
         //This is for getting Customer Data
         $data['customer'] = User::where('id',$data['order_result']->customer_id)->first();

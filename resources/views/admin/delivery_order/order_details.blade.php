@@ -112,7 +112,9 @@
                             </div>
 
                             <div class="col-sm-6 col-md-6">
-
+                                <pre>Real Drop_location : {{$real_location_result['real_drop_location']}}</pre>
+                                <pre>Real Drop_Latitude  : {{$real_location_result['real_drop_latitude']}}</pre>
+                                <pre>Real Drop_Longitude : {{$real_location_result['real_drop_longitude']}}</pre>
                             </div>
                         </div>
 
