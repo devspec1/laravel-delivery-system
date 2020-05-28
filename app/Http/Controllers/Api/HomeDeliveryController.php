@@ -224,6 +224,7 @@ class HomeDeliveryController extends Controller
 
         if(($request->cancel == "True" || $request->cancel == true) && $order_status != 'new' && $order_status != 'delivered'){
             $order->status = $order_status = 'new';
+            $order->driver_id = null;
 
             $order->save();
 
