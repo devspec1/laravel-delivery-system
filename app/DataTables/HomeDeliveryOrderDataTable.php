@@ -54,7 +54,7 @@ class HomeDeliveryOrderDataTable extends DataTable
      */
     public function query(HomeDeliveryOrder $model)
     {
-        return $model->whereIn('delivery_orders.status',['new','assigned','delivered','expired'])
+        return $model->whereIn('delivery_orders.status',['new','assigned','picked_up','delivered','expired'])
             ->join('users as rider', function($join) {
                 $join->on('rider.id', '=', 'delivery_orders.customer_id');
             })
