@@ -37,6 +37,9 @@ Route::match(array('GET', 'POST'), 'integrations/gloria_food', 'TokenAuthControl
 Route::match(array('GET', 'POST'), 'integrations/square', 'TokenAuthController@square_up');
 Route::match(array('GET', 'POST'), 'integrations/shopify', 'TokenAuthController@shopify');
 
+Route::match(array('GET', 'POST'), 'integrations/jotform_driver', 'JotFormController@driver');
+Route::match(array('GET', 'POST'), 'integrations/jotform_merchant', 'JotFormController@merchant');
+
 Route::get('faq', 'HomeController@faq');
 
 // With Login Routes
