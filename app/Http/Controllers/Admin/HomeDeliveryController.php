@@ -649,9 +649,15 @@ class HomeDeliveryController extends Controller
         $data['real_location_result'] = array(
             'real_drop_location' => 'None',
             'real_drop_latitude' => 'None',
-            'real_drop_longitude' => 'None'
+            'real_drop_longitude' => 'None',
+            'real_pickup_location' => 'None',
+            'real_pickup_latitude' => 'None',
+            'real_pickup_longitude' => 'None'
         );
         if($trip){
+            $data['real_location_result']['real_pickup_location'] = $trip->pickup_location;
+            $data['real_location_result']['real_pickup_latitude'] = $trip->pickup_latitude;
+            $data['real_location_result']['real_pickup_longitude'] = $trip->pickup_longitude;
             $data['real_location_result']['real_drop_location'] = $trip->drop_location;
             $data['real_location_result']['real_drop_latitude'] = $trip->drop_latitude;
             $data['real_location_result']['real_drop_longitude'] = $trip->drop_longitude;

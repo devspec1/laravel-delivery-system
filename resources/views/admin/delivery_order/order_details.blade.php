@@ -112,6 +112,9 @@
                             </div>
 
                             <div class="col-sm-6 col-md-6">
+                                <pre>Real Pickup_Location : {{$real_location_result['real_pickup_location']}}</pre>
+                                <pre>Real Pickup_Latitude  : {{$real_location_result['real_pickup_latitude']}}</pre>
+                                <pre>Real ickup_Longitude : {{$real_location_result['real_pickup_longitude']}}</pre>
                                 <pre>Real Drop_location : {{$real_location_result['real_drop_location']}}</pre>
                                 <pre>Real Drop_Latitude  : {{$real_location_result['real_drop_latitude']}}</pre>
                                 <pre>Real Drop_Longitude : {{$real_location_result['real_drop_longitude']}}</pre>
