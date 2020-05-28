@@ -53,7 +53,7 @@ class HomeDeliveryController extends Controller
     }
 
     public function test(Request $request){
-        $data = HomeDeliveryOrder::all();
+        $data = HomeDeliveryOrder::where('status','new')->get();
         $Order_ID_List =[];
         for($i=0;$i<count($data);$i++){
             $estimate_time = $data[$i]['estimate_time'];
