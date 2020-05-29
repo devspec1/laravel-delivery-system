@@ -307,13 +307,15 @@ app.controller('delivery_order', ['$scope', '$http', '$compile', '$filter', func
     }
     $scope.utc_offset = ''
     $(function() {
+        moment.tz.setDefault('Australia/Brisbane');
         if ($scope.date_time == '') {
-            $scope.date_time = moment()
+            $scope.date_time = moment().tz('Australia/Brisbane').format('ha z');
         }
-        var today = new Date();
+        var today = new Date().toLocaleString("en-US", { timeZone: "Australia/Brisbane" });
+        //console.log(today);
         $('#input_date_time').datetimepicker({
             format: 'YYYY-MM-DD HH:mm',
-            // minDate:  moment(),
+            //minDate: new Date().toLocaleString("en-US", { timeZone: "Australia/Brisbane" }),
             ignoreReadonly: true,
             sideBySide: true,
         }).on('dp.hide', function(e) {
@@ -359,7 +361,7 @@ app.controller('delivery_order', ['$scope', '$http', '$compile', '$filter', func
         $('.submit_button').attr('disabled', true)
         date_time = $('#input_date_time').val()
         if (date_time == '') {
-            var today = new Date();
+            var today = new Date().toLocaleString("en-US", { timeZone: "Australia/Brisbane" });
             $('#input_date_time').val($filter('date')(new Date(today), 'yyyy-MM-dd HH:mm'))
         }
         date_time = $('#input_date_time').val()
@@ -503,7 +505,7 @@ app.controller('delivery_order', ['$scope', '$http', '$compile', '$filter', func
     $.validator.addMethod("min_date_time", function(value, element, param) {
         if (page == 'edit') {
             var old_date_value = new Date(old_edit_date);
-            var today = new Date();
+            var today = new Date().toLocaleString("en-US", { timeZone: "Australia/Brisbane" });
             var alignFillDate = new Date($('#input_date_time').val());
             if ($scope.utc_offset == '') {
                 var valid_date = new Date(today.getTime() + (14 * 60 * 1000));
@@ -521,7 +523,7 @@ app.controller('delivery_order', ['$scope', '$http', '$compile', '$filter', func
             var alignFillDate = new Date($('#input_date_time').val());
             return moment(old_date_value).isBefore(alignFillDate) || moment(valid_date).isBefore(alignFillDate) || moment(old_date_value).isSame(alignFillDate);
         } else {
-            var today = new Date();
+            var today = new Date().toLocaleString("en-US", { timeZone: "Australia/Brisbane" });
             var alignFillDate = new Date($('#input_date_time').val());
             if ($scope.utc_offset == '') {
                 var valid_date = new Date(today.getTime() + (14 * 60 * 1000));
@@ -563,7 +565,7 @@ app.controller('delivery_order', ['$scope', '$http', '$compile', '$filter', func
     })
 
     $scope.checkInvalidTime = function() {
-        var today = new Date();
+        var today = new Date().toLocaleString("en-US", { timeZone: "Australia/Brisbane" });
         var alignFillDate = new Date($('#input_date_time').val());
 
         if ($scope.utc_offset == '') {
@@ -585,9 +587,9 @@ app.controller('delivery_order', ['$scope', '$http', '$compile', '$filter', func
         $('#customer_phone_number').val($("#country_code_view").val() + $("#input_mobile_number").val());
         $('#customer_name').val($("#input_first_name").val() + ' ' + $("#input_last_name").val());
 
-        var today = new Date();
+        var today = new Date(new Date().toLocaleString("en-US", { timeZone: "Australia/Brisbane" }));
         var alignFillDate = new Date($('#input_date_time').val());
-        var diff = 0 - Date.dateDiff('m', alignFillDate, today)
+        var diff = Date.dateDiff('m', today, alignFillDate);
         $('#input_date_time').val(diff);
 
         $("form[name='deliveryAddForm']").submit();

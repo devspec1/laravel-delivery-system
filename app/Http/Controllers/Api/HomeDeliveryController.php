@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\HomeDeliveryOrder;
 use App\Models\DriverLocation;
@@ -14,6 +15,9 @@ use App\Models\StripeSubscriptionsPlans;
 use App\Models\Trips;
 use App\Models\Payment;
 
+use App\Http\Start\Helpers;
+use App\Http\Helper\RequestHelper;
+
 use Validator;
 use JWTAuth;
 use DB;
@@ -21,6 +25,15 @@ use DateTime;
 
 class HomeDeliveryController extends Controller
 {
+
+    protected $helper;  // Global variable for instance of Helpers
+
+    public function __construct(RequestHelper $request)
+    {
+        $this->helper = new Helpers;
+        $this->otp_helper = resolve('App\Http\Helper\OtpHelper');
+        $this->request_helper = $request;        
+    }
     /** 
      * Get orders data
      * 
@@ -224,8 +237,18 @@ class HomeDeliveryController extends Controller
 
         if(($request->cancel == "True" || $request->cancel == true) && $order_status != 'new' && $order_status != 'delivered'){
             $order->status = $order_status = 'new';
+            $order->driver_id = null;
 
             $order->save();
+
+            try{
+                $ride_request = RideRequest::where('id',$order->ride_request)->first();
+                
+                $this->notify_drivers($ride_request, 'New job(s) in your location');
+            }
+            catch(\Exception $e){
+                //
+            }
 
             $assign_status_message = 'successfully cancelled';
         }
@@ -255,8 +278,14 @@ class HomeDeliveryController extends Controller
             $trip->otp = mt_rand(1000, 9999);
             $trip->pickup_latitude = $ride_request->pickup_latitude;
             $trip->pickup_longitude = $ride_request->pickup_longitude;
-            $trip->drop_latitude = $ride_request->drop_latitude;
-            $trip->drop_longitude = $ride_request->drop_longitude;
+            try{
+                $trip->drop_latitude = $request->latitude;
+                $trip->drop_longitude = $request->longitude;
+            }
+            catch(\Exception $e){
+                $trip->drop_latitude = $ride_request->drop_latitude;
+                $trip->drop_longitude = $ride_request->drop_longitude;
+            }
             $trip->driver_id = $user->id;
             $trip->car_id = $ride_request->car_id;
             $trip->pickup_location = $ride_request->pickup_location;
@@ -522,5 +551,54 @@ class HomeDeliveryController extends Controller
         }
   
         return $job_array;
+    }
+
+    /**
+     * Notify nearest drivers
+     *
+     * @return success or fail
+     */
+    public function notify_drivers($request, $message)
+    {  
+        $nearest_cars = DriverLocation::select(DB::raw('*, ( 6371 * acos( cos( radians(' . $request->pickup_latitude . ') ) * cos( radians( latitude ) ) * cos(radians( longitude ) - radians(' . $request->pickup_longitude . ') ) + sin( radians(' . $request->pickup_latitude . ') ) * sin( radians( latitude ) ) ) ) as distance'))
+            ->having('distance', '<=', 15)->get();
+
+            foreach ($nearest_cars as $nearest_car) {
+                $driver_details = User::where('id', $nearest_car->user_id)->first();
+
+                if($driver_details->device_id != "" && $driver_details->status == "Active")
+                {    
+                    $this->send_custom_pushnotification($driver_details->device_id,$driver_details->device_type,$driver_details->user_type,$message);    
+                }
+            }
+    }
+
+    /**
+     * custom push notification
+     *
+     * @return success or fail
+     */
+    public function send_custom_pushnotification($device_id,$device_type,$user_type,$message)
+    {   
+        if (LOGIN_USER_TYPE=='company') {
+            $push_title = "Message from ".Auth::guard('company')->user()->name;    
+        }
+        else {
+            $push_title = "Message from ".SITE_NAME;   
+        }
+
+        try {
+            if($device_type == 1) {
+                $data       = array('custom_message' => array('title' => $message,'push_title'=>$push_title));
+                $this->request_helper->push_notification_ios($message, $data, $user_type, $device_id,$admin_msg=1);
+            }
+            else {
+                $data       = array('custom_message' => array('message_data' => $message,'title' => $push_title ));
+                $this->request_helper->push_notification_android($push_title, $data, $user_type, $device_id,$admin_msg=1);
+            }
+        }
+        catch (\Exception $e) {
+            logger('Could not send push notification');
+        }
     }
 }

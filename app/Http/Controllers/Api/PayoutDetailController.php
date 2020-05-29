@@ -422,6 +422,7 @@ class PayoutDetailController extends Controller
 
         $user_id = $user_details->id;
         $country = $request->country;
+
         $payout_default_count = PayoutCredentials::where('user_id', $user_id)->where('default', '=', 'yes');
         $account_holder_type = 'company';
         $payout_method = snakeToCamel($request->payout_method,true);

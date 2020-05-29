@@ -97,17 +97,17 @@ class MerchantsDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('id', 'Id'),
-            Column::make('name', 'Name'),
-            Column::make('description', 'Description'),
-            Column::make('integration', 'Integration Type'),
-            Column::make('owe_fees', 'Owe fees'),
-            Column::make('base_fee', 'Base fee'),
-            Column::make('base_distance_km', 'Base distance'),
-            Column::make('surcharge_fee', 'Surchange fee per KM'),
-            Column::make('shared_secret', 'Integration Secret'),
-            Column::make('created_at', 'Created At'),
-            Column::make('action', 'Action')
+            Column::make('id')->title('Merchant ID'),
+            Column::make('name'),
+            Column::make('description'),
+            Column::make('integration')->name('integration.name'),
+            Column::make('owe_fees')->title('Owe fees'),
+            Column::make('base_fee')->searchable(false),
+            Column::make('base_distance_km')->searchable(false),
+            Column::make('surcharge_fee')->searchable(false),
+            Column::make('shared_secret'),
+            Column::make('created_at'),
+            Column::make('action')
                 ->exportable(false)
                 ->printable(false)
                 ->orderable(false)

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    
+
 
     $('#country_code_view').val('+' + $('#input_country_code').val());
     $('#input_country_code').change(function() {
@@ -8,20 +8,20 @@ $(document).ready(function() {
 
     var phone_select = 0;
     var user_list = [];
-        //Auto complete to mobile number
+    //Auto complete to mobile number
     $("#mobile_number").autocomplete({
         source: function(request, response) {
             $.ajax({
                 type: 'POST',
                 url: REQUEST_URL + '/search_phone',
                 data: {
-                    type: 'driver',
+                    type: 'merchant',
                     text: $("#mobile_number").val(),
                     country_code: $("#input_country_code").val()
                 },
                 dataType: "json",
                 success: function(data) {
-                    console.log(data);
+                    //console.log(data);
                     var users = [];
                     user_list = [];
                     for (var i = 0; i < data.length; i++) {
@@ -55,8 +55,7 @@ $(document).ready(function() {
 
             var select = $("#input-tags3").selectize();
             var selectize = select[0].selectize;
-            if(v = ui.item.used_referral_code)
-            {
+            if (v = ui.item.used_referral_code) {
                 selectize.setValue(v, false);
                 $('#referrer_id').val(ui.item.used_referral_code);
             }
@@ -83,11 +82,10 @@ $(document).ready(function() {
             $('#city').prop('readonly', true);
             $('#state').prop('readonly', true);
             $('#postal_code').prop('readonly', true);
-            
+
             var select = $("#input-tags3").selectize();
             var selectize = select[0].selectize;
-            if(v = user_list[$(this).val()].used_referral_code)
-            {
+            if (v = user_list[$(this).val()].used_referral_code) {
                 selectize.setValue(v, false);
                 $('#referrer_id').val(ui.item.used_referral_code);
             }
@@ -112,8 +110,8 @@ $(document).ready(function() {
 
             var select = $("#input-tags3").selectize();
             var selectize = select[0].selectize;
-            selectize.setValue(0, false);      
-            $('#referrer_id').val('0');          
+            selectize.setValue(0, false);
+            $('#referrer_id').val('0');
             selectize.enable();
         }
     });

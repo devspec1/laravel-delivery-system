@@ -16,6 +16,11 @@ class UpdateMerchant20200519 extends Migration
         //
         Schema::table('merchants', function (Blueprint $table) {
             $table->string('squareup_id')->after('shared_secret');
+            $table->decimal('delivery_fee', 11, 2)->nullable();
+            $table->decimal('delivery_fee_base_distance', 11, 2)->nullable();
+            $table->decimal('delivery_fee_per_km', 11, 2)->nullable();
+            $table->integer('user_id')->after('id');
+            $table->string('cuisine_type')->after('description');
         });
     }
 

@@ -24,6 +24,12 @@ use App\Models\ProfilePicture;
 use App\Models\DriverDocuments;
 use App\Models\Vehicle;
 use App\Models\PasswordResets;
+use App\Models\DriversSubscriptions;
+use App\Models\PayoutPreference;
+use App\Models\StripeSubscriptionsPlans;
+use App\Models\Merchant;
+use App\Models\ReferralUser;
+use App\Models\HomeDeliveryOrder;
 use Auth;
 use App;
 use DateTime;
@@ -48,6 +54,8 @@ class DriverDashboardController extends Controller
     public function driver_profile()
     {
         $data['result'] = User::find(@Auth::user()->id);
+
+        $data['sub_name'] = StripeSubscriptionsPlans::where('id',DriversSubscriptions::where('user_id',@Auth::user()->id)->first()->plan)->first()->plan_name;
         return view('driver_dashboard.profile',$data);
     }
 
@@ -55,26 +63,42 @@ class DriverDashboardController extends Controller
     {
         $data['result'] = User::find(@Auth::user()->id);
 
-        $data['driveteam'] = count(DB::select(DB::raw('SELECT * FROM users WHERE used_referral_code = ' . @Auth::user()->id . " OR id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")")));
 
+        //Loking for drivers referrals
+        $data['driveteam'] = User::where('used_referral_code', @Auth::user()->referral_code)
+            ->where('user_type', 'Driver')
+            ->count();
 
-        $data['deliveries'] = count(DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR driver_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ") OR merchant_id IN (SELECT id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code =" . @Auth::user()->id . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . "))"));
+        //Push current user to team (in case he makes deliveries too)
+        $driveteam = User::where('used_referral_code', @Auth::user()->referral_code)
+            ->where('user_type', 'Driver')
+            ->orWhere('id', @Auth::user()->id)
+            ->pluck('id')
+            ->toArray();
 
+        //Search for deliveries of current user and his drivers referrals
+        $data['deliveries'] = HomeDeliveryOrder::whereIn('driver_id', $driveteam)
+            ->where('status','delivered')
+            ->count();
 
-        $data['merchantCount'] = count(DB::select(DB::raw('SELECT DISTINCT user_id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")"));
-
+        //Search for merchants referrals
+        $data['merchantCount'] = User::where('used_referral_code', @Auth::user()->referral_code)
+            ->where('user_type', 'Merchant')
+            ->count();
 
         return view('driver_dashboard.home',$data);
     }
 
         public function driver_new_dash()
     {
-        $data['result'] = User::find(@Auth::user()->id);
-        return view('driver_dashboard.new_dash',$data);
+        //$data['result'] = User::find(@Auth::user()->id);
+        return redirect("driver/home");
     }
+
      public function driver_leaderboard()
     {
-         $data['merchants'] = User::where("used_referral_code", @Auth::user()->id)->get();
+      
+        $data['merchants'] = User::where('used_referral_code', @Auth::user()->referral_code)->where('user_type', 'Driver')->get();
         
         foreach($data['merchants'] as $k => $v) {
 
@@ -89,36 +113,44 @@ class DriverDashboardController extends Controller
         $data['result'] = User::find(@Auth::user()->id);
         return view('driver_dashboard.leaderboard',$data);
     }
+
      public function driver_merchants()
     {
 
 
-        $data['merchants'] = DB::select(DB::raw('SELECT * FROM users WHERE id IN (SELECT user_id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . "))");
+        $data['merchants'] = User::where('used_referral_code', @Auth::user()->referral_code)->where('user_type', 'Merchant')->get();
         
         foreach($data['merchants'] as $k => $v) {
 
             $add = DB::table('driver_address')->where('user_id', $v->id)->first();
      
-            
-                $data['merchants'][$k]->address = $add ? $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code : "";
-            $data['merchants'][$k]->profile_picture = DB::table('profile_picture')->where('user_id', $v->id)->first();
+            $data['merchants'][$k]->address = $add ? $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code : "";
 
-            
+            $data['merchants'][$k]->trading_name = Merchant::where('user_id', $data['merchants'][$k]->id)->first()->name;
+
+            //$data['merchants'][$k]->profile_picture = DB::table('profile_picture')->where('user_id', $v->id)->first();
+
             $data['merchants'][$k]->since = $v->created_at ? date_format(date_create($v->created_at), "M Y") : "";
         }
+
         $data['result'] = User::find(@Auth::user()->id);
-        return view('driver_dashboard.merchants',$data);
+
+        return view('driver_dashboard.merchants', $data);
     }
+
     public function driver_driver_team()
     {
-        $data['merchants'] = DB::select(DB::raw('SELECT * FROM users WHERE id IN (SELECT user_id FROM referral_users WHERE referral_id = ' . @Auth::user()->id) . ") OR used_referral_code = " . @Auth::user()->id);
+    
+
+        //Looking for referrals drivers
+        $data['merchants'] = User::where('used_referral_code', @Auth::user()->referral_code)->where('user_type', 'Driver')->get();
         
         foreach($data['merchants'] as $k => $v) {
 
             $add = DB::table('driver_address')->where('user_id', $v->id)->first();
      
             
-                $data['merchants'][$k]->address = $add ?  $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code : "";
+            $data['merchants'][$k]->address = $add ?  $add->address_line1 . " " . $add->address_line2 . ", " . $add->postal_code : "";
             $data['merchants'][$k]->profile_picture = DB::table('profile_picture')->where('user_id', $v->id)->first();
 
             $data['merchants'][$k]->since = date_format(date_create($v->created_at), "M Y");
@@ -130,6 +162,8 @@ class DriverDashboardController extends Controller
     {
      
         $data['result'] = User::find(@Auth::user()->id);
+        $data['payout'] = PayoutPreference::where("user_id", @Auth::user()->id)->first();
+
         return view('driver_dashboard.driver_payment',$data);
     }
     public function driver_password()
@@ -146,7 +180,17 @@ class DriverDashboardController extends Controller
     }
      public function driver_delivery_orders()
     {
-       $data['deliveries'] =  DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR driver_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ") OR merchant_id IN (SELECT id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code =" . @Auth::user()->id . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")) ORDER BY created_at DESC");
+
+        //Loking for drivers referrals
+        $driveteam = User::where('used_referral_code', @Auth::user()->referral_code)->where('user_type', 'Driver');
+
+        //Push current user to team (in case he makes deliveries too)
+        $driveteam = $driveteam->orWhere('id', @Auth::user()->id)->pluck('id')->toArray();
+
+        //Search for deliveries of current user and his drivers referrals
+        $data['deliveries'] = HomeDeliveryOrder::whereIn('driver_id', $driveteam)->where('status','delivered')->get();
+
+       //$data['deliveries'] =  DB::select(DB::raw('SELECT * FROM delivery_orders WHERE driver_id IN (SELECT id FROM users WHERE used_referral_code = ' . @Auth::user()->id) . ") OR driver_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ") OR merchant_id IN (SELECT id FROM merchants WHERE user_id IN (SELECT id FROM users WHERE used_referral_code =" . @Auth::user()->id . ") OR user_id IN (SELECT user_id FROM referral_users WHERE referral_id = " . @Auth::user()->id . ")) ORDER BY created_at DESC");
 
        foreach($data['deliveries'] as $k => $v) {
         $driver = User::find($v->driver_id);
@@ -315,6 +359,27 @@ class DriverDashboardController extends Controller
         }
         
     }
+    public function driver_update_payment(Request $request) {
+        $user = @Auth::user();
+
+        $payment = PayoutPreference::where("user_id", $user->id)->where("payout_method", "BankTransfer")->first();
+
+        if(!$payment) {
+            $payment = new PayoutPreference;
+            $payment->user_id = $user->id;
+            $payment->payout_method = "BankTransfer";
+        }
+        $payment->bank_name = $request->bank_name;
+        $payment->branch_name = $request->branch;
+        $payment->branch_code = $request->bsb;
+
+        $payment->save();
+
+        $this->helper->flash_message('success', trans('messages.user.update_success')); // Call flash message function
+        return redirect('driver/driver_payment');
+        
+    }
+
     public function driver_update_profile(Request $request)
     {
         $rules = array(
@@ -462,15 +527,15 @@ class DriverDashboardController extends Controller
             $result['success'] = 'true';
             $profile_image_extension      =   $profile_image->getClientOriginalExtension();
             $profile_image_filename       =   'profile_image' . time() .  '.' . $profile_image_extension;
-            $profile_image_save_filename       =   'profile_image' . time() .  '_450x250.' . $profile_image_extension;
+            //$profile_image_save_filename       =   'profile_image' . time() .  '_450x250.' . $profile_image_extension;
             $success = $profile_image->move('images/users/'.$user->id, $profile_image_filename);
             if(!$success) {
                 return back()->withError(trans('messages.user.update_fail'));
             }
             else {
-                $this->helper->compress_image("images/users/".$user->id."/".$profile_image_filename, "images/users/".$user->id."/".$profile_image_filename, 80, 450, 250);
+                //$this->helper->compress_image("images/users/".$user->id."/".$profile_image_filename, "images/users/".$user->id."/".$profile_image_filename, 80, 450, 250);
             }
-            $user_profile_image->src   =url('images/users').'/'.$user->id.'/'.$profile_image_save_filename;
+            $user_profile_image->src   =url('images/users').'/'.$user->id.'/'.$profile_image_filename;
             $user_profile_image->save();
         }
 

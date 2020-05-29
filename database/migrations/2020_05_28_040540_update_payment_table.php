@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateMerchantsTable extends Migration
+class UpdatePaymentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,7 @@ class UpdateMerchantsTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::table('merchants', function (Blueprint $table) {
-            $table->integer('user_id')->after('id');
-            $table->string('cuisine_type')->after('description');
-        });
+        \DB::statement("ALTER TABLE payment CHANGE COLUMN driver_payout_status driver_payout_status ENUM('Pending', 'Processing', 'Paid', 'Suspended') DEFAULT 'Pending'");
     }
 
     /**

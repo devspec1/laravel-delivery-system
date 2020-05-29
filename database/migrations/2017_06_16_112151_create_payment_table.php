@@ -21,7 +21,7 @@ class CreatePaymentTable extends Migration
             $table->text('admin_transaction_id')->nullable();
             $table->text('driver_transaction_id')->nullable();
             $table->enum('admin_payout_status',['Pending', 'Processing', 'Paid'])->default('Pending');
-            $table->enum('driver_payout_status',['Pending', 'Processing', 'Paid'])->default('Pending');
+            $table->enum('driver_payout_status',['Pending', 'Processing', 'Paid', 'Suspended'])->default('Pending');
         });
     }
 

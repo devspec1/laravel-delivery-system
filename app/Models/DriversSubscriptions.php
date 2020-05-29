@@ -12,4 +12,6 @@ class DriversSubscriptions extends Model
      * @var string
      */
     protected $table = 'stripe_subscriptions';
+
+    protected $fillable = ['stripe_id', 'status', 'email', 'plan', 'country','card_name',];
 }

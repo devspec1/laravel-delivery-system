@@ -184,7 +184,7 @@
       url: APP_URL+'/{{LOGIN_USER_TYPE}}/get_send_merchants',
       dataType: "json",
       success: function(resultData) {
-        console.log(resultData);
+        //console.log(resultData);
         var select = $("#input-merchant-id").selectize();
         var selectize = select[0].selectize;
         selectize.clear();

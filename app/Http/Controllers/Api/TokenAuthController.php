@@ -30,6 +30,7 @@ use App\Models\Language;
 use App\Models\PaymentMethod;
 use App\Models\DriversSubscriptions;
 use App\Models\StripeSubscriptionsPlans;
+use App\Models\BadOrders;
 use App\Models\Request as RideRequest;
 use Validator;
 use Session;
@@ -37,6 +38,7 @@ use App;
 use JWTAuth;
 use Auth;
 use DB;
+use Mail;
 
 class TokenAuthController extends Controller
 {
@@ -968,89 +970,162 @@ class TokenAuthController extends Controller
     public function gloria_food(Request $request) 
     {
         if($request->isMethod("POST")) {
-
+            
             $server_key = $request->header("Authorization");
 
-            if ($server_key){
-                foreach($request->orders as $order){
+            // !--- need to change this to asymmetric crypto checking
+            $merchant_check = Merchant::where('shared_secret', $server_key)->count();              
+            
+            if ($merchant_check > 0){
+                try{
                     $merchant_id = Merchant::where('shared_secret', $server_key)->first()->id;
 
-                    $data['pick_up_latitude'] = $order["restaurant_latitude"];
-                    $data['pick_up_longitude'] = $order["restaurant_longitude"];
-                    $data['pick_up_location'] = $order["restaurant_street"] . ' ' . $order["restaurant_city"];
-                    $data['drop_off_longitude'] = $order["longitude"];
-                    $data['drop_off_latitude'] = $order["latitude"];
-                    $data['drop_off_location'] = $order["client_address"];
-                    $data['country_code'] = "61";
-                    $data['mobile_number'] = ltrim($order["client_phone"], "+".$data['country_code']);
+                    foreach($request->orders as $order){
+                                            
+                        // -- Location data
+                        $data['pick_up_latitude'] = $order["restaurant_latitude"] ? $order["restaurant_latitude"] : '0.00';
+                        $data['pick_up_longitude'] = $order["restaurant_longitude"] ? $order["restaurant_longitude"] : '0.00';
+                        $data['pick_up_location'] = $order["restaurant_street"] . ' ' . $order["restaurant_city"];
+                        $data['drop_off_longitude'] = $order["longitude"] ? $order["longitude"] : '0.00';
+                        $data['drop_off_latitude'] = $order["latitude"] ? $order["latitude"] : '0.00';
+                        $data['drop_off_location'] = $order["client_address"];
 
-                    $data['first_name'] = $order["client_first_name"];
-                    $data['last_name'] = $order["client_last_name"];
-                    $data['email'] = $order["client_email"];
-                    
-                    $data['delivery_fee'] = null;
-                    try {
-                        if ($order["items"][0]["name"] == "DELIVERY_FEE"){
-                            $data['delivery_fee'] = (float)$order["items"][0]["total_item_price"];
+                        try{
+                            if($data['drop_off_latitude' == '0.00']){
+                                $dropoff_geocode = $this->request_helper->GetLatLng($order["client_address"]);
+                                $data['drop_off_longitude'] = $dropoff_geocode[1];
+                                $data['drop_off_latitude'] = $dropoff_geocode[0];
+                            }
                         }
-                    } 	catch (\Exception $e) {
-                        logger('getting delivery fee error : '.$e->getMessage());
-                    }
-
-                    $user = $this->get_or_create_rider((object)$data);
-
-                    $ride_request = $this->create_ride_request((object)$data, $user);
-
-                    //create order
-                    $new_order = new HomeDeliveryOrder;
-
-                    $accepted_time = new \Carbon\Carbon($order["accepted_at"]);
-                    $fulfill_time = new \Carbon\Carbon($order["fulfill_at"]);
-
-                    $get_fare_estimation = $this->request_helper->GetDrivingDistance($data['pick_up_latitude'], $data['drop_off_latitude'] ,$data['pick_up_longitude'], $data['drop_off_longitude']);
-
-                    if ($get_fare_estimation['status'] == "success") {
-                        if ($get_fare_estimation['distance'] == '') {
-                            $get_fare_estimation['distance'] = 0;
+                        catch(\Exception $e){
+                            $data['drop_off_longitude'] = '0.00';
+                            $data['drop_off_latitude'] = '0.00';
                         }
-                    }
-                    else{
-                        $get_fare_estimation['distance'] = 0;
-                    }
-        
-                    $new_order->distance                = $get_fare_estimation['distance'];
-                    $new_order->estimate_time           = $fulfill_time->diffInMinutes($accepted_time);
-                    $new_order->fee                     = 0;
-                    $new_order->customer_id             = $user->id;
-                    $new_order->ride_request            = $ride_request->id;
-                    $new_order->order_description       = $order["instructions"];
-                    $new_order->merchant_id             = $merchant_id;
 
-                    $merchant = Merchant::where('id', $request->merchant_id)->first();
-                    $fee = 0.0;
-                    if($data['delivery_fee']){
-                        $fee = $data['delivery_fee'];
-                    }
-                    else{
-                        if(($get_fare_estimation['distance']/1000) > $merchant->delivery_fee_base_distance){
-                            $fee = $merchant->delivery_fee + $merchant->delivery_fee_per_km * ($get_fare_estimation['distance']/1000 - $merchant->delivery_fee_base_distance);
+                        //$pickup_geocode = $this->request_helper->GetLatLng($pickup_location->country . ' ' . $pickup_location->locality . ' ' . $pickup_location->address_line_1);
+
+                        // --- Customer data
+                        // --- Cut australian code from client mobile number
+                        $data['country_code'] = "61";
+                        $data['mobile_number'] = ltrim($order["client_phone"], "+".$data['country_code']);
+
+                        $data['first_name'] = $order["client_first_name"];
+                        $data['last_name'] = $order["client_last_name"];
+                        $data['email'] = $order["client_email"];
+                        
+                        $data['delivery_fee'] = null;
+                        
+                        try {
+                            if ($order["items"][0]["name"] == "DELIVERY_FEE"){
+                                $data['delivery_fee'] = $order["items"][0]["total_item_price"];
+                            }
+                        } 	catch (\Exception $e) {
+                            logger('getting delivery fee error : '.$e->getMessage());
+                        }
+
+                        $user = $this->get_or_create_rider((object)$data);
+                        
+
+                        $ride_request = $this->create_ride_request((object)$data, $user);
+
+                        //create order
+                        $new_order = new HomeDeliveryOrder;
+
+                        $accepted_time = new \Carbon\Carbon($order["accepted_at"]);
+                        $fulfill_time = new \Carbon\Carbon($order["fulfill_at"]);
+                        $est_time = $fulfill_time->diffInMinutes($accepted_time);
+                        try{
+                            if($est_time = 30){
+                                $est_time = 30;
+                            }
+                            else if($est_time > 46){
+                                $est_time = $est_time - 30;
+                            }
+                            else{
+                                $est_time = 45;
+                            }
+                        }
+                        catch(\Exception $e){
+                            //
+                        }
+
+                        $get_fare_estimation = $this->request_helper->GetDrivingDistance($data['pick_up_latitude'], $data['drop_off_latitude'] ,$data['pick_up_longitude'], $data['drop_off_longitude']);
+
+                        if ($get_fare_estimation['status'] == "success") {
+                            if ($get_fare_estimation['distance'] == '') {
+                                $get_fare_estimation['distance'] = 0;
+                            }
                         }
                         else{
-                            $fee = $merchant->delivery_fee;
+                            $get_fare_estimation['distance'] = 0;
                         }
-                    }
-                    $new_order->fee                     = round($fee, 2);
-                    
-                    $new_order->save();
+                        
+                        $new_order->distance                = $get_fare_estimation['distance'];
+                        $new_order->estimate_time           = $est_time;
+                        $new_order->fee                     = 0;
+                        $new_order->customer_id             = $user->id;
+                        $new_order->ride_request            = $ride_request->id;
+                        $new_order->order_description       = $order["instructions"];
+                        $new_order->merchant_id             = $merchant_id;
 
-                    $this->notify_drivers((object)$data, 'New job(s) in your location');
+                        $merchant = Merchant::where('id', $merchant_id)->first();
+                        $fee = 0.0;
+                        if($data['delivery_fee']){
+                            $fee = $data['delivery_fee'];
+                        }
+                        else{
+                            if(($get_fare_estimation['distance']/1000) > $merchant->delivery_fee_base_distance){
+                                $fee = $merchant->delivery_fee + $merchant->delivery_fee_per_km * ($get_fare_estimation['distance']/1000 - $merchant->delivery_fee_base_distance);
+                            }
+                            else{
+                                $fee = $merchant->delivery_fee;
+                            }
+                        }
+                        $new_order->fee                     = round($fee, 2);
+                        
+                        $new_order->save();
+
+                        $this->notify_drivers((object)$data, 'New job(s) in your location');
+
+                        return response()->json([
+                            'status_code'     => '1',
+                            'status_message' => 'Successfully created',
+                        ]);
+                    }
+                }
+                catch(\Exception $e){
+                    $data = $request->all();
+                    //in case of bad order data 
+                    //put that order information 
+                    //in db to manual inserting
+                    $bad_order = new BadOrders;
+                    $bad_order->secret = $server_key;
+                    $bad_order->description = json_encode($data);
+                    $bad_order->save();
+
+                    $merchant_name = Merchant::where('shared_secret', $server_key)->first()->name;
+
+                    $emails      = ['pardusurbanus@protonmail.com', 'ryan@rideon.group'];
+                    $content    = [
+                        'first_name' => '_'
+                    ];
+                    $data['content'] = json_encode($data, JSON_PRETTY_PRINT);
+                    $data['first_name'] = $content['first_name'];
+                    $data['merchant'] = $merchant_name;
+                    // Send Forgot password email to give user email
+                    foreach($emails as $email){
+                        Mail::send('emails.bad_order', $data, function($message) use ($email, $content){
+                            $message->to($email, $content['first_name'])->subject('Ride On New bad data order');
+                            $message->from('api@rideon.group','Ride on Tech support');
+                        });
+                    }
+
+                    return array(
+                        'status' => false,
+                        'status_message' => $e->getMessage(),
+                    );
                 }
             }
-            
-            return response()->json([
-                'status_code'     => '1',
-                'status_message' => 'Successfully created',
-            ]);
         }
     }
 
@@ -1193,7 +1268,7 @@ class TokenAuthController extends Controller
 
             $user = $this->get_or_create_rider((object)$data);
 
-            $ride_request = $this->create_ride_request((object)$data, $user);
+            $ride_request = $this->create_ride_request($data, $user);
 
             //create order
             $new_order = new HomeDeliveryOrder;
@@ -1440,7 +1515,14 @@ class TokenAuthController extends Controller
      */
     public function create_ride_request($request, $user)
     {  
-        $polyline = $this->request_helper->GetPolyline($request->pick_up_latitude, $request->drop_off_latitude, $request->pick_up_longitude, $request->drop_off_longitude);
+        $polyline = null;
+        try{
+            $polyline = $this->request_helper->GetPolyline($request->pick_up_latitude, $request->drop_off_latitude, $request->pick_up_longitude, $request->drop_off_longitude);
+        }
+        catch (\Exception $e) {
+            logger('polyline getting exception : '.$e->getMessage());
+        }
+        
         //create ride request
         $ride_request = new RideRequest;
         $ride_request->user_id = $user->id;
@@ -1450,10 +1532,11 @@ class TokenAuthController extends Controller
         $ride_request->drop_latitude = $request->drop_off_latitude;
         $ride_request->drop_longitude = $request->drop_off_longitude;
         $ride_request->driver_id = User::where('user_type', 'Driver')->first()->id;
+        
         $ride_request->car_id = '1';
         $ride_request->pickup_location = $request->pick_up_location;
         $ride_request->drop_location = $request->drop_off_location;
-        $ride_request->trip_path = $polyline;
+        $ride_request->trip_path = $polyline ? $polyline : '';
         $ride_request->payment_mode = 'Stripe';
         $ride_request->status = 'Accepted';
         $ride_request->timezone = 'Australia/Brisbane';
@@ -1461,7 +1544,7 @@ class TokenAuthController extends Controller
         $ride_request->additional_fare = '';
         $ride_request->peak_fare = '0';
         $ride_request->save();
-
+        
         return $ride_request;
     }
 }

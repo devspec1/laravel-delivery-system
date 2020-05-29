@@ -24,6 +24,8 @@ class DriverAddress extends Model
      */
     protected $table = 'driver_address';
 
+    protected $fillable = ['address_line1', 'address_line2', 'city', 'state', 'postal_code','user_id',];
+
     public $timestamps = false;
 
 

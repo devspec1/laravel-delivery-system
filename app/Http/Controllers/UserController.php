@@ -21,6 +21,7 @@ use App\Models\DriverAddress;
 use App\Models\DriverDocuments;
 use App\Models\DriversSubscriptions;
 use App\Models\StripeSubscriptionsPlans;
+
 use App\Models\PasswordResets;
 use App\Models\ProfilePicture;
 use App\Models\RiderLocation;
@@ -212,8 +213,25 @@ class UserController extends Controller
 			return back()->withErrors($validator)->withInput(); // Form calling with
 		}
 
-		if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password, 'user_type' => 'Driver'])) {
-			return redirect()->intended('driver/home');
+		$user = User::where("email", $request->email)->where('user_type','Driver')->first();
+
+
+
+		if($user) {
+			
+			$subscription = DriversSubscriptions::where('user_id',$user->id)->first();
+
+				$plan = StripeSubscriptionsPlans::where('id',$subscription->plan)->first();
+
+				if (in_array($plan->plan_name, array('Regular','Founder','Executive')))
+				{
+						if (Auth::guard('web')->attempt(['email' => $request->email, 'password' =>$request->password, 'user_type' => 'Driver'])) {
+							return redirect()->intended('driver/home');
+						}
+						return back()->withErrors(['password' => 'Invalid credentials'])->withInput();
+				}
+				else
+					return back()->withErrors(['password' => "Your subscription plan doesn't allow you to access this site"])->withInput();
 		}
 		return back()->withErrors(['password' => 'Invalid credentials'])->withInput();
 	}
@@ -805,7 +823,7 @@ class UserController extends Controller
 					if (Auth::guard('web')->attempt(['email' => $user->email, 'password' => Session::get('password'), 'user_type' => 'Driver'])) {
 
 						flashMessage('success', trans('messages.user.register_successfully'));
-						return redirect()->intended('driver/new_dash'); // Redirect to dashboard page
+						return redirect()->intended('driver/home'); // Redirect to dashboard page
 
 					} else {
 						return redirect('signup_driver');

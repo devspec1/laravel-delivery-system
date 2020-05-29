@@ -2972,6 +2972,7 @@ i.google-ride {
     font-size: 24px;
 }
 
+
 #newLoginWrp #logo1 {
     height: 13em;
 }
@@ -3408,6 +3409,18 @@ height: 90%; width: 30%; padding: 1em; padding-top: 4em; padding-bottom: 4em; di
 .statusPending1 {
     background: rgba(0, 0, 0, 0.3);
 }
+#driverteamSubWrp .statusDocument_details1, #leaderboardSubWrp .statusDocument_details1 {
+    background: rgba(0, 0, 0, 0.6);
+
+}
+#driverteamSubWrp .statusCar_details1, #leaderboardSubWrp .statusCar_details1 {
+    background: #2d53a6;
+
+}
+#driverteamSubWrp .statusInactive1, #leaderboardSubWrp .statusInactive1 {
+    background: #a63f2d;
+
+}
 #deliverySubWrp .acceptBtn1 {
     padding: 0.8em;
     color: white;
@@ -3607,6 +3620,16 @@ a.side-nav-a[aria-selected="true"] {
     height: auto;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 7px;
+}
+#cardModal img {
+    width: 5em;
+    padding: 0.9em;
+    height: 3.2em;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+}
+#cardModal .currentImg {
+    border: 1px solid #3B5998;
 }
 .paymentMethodItem > div > span {
     margin-left: 0.6em;

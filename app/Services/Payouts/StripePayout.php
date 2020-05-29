@@ -167,7 +167,7 @@ class StripePayout
                 ),
                 "first_name" 	=> $user->first_name,
                 "last_name" 	=> $user->last_name,
-                "phone" 		=> $user->mobile_number ?? "7894561230",
+                "phone" 		=> '+' . $user->country_code . $user->mobile_number,
                 "email"			=> $user->email,
             ];
 

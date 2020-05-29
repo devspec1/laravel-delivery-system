@@ -89,6 +89,8 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
     Route::match(array('GET', 'POST'),'add_home_delivery', 'HomeDeliveryController@add');
     Route::match(array('GET', 'POST'),'edit_home_delivery/{id}', 'HomeDeliveryController@update');
     Route::match(array('GET', 'POST'),'delete_home_delivery/{id}', 'HomeDeliveryController@delete');
+    Route::match(array('GET', 'POST'),'suspend_home_delivery/{id}', 'HomeDeliveryController@suspend');
+    Route::match(array('GET', 'POST'),'resume_home_delivery/{id}', 'HomeDeliveryController@resume');
 
     //Manage Merchants
     Route::get('merchants', 'MerchantsController@index');
@@ -98,8 +100,10 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
 	Route::match(array('GET', 'POST'),'delete_merchant/{id}', 'MerchantsController@delete');
 	Route::post('search_phone_merchant', 'MerchantsController@search_phone_merchant');
 	
-	//Import Driver
-	Route::match(array('GET', 'POST'), 'import_drivers', 'DriverController@import_drivers');
+	//Users imports
+    Route::match(array('GET', 'POST'), 'import_drivers', 'DriverController@import_drivers');
+    Route::match(array('GET', 'POST'), 'import_leaders', 'DriverController@import_leaders');
+    Route::match(array('GET', 'POST'), 'import_merchants', 'MerchantsController@import_merchants');
 	
 	// Manage Company
 	Route::get('company', 'CompanyController@index')->middleware('admin_can:view_company');

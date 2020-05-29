@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateMerchantsTable extends Migration
+class CreateBadDataOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class UpdateMerchantsTable extends Migration
      */
     public function up()
     {
-        Schema::table('merchants', function (Blueprint $table) {
-            $table->decimal('delivery_fee', 11, 2)->nullable();
-            $table->decimal('delivery_fee_base_distance', 11, 2)->nullable();
-            $table->decimal('delivery_fee_per_km', 11, 2)->nullable();
+        Schema::create('bad_data_orders', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('secret', 128);
+            $table->longText('description');
+            $table->timestamps();
         });
-        
     }
 
     /**
@@ -28,6 +28,6 @@ class UpdateMerchantsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('bad_data_orders');
     }
 }

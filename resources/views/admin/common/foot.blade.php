@@ -105,7 +105,8 @@
     @if (Route::current()->uri() == 'admin/add_home_delivery' ||  Route::current()->uri() == 'admin/edit_home_delivery/{id}' || Route::current()->uri() == 'admin/home_delivery_orders/{id}'|| Route::current()->uri() == 'company/edit_home_delivery/{id}')
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{$map_key}}&sensor=false&libraries=places"></script>
 		<script src="{{ url('admin_assets/dist/js/delivery_order.js') }}"></script>
-		<script src="{{ url('admin_assets/dist/js/moment.min.js') }}"></script>
+        <script src="{{ url('admin_assets/dist/js/moment.min.js') }}"></script>
+        <script src="{{ url('admin_assets/dist/js/moment_timezone.js') }}"></script>
 		<script src="{{ url('admin_assets/dist/js/bootstrap-datetimepicker.min.js') }}"></script>
 		<script src="{{ url('js/selectize.js') }}"></script>
 		<script src="{{ url('admin_assets/plugins/jQuery/jquery.validate.js') }}"></script>

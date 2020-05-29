@@ -15,6 +15,8 @@ use App\Models\CarType;
 use App\Models\ScheduleRide;
 use App\Models\Request as RideRequest;
 use App\Models\DriverLocation;
+use App\Models\Trips;
+use App\Models\Payment;
 
 use App\Http\Start\Helpers;
 use App\Http\Helper\RequestHelper;
@@ -25,6 +27,7 @@ use JWTAuth;
 use DB;
 use DateTime;
 use App;
+use Mail;
 
 class HomeDeliveryController extends Controller
 {
@@ -50,7 +53,7 @@ class HomeDeliveryController extends Controller
     }
 
     public function test(Request $request){
-        $data = HomeDeliveryOrder::all();
+        $data = HomeDeliveryOrder::where('status','new')->get();
         $Order_ID_List =[];
         for($i=0;$i<count($data);$i++){
             $estimate_time = $data[$i]['estimate_time'];
@@ -385,6 +388,112 @@ class HomeDeliveryController extends Controller
         return redirect(LOGIN_USER_TYPE.'/home_delivery');
     }
 
+
+    /**
+     * Suspend Bad Orders
+     *
+     * @param array $request    Input values
+     * @return redirect     to Order View
+     */
+    public function suspend(Request $request)
+    {
+        try {
+            $order = HomeDeliveryOrder::find($request->id);
+            if($order->status != 'delivered'){
+                flashMessage('error', 'You cannot disapprove an undelivered order');
+                return back();
+            }
+            else{
+                $ride_request = RideRequest::where('id',$order->ride_request)->first();
+                $trip = Trips::where('request_id',$ride_request->id)->first();
+                $payment = Payment::where('trip_id', $trip->id)->first();
+                if($payment->driver_payout_status != 'Suspended'){
+                    $payment->driver_payout_status = 'Suspended';
+                    
+                    $driver_details = User::where('id', $order->driver_id)->first();
+
+                    $email = $driver_details->email;
+
+                    $content    = [
+                        'first_name' => $driver_details->first_name
+                    ];
+                    $data['first_name'] = $content['first_name'];
+                    $data['order_number'] = $order->id;
+                    $data['order_date'] = $order->created_at;
+                    $data['pick_up'] = $ride_request->pickup_location;
+                    $data['drop_off'] = $ride_request->drop_location;
+                    $data['fee'] = $trip->driver_payout;
+                    $data['reason'] = $request->reason ? $request->reason : 'No reason';
+                    
+                    //Send push
+                    if($driver_details->device_id != "" && $driver_details->status == "Active")
+                    {    
+                        $message = "Your funds related to delivery order #" . $data['order_number'] . "were withheld. Please, contact us.";
+                        $this->send_custom_pushnotification($driver_details->device_id,$driver_details->device_type,$driver_details->user_type,$message);    
+                    }
+                    
+                    // Send Forgot password email to give user email
+                    Mail::send('emails.payouts_suspent', $data, function($message) use ($email, $content){
+                        $message->to($email, $content['first_name'])->subject('Your funds were withheld.');
+                        $message->from('api@rideon.group','Ride on Tech support');
+                    });
+
+                    $payment->save();
+
+                    flashMessage('success', ' Payments for order #'. $order->id .' successfully disapproved');
+                    return redirect(LOGIN_USER_TYPE.'/home_delivery');
+                }
+                else{
+                    flashMessage('warning', 'Payments for order #'. $order->id . ' are already disapproved');
+                    return redirect(LOGIN_USER_TYPE.'/home_delivery');
+                }
+                
+            }
+        }
+        catch(\Exception $e) {
+            flashMessage('error','Got a problem on suspending this order. Contact admin, please' . $e->getMessage());
+            return back();
+        }
+
+    }
+
+        /**
+     * Resume Bad Orders payment
+     *
+     * @param array $request    Input values
+     * @return redirect     to Order View
+     */
+    public function resume(Request $request)
+    {
+        try {
+            $order = HomeDeliveryOrder::find($request->id);
+            if($order->status != 'delivered'){
+                flashMessage('error', 'You cannot approve an undelivered order');
+                return back();
+            }
+            else{
+                $ride_request = RideRequest::where('id',$order->ride_request)->first();
+                $trip = Trips::where('request_id',$ride_request->id)->first();
+                $payment = Payment::where('trip_id', $trip->id)->first();
+                if($payment->driver_payout_status == 'Suspended'){
+                    $payment->driver_payout_status = 'Pending';
+                    $payment->save();
+                    flashMessage('success', 'Payments for order #'. $order->id .' successfully approved');
+                    return redirect(LOGIN_USER_TYPE.'/home_delivery');
+                }
+                else{
+                    flashMessage('warning', 'Payments for order #'. $order->id . ' are already approved');
+                    return redirect(LOGIN_USER_TYPE.'/home_delivery');
+                }
+            }
+        }
+        catch(\Exception $e) {
+            flashMessage('error','Got a problem on deleting this order. Contact admin, please');
+            return back();
+        }
+
+    }
+
     // Check Given Order deletable or not
     public function canDestroy($order_id)
     {
@@ -535,6 +644,24 @@ class HomeDeliveryController extends Controller
         // This is for getting Location Result
         $data['location_result'] = RideRequest::where('id', $data['order_result']->ride_request)->get()->first();
         $data['location_result'] ->distance = $data['order_result']->distance/1000;
+        $trip = Trips::where('request_id', $data['location_result']->id)->first();
+        
+        $data['real_location_result'] = array(
+            'real_drop_location' => 'None',
+            'real_drop_latitude' => 'None',
+            'real_drop_longitude' => 'None',
+            'real_pickup_location' => 'None',
+            'real_pickup_latitude' => 'None',
+            'real_pickup_longitude' => 'None'
+        );
+        if($trip){
+            $data['real_location_result']['real_pickup_location'] = $trip->pickup_location;
+            $data['real_location_result']['real_pickup_latitude'] = $trip->pickup_latitude;
+            $data['real_location_result']['real_pickup_longitude'] = $trip->pickup_longitude;
+            $data['real_location_result']['real_drop_location'] = $trip->drop_location;
+            $data['real_location_result']['real_drop_latitude'] = $trip->drop_latitude;
+            $data['real_location_result']['real_drop_longitude'] = $trip->drop_longitude;
+        }
 
         //This is for getting Customer Data
         $data['customer'] = User::where('id',$data['order_result']->customer_id)->first();
