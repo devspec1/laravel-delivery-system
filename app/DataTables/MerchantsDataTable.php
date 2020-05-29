@@ -101,6 +101,7 @@ class MerchantsDataTable extends DataTable
             Column::make('name'),
             Column::make('description'),
             Column::make('integration')->name('integration.name'),
+            Column::make('owe_fees')->title('Owe fees'),
             Column::make('base_fee')->searchable(false),
             Column::make('base_distance_km')->searchable(false),
             Column::make('surcharge_fee')->searchable(false),
