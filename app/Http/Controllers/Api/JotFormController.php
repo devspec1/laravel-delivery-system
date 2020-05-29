@@ -93,6 +93,7 @@ class JotFormController extends Controller
         }
 
         $user = new User;
+        $usedRef = User::where('referral_code', $obj['q138_invitationCode'])->first();
 
         $user->first_name   = $obj['q96_name96']['first'];
         $user->last_name    = $obj['q96_name96']['last'];
@@ -102,10 +103,25 @@ class JotFormController extends Controller
         $user->password     = $this->randomPassword();
         $user->status       = 'Pending';
         $user->user_type    = 'Driver';
-        $user->used_referral_code = $obj['q138_invitationCode'] ? $obj['q138_invitationCode']:'';
+
+        if ($usedRef)
+            $user->used_referral_code = $usedRef->referral_code;
+        else
+            $user->used_referral_code = 0;
+
         $user->company_id   = 1;
         $user->save();
 
+        //find user by refferer_id
+        if($usedRef) {
+            //if there is no reference between users, create it
+            $referrel_user = new ReferralUser;
+            $referrel_user->referral_id = $user->id;
+            $referrel_user->user_id     = $usedRef->id;
+            $referrel_user->user_type   = $usedRef->user_type;
+            $referrel_user->save();
+        }
+        
         $user_pic = new ProfilePicture;
         $user_pic->user_id      =   $user->id;
         if (isset($obj['temp_upload']['q131_profilephoto'][0]))
