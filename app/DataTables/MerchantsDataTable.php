@@ -61,6 +61,7 @@ class MerchantsDataTable extends DataTable
             'merchants.delivery_fee as base_fee',
             'merchants.delivery_fee_base_distance as base_distance_km',
             'merchants.delivery_fee_per_km as surcharge_fee',
+            DB::raw('(SELECT COALESCE(sum(o2.fee), 0) FROM delivery_orders AS o2 WHERE o2.merchant_id = merchants.id) as owe_fees'),
             'merchants.shared_secret as shared_secret',
             'merchants.created_at as created_at',
         ]);
@@ -100,6 +101,7 @@ class MerchantsDataTable extends DataTable
             Column::make('name', 'Name'),
             Column::make('description', 'Description'),
             Column::make('integration', 'Integration Type'),
+            Column::make('owe_fees', 'Owe fees'),
             Column::make('base_fee', 'Base fee'),
             Column::make('base_distance_km', 'Base distance'),
             Column::make('surcharge_fee', 'Surchange fee per KM'),
