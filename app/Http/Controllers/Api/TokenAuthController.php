@@ -1038,7 +1038,7 @@ class TokenAuthController extends Controller
                             if($est_time = 30){
                                 $est_time = 30;
                             }
-                            else if($est_time > 45){
+                            else if($est_time > 46){
                                 $est_time = $est_time - 30;
                             }
                             else{
