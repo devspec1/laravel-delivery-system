@@ -108,7 +108,8 @@ class JotFormController extends Controller
 
         $user_pic = new ProfilePicture;
         $user_pic->user_id      =   $user->id;
-        $user_pic->src          =   'https://rideon-cdn.sgp1.cdn.digitaloceanspaces.com/images/users/JotForm/Driver Application/' . $submissionID . '/' . $obj['temp_upload']['q131_profilephoto'][0];
+        if (isset($obj['temp_upload']['q131_profilephoto'][0]))
+            $user_pic->src          =   'https://rideon-cdn.sgp1.cdn.digitaloceanspaces.com/images/users/JotForm/Driver Application/' . $submissionID . '/' . $obj['temp_upload']['q131_profilephoto'][0];
         $user_pic->photo_source =   'Local';
         $user_pic->save();
 
@@ -147,9 +148,9 @@ class JotFormController extends Controller
 
         $user_doc = new DriverDocuments;
         $user_doc->user_id = $user->id;
-        if ($obj['temp_upload']['q134_driver_license'][0])
+        if (isset($obj['temp_upload']['q134_driver_license'][0]))
             $user_doc->license_front = 'https://rideon-cdn.sgp1.cdn.digitaloceanspaces.com/images/users/JotForm/Driver Application/' . $submissionID . '/' . $obj['temp_upload']['q134_driver_license'][0];
-        if ($obj['temp_upload']['q134_driver_license'][1])
+        if (isset($obj['temp_upload']['q134_driver_license'][1]))
             $user_doc->license_back = 'https://rideon-cdn.sgp1.cdn.digitaloceanspaces.com/images/users/JotForm/Driver Application/' . $submissionID . '/' . $obj['temp_upload']['q134_driver_license'][1];
         $user_doc->abn_number = $obj['q136_yourAbn'];
         $user_doc->save();
@@ -291,9 +292,9 @@ class JotFormController extends Controller
         $application->asset_instagram = $obj['q144_q_assets']['field_3'];
         $application->asset_other = $obj['q144_q_assets']['field_4'];
 
-        if ($obj['temp_upload']['q141_logo'][0])
+        if (isset($obj['temp_upload']['q141_logo'][0]))
             $application->logo = 'https://rideon-cdn.sgp1.cdn.digitaloceanspaces.com/images/users/JotForm/Merchant Application/' . $submissionID . '/' . $obj['temp_upload']['q141_logo'][0];
-        if ($obj['temp_upload']['q147_q_photoItem'][0])
+        if (isset($obj['temp_upload']['q147_q_photoItem'][0]))
             $application->photoItem = 'https://rideon-cdn.sgp1.cdn.digitaloceanspaces.com/images/users/JotForm/Merchant Application/' . $submissionID . '/' . $obj['temp_upload']['q147_q_photoItem'][0];
 
         $application->save();
