@@ -25,7 +25,8 @@ $(document).ready(function() {
                     var users = [];
                     user_list = [];
                     for (var i = 0; i < data.length; i++) {
-                        user_list[data[i].mobile_number] = users[i] = { value: data[i].mobile_number, first_name: data[i].first_name, last_name: data[i].last_name, email: data[i].email, address_line1: data[i].address_line1, address_line2: data[i].address_line2, city: data[i].city, state: data[i].state, postal_code: data[i].postal_code, used_referral_code: data[i].used_referral_code }
+                        if (data[i].user_type == 'Merchant')
+                            user_list[data[i].mobile_number] = users[i] = { value: data[i].mobile_number, first_name: data[i].first_name, last_name: data[i].last_name, email: data[i].email, address_line1: data[i].address_line1, address_line2: data[i].address_line2, city: data[i].city, state: data[i].state, postal_code: data[i].postal_code, used_referral_code: data[i].used_referral_code }
                     }
                     response(users);
                 },

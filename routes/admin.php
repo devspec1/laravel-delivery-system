@@ -164,6 +164,7 @@ Route::group(['prefix' => (LOGIN_USER_TYPE=='company')?'company':'admin', 'middl
 	Route::group(['prefix' => 'referrals'], function() {
 		Route::get('rider', 'ReferralsController@index')->middleware('admin_can:manage_rider_referrals');
 		Route::get('driver', 'ReferralsController@index')->middleware('admin_can:manage_driver_referrals');
+		Route::get('community_leader', 'ReferralsController@index')->middleware('admin_can:manage_driver_referrals');
 		Route::get('{id}', 'ReferralsController@referral_details');
 	});
 

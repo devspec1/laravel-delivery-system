@@ -64,7 +64,25 @@ class ReferralsDataTable extends DataTable
      */
     public function query(ReferralUser $model)
     {
-        $referrals = $model->with('user','referral_user')->where('user_type',$this->user_type)->where('payment_status','!=','Expired')->groupBy('user_id')->get();
+        if ($this->user_type == 'Driver' || $this->user_type == 'Rider')
+            $referrals = $model->with('user','referral_user')->where('user_type',$this->user_type)->where('payment_status','!=','Expired')->groupBy('user_id')->get();
+            
+        if ($this->user_type == 'Community_leader')
+            $referrals = ReferralUser::with('user','referral_user')
+                            ->leftJoin('stripe_subscriptions', 'referral_users.user_id', '=', 'stripe_subscriptions.user_id')
+                            ->leftJoin('stripe_subscription_plans', 'stripe_subscriptions.plan', '=', 'stripe_subscription_plans.id')
+                            ->whereIn('stripe_subscription_plans.plan_name', ['Regular', 'Founder', 'Executive'])
+                            ->where('referral_users.user_type', 'Driver')->where('referral_users.payment_status','!=','Expired')->groupBy('referral_users.user_id')->get();
+
+            // $referrals = $model->with('user','referral_user')
+            //                 ->leftJoin('stripe_subscriptions', 'user.id', '=', 'stripe_subscriptions.user_id')
+            //                 ->leftJoin('stripe_subscription_plans', 'stripe_subscriptions.plan', '=', 'stripe_subscription_plans.id')
+            //                 ->whereIn('stripe_subscription_plans.plan_name', ['Regular', 'Founder', 'Executive'])
+            //                 ->where('user_type','Driver')
+            //                 ->where('payment_status','!=','Expired')
+            //                 ->groupBy('user_id')
+            //                 ->get();
+
         return $referrals;
     }
 
@@ -93,9 +111,14 @@ class ReferralsDataTable extends DataTable
      */
     protected function getColumns()
     {
+        if ($this->user_type == 'Community_leader')
+            $title = 'Community Leader';
+        else
+            $title = $this->user_type;
+            
         return [
             ['data' => 'user.id', 'name' => 'user.id', 'title' => 'Id'],
-            ['data' => 'rider_name', 'name' => 'rider_name', 'title' => $this->user_type.' Name'],
+            ['data' => 'rider_name', 'name' => 'rider_name', 'title' => $title.' Name'],
             ['data' => 'referrer_name', 'name' => 'referrer_name', 'title' => 'Referrer Name'],
             ['data' => 'currency_code', 'name' => 'currency_code', 'title' => 'Currency Code'],
             ['data' => 'earned_amount', 'name' => 'amount', 'title' => 'Earned Amount'],

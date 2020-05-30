@@ -77,7 +77,7 @@
 			</li>
             @endif
             @if(@$user->can('manage_rider_referrals') || @$user->can('manage_driver_referrals'))
-			<li class="treeview {{ (Route::current()->uri() == 'admin/referrals/rider' || Route::current()->uri() == 'admin/referrals/driver') ? 'active' : ''  }}">
+			<li class="treeview {{ (Route::current()->uri() == 'admin/referrals/rider' || Route::current()->uri() == 'admin/referrals/driver' || Route::current()->uri() == 'admin/referrals/community_leader') ? 'active' : ''  }}">
 				<a href="#">
 					<i class="fa fa-users"></i>
 					<span>Referrals</span><i class="fa fa-angle-left pull-right"></i>
@@ -94,6 +94,13 @@
 					<li class="{{ (Route::current()->uri() == 'admin/referrals/driver') ? 'active' : ''  }}">
 						<a href="{{ url('admin/referrals/driver') }}"><i class="fa fa-circle-o"></i>
 							<span> Drivers </span>
+						</a>
+					</li>
+					@endif
+					@if(@$user->can('manage_driver_referrals'))
+					<li class="{{ (Route::current()->uri() == 'admin/referrals/community_leader') ? 'active' : ''  }}">
+						<a href="{{ url('admin/referrals/community_leader') }}"><i class="fa fa-circle-o"></i>
+							<span> Community Leaders </span>
 						</a>
 					</li>
 					@endif
