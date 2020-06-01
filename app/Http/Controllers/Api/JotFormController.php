@@ -183,6 +183,7 @@ class JotFormController extends Controller
         $subscription_row->save(); 
                 
         $application = new Application;
+        $application->pdf = 'https://rideon-cdn.sgp1.cdn.digitaloceanspaces.com/images/users/JotForm/Driver Application/' . $submissionID . '/' . $submissionID . '.pdf';
         $application->user_id = $user->id;
         $application->type = 'Driver';
         $application->vehicleType = implode($obj['q132_vehicleType']);
@@ -238,6 +239,7 @@ class JotFormController extends Controller
         $user->country_code = $country_code;
         $user->mobile_number = $last_phone_number;
         $user->user_type    = 'Merchant';
+        $user->status       = 'Pending';
         
         $user->save();
 
@@ -291,6 +293,7 @@ class JotFormController extends Controller
         $merchant->save();
         
         $application = new Application;
+        $application->pdf = 'https://rideon-cdn.sgp1.cdn.digitaloceanspaces.com/images/users/JotForm/Merchant Application/' . $submissionID . '/' . $submissionID . '.pdf';
         $application->user_id = $user->id;
         $application->type = 'Merchant';
         $application->q_hear = $obj['q145_q_hear'];

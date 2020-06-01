@@ -12,6 +12,16 @@ $('#confirm-delete').on('show.bs.modal', function(e) {
     });
 });
 
+$('#confirm-active').on('show.bs.modal', function(e) {
+    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    $(".confirm-active").on('click', function(event) {
+        if ($(this).attr('disabled')) {
+            event.preventDefault();
+        }
+        $(".confirm-active").attr("disabled", true);
+    });
+});
+
 $('#confirm-resume').on('show.bs.modal', function(e) {
     $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
     $(".confirm-resume").on('click', function(event) {
